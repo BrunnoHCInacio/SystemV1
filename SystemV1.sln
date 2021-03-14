@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Domain", "3 - Domain", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infrastuture", "4 - Infrastuture", "{B7AA5899-8B97-424B-A820-40CE40C16E3A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemV1.RegistersAPI", "SystemV1.RegistersAPI\SystemV1.RegistersAPI.csproj", "{A25089B0-3F07-43EC-AAFB-A2B4FAAD86B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemV1.API", "SystemV1.RegistersAPI\SystemV1.API.csproj", "{A25089B0-3F07-43EC-AAFB-A2B4FAAD86B9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemV1.Application", "SystemV1.Application\SystemV1.Application.csproj", "{3D4C5A2D-6BC9-4CA4-924B-173DDE4FAB6A}"
 EndProject

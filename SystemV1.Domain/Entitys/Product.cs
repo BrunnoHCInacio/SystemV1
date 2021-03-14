@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SystemV1.Domain.Entitys
 {
-    public class Product:Entity
+    public class Product : Entity
     {
         public string Name { get; set; }
-        
-        public IEnumerable<ProductItem> ProductItems { get; set; }
 
+        public IEnumerable<ProductItem> ProductItems { get; set; }
     }
 }

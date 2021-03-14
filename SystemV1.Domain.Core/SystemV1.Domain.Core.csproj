@@ -6,7 +6,10 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\Services\" />
-    <Folder Include="Interfaces\Repositorys\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SystemV1.Domain\SystemV1.Domain.csproj" />
   </ItemGroup>
 
 </Project>

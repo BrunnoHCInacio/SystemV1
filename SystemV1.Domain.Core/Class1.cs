@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SystemV1.Domain.Core
+﻿namespace SystemV1.Domain.Core
 {
     public class Class1
     {
