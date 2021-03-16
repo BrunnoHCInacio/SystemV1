@@ -49,14 +49,12 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         public void Remove(TEntity entity)
         {
             _sqlContext.Set<TEntity>().Remove(entity);
-            _sqlContext.SaveChanges();
         }
 
         public void Update(TEntity entity)
         {
             _sqlContext.Entry(entity).State = EntityState.Modified;
             _sqlContext.Set<TEntity>().Update(entity);
-            _sqlContext.SaveChanges();
         }
     }
 }
