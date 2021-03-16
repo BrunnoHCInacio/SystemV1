@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
@@ -10,7 +11,8 @@ namespace SystemV1.Infrastructure.Data.Repositorys
     {
         private readonly SqlContext _sqlContext;
 
-        public RepositoryProductItem(SqlContext sqlContext) : base(sqlContext)
+        public RepositoryProductItem(SqlContext sqlContext,
+                                     IConfiguration configuration) : base(sqlContext, configuration)
         {
             _sqlContext = sqlContext;
         }

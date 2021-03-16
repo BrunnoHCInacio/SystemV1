@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -22,14 +23,14 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         public void Add(TEntity entity)
         {
             _sqlContext.Set<TEntity>().Add(entity);
-            _sqlContext.SaveChanges();
         }
 
         public IEnumerable<TEntity> GetAll(int page, int pageSize)
         {
             var skip = (page - 1) * pageSize;
             var sql = @$"SELECT *
-                         FROM {TEntity.GetType().Name}
+                         FROM {typeof(TEntity).Name}
+                         WHERE isactive
                          ORDER BY id
                          OFFSET {pageSize} ROWS
                          FETCH NEXT {skip} ROWS ONLY";
@@ -40,9 +41,9 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         public TEntity GtById(int id)
         {
             var sql = $@"SELECT *
-                         FROM {TEntity.GetType().Name}
+                         FROM {typeof(TEntity).Name}
                          WHERE id = {id}";
-            return _sqlConnection.Query<TEntity>(sql);
+            return (TEntity)_sqlConnection.Query<TEntity>(sql);
         }
 
         public void Remove(TEntity entity)
