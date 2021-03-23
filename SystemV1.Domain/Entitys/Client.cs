@@ -1,7 +1,10 @@
-﻿namespace SystemV1.Domain.Entitys
+﻿using System.Collections.Generic;
+
+namespace SystemV1.Domain.Entitys
 {
-    public class Client : Entity
+    public class Client : People
     {
-        public People People { get; set; }
+        public IEnumerable<Address> Addresses { get; set; }
+        public IEnumerable<Contact> Contacts { get; set; }
     }
 }

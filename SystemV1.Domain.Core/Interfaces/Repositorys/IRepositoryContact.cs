@@ -2,7 +2,7 @@
 
 namespace SystemV1.Domain.Core.Interfaces.Repositorys
 {
-    public interface IRepositoryPeople : IRepository<People>
+    public interface IRepositoryContact : IRepository<Contact>
     {
     }
 }

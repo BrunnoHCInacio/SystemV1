@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Domain.Core.Interfaces.Repositorys
@@ -7,7 +8,7 @@ namespace SystemV1.Domain.Core.Interfaces.Repositorys
     {
         IEnumerable<TEntity> GetAll(int page, int pageSize);
 
-        TEntity GtById(int id);
+        TEntity GetById(Guid id);
 
         void Add(TEntity entity);
 

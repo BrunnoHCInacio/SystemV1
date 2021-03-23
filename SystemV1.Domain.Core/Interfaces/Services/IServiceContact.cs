@@ -5,7 +5,9 @@ using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Domain.Core.Interfaces.Services
 {
-    public interface IServicePeople : IService<People>
+    public interface IServiceContact:IService<Contact>
     {
+        void Remove(Contact peopleContact);
+        void RemoveUow(Contact peopleContact);
     }
 }

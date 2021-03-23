@@ -5,9 +5,10 @@ using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Domain.Core.Interfaces.Services
 {
-    public interface IServiceClient : IService<Client>
+    public interface IServiceProvider : IService<Provider>
     {
-        void Remove(Client client);
-        void RemoveUow(Client client);
+        void Remove(Provider provider);
+
+        void RemoveUow(Provider provider);
     }
 }

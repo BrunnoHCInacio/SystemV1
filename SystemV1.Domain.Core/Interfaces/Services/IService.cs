@@ -8,13 +8,13 @@ namespace SystemV1.Domain.Core.Interfaces.Services
     public interface IService<TEntity> where TEntity : Entity
     {
         void Add(TEntity entity);
+        void AddUow(TEntity entity);
 
         void Update(TEntity entity);
-
-        void Remove(TEntity entity);
+        void UpdateUow(TEntity entity);
 
         IEnumerable<TEntity> GetAll(int page, int pageSize);
 
-        TEntity GetById(int id);
+        TEntity GetById(Guid id);
     }
 }

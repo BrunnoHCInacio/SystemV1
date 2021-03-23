@@ -1,7 +1,9 @@
 ﻿namespace SystemV1.Domain.Entitys
 {
-    public class PeopleAddress : Entity
+    public class Address : Entity
     {
+        public Client CLient { get; set; }
+        public Provider Provider { get; set; }
         public int ZipCode { get; set; }
         public string Street { get; set; }
         public string Number { get; set; }

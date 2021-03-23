@@ -4,11 +4,11 @@ using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Infrastructure.Data.Repositorys
 {
-    public class RepositoryPeopleContact : Repository<PeopleContact>, IRepositoryPeopleContact
+    public class RepositoryContact : Repository<Contact>, IRepositoryContact
     {
         private readonly SqlContext _sqlContext;
 
-        public RepositoryPeopleContact(SqlContext sqlContext,
+        public RepositoryContact(SqlContext sqlContext,
                                        IConfiguration configuration) : base(sqlContext,
                                                                             configuration)
         {

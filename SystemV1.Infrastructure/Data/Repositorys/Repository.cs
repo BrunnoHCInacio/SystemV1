@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace SystemV1.Infrastructure.Data.Repositorys
             return _sqlConnection.Query<TEntity>(sql);
         }
 
-        public TEntity GtById(int id)
+        public TEntity GetById(Guid id)
         {
             var sql = $@"SELECT *
                          FROM {typeof(TEntity).Name}

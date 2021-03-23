@@ -15,9 +15,8 @@ namespace SystemV1.Infrastructure.Data
         }
 
         public DbSet<Client> Clients { get; set; }
-        public DbSet<People> Peoples { get; set; }
-        public DbSet<PeopleAddress> PeopleAddresses { get; set; }
-        public DbSet<PeopleContact> PeopleContacts { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductItem> ProductItems { get; set; }
         public DbSet<State> States { get; set; }
