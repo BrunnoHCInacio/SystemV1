@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
@@ -19,35 +20,35 @@ namespace SystemV1.Domain.Services
             _unitOfWork = unitOfWork;
         }
 
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
-            _repository.Add(entity);
+            await _repository.Add(entity);
         }
 
-        public void AddUow(TEntity entity)
+        public async Task AddUow(TEntity entity)
         {
-            Add(entity);
+            await Add(entity);
             _unitOfWork.Commit();
         }
 
-        public IEnumerable<TEntity> GetAll(int page, int pageSize)
+        public async Task<IEnumerable<TEntity>> GetAll(int page, int pageSize)
         {
-            return _repository.GetAll(page, pageSize);
+            return await _repository.GetAll(page, pageSize);
         }
 
-        public TEntity GetById(Guid id)
+        public async Task<TEntity> GetById(Guid id)
         {
-            return _repository.GetById(id);
+            return await _repository.GetById(id);
         }
 
-        public void Update(TEntity entity)
+        public async Task Update(TEntity entity)
         {
-            _repository.Update(entity);
+            await _repository.Update(entity);
         }
 
-        public void UpdateUow(TEntity entity)
+        public async Task UpdateUow(TEntity entity)
         {
-            Update(entity);
+            await Update(entity);
             _unitOfWork.Commit();
         }
     }

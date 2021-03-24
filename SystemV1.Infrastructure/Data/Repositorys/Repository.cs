@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
+using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Entitys;
 
@@ -21,12 +21,12 @@ namespace SystemV1.Infrastructure.Data.Repositorys
             _sqlConnection = new SqlConnection(configuration.GetConnectionString("ConnectionString"));
         }
 
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
             _sqlContext.Set<TEntity>().Add(entity);
         }
 
-        public IEnumerable<TEntity> GetAll(int page, int pageSize)
+        public async Task<IEnumerable<TEntity>> GetAll(int page, int pageSize)
         {
             var skip = (page - 1) * pageSize;
             var sql = @$"SELECT *
@@ -39,7 +39,7 @@ namespace SystemV1.Infrastructure.Data.Repositorys
             return _sqlConnection.Query<TEntity>(sql);
         }
 
-        public TEntity GetById(Guid id)
+        public async Task<TEntity> GetById(Guid id)
         {
             var sql = $@"SELECT *
                          FROM {typeof(TEntity).Name}
@@ -47,12 +47,12 @@ namespace SystemV1.Infrastructure.Data.Repositorys
             return (TEntity)_sqlConnection.Query<TEntity>(sql);
         }
 
-        public void Remove(TEntity entity)
+        public async Task Remove(TEntity entity)
         {
             _sqlContext.Set<TEntity>().Remove(entity);
         }
 
-        public void Update(TEntity entity)
+        public async Task Update(TEntity entity)
         {
             _sqlContext.Entry(entity).State = EntityState.Modified;
             _sqlContext.Set<TEntity>().Update(entity);

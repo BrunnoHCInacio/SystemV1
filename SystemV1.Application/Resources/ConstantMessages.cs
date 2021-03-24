@@ -25,5 +25,11 @@ namespace SystemV1.Application.Resources
         public const string TypeContactRequired_PT = @"O tipo de contato deve ser informado";
         public const string ProviderDocumentRequired_PT = @"O CNPJ é obrigatório";
         public const string ProviderDocumentLength_PT = @"O CNPJ deve conter 14 caracteres";
+        public const string ClientDocumentRequired_PT = @"O CPF é obrigatório";
+        public const string ClientDocumentLength_PT = @"O CPF deve conter 11 caracteres";
+
+        public const string ProductItemModelRequired_PT = @"O modelo é obrigatório.";
+        public const string ProductItemModelLength_PT = @"O modelo deve conter entre 2 e 150 caracteres.";
+        public const string ProductItemValueRequired_PT = @"O valor é obrigatório";
     }
 }

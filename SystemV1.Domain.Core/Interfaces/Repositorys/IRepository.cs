@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Domain.Core.Interfaces.Repositorys
 {
     public interface IRepository<TEntity> where TEntity : Entity
     {
-        IEnumerable<TEntity> GetAll(int page, int pageSize);
+        Task<IEnumerable<TEntity>> GetAll(int page, int pageSize);
 
-        TEntity GetById(Guid id);
+        Task<TEntity> GetById(Guid id);
 
-        void Add(TEntity entity);
+        Task Add(TEntity entity);
 
-        void Update(TEntity entity);
+        Task Update(TEntity entity);
 
-        void Remove(TEntity entity);
+        Task Remove(TEntity entity);
     }
 }

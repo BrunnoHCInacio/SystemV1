@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Domain.Core.Interfaces.Services
 {
     public interface IService<TEntity> where TEntity : Entity
     {
-        void Add(TEntity entity);
-        void AddUow(TEntity entity);
+        Task Add(TEntity entity);
 
-        void Update(TEntity entity);
-        void UpdateUow(TEntity entity);
+        Task AddUow(TEntity entity);
 
-        IEnumerable<TEntity> GetAll(int page, int pageSize);
+        Task Update(TEntity entity);
 
-        TEntity GetById(Guid id);
+        Task UpdateUow(TEntity entity);
+
+        Task<IEnumerable<TEntity>> GetAll(int page, int pageSize);
+
+        Task<TEntity> GetById(Guid id);
     }
 }
