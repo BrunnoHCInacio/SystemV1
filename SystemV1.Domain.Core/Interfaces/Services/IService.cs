@@ -9,16 +9,16 @@ namespace SystemV1.Domain.Core.Interfaces.Services
 {
     public interface IService<TEntity> where TEntity : Entity
     {
-        Task Add(TEntity entity);
+        void Add(TEntity entity);
 
-        Task AddUow(TEntity entity);
+        Task AddAsyncUow(TEntity entity);
 
-        Task Update(TEntity entity);
+        void Update(TEntity entity);
 
-        Task UpdateUow(TEntity entity);
+        Task UpdateAsyncUow(TEntity entity);
 
-        Task<IEnumerable<TEntity>> GetAll(int page, int pageSize);
+        Task<IEnumerable<TEntity>> GetAllAsync(int page, int pageSize);
 
-        Task<TEntity> GetById(Guid id);
+        Task<TEntity> GetByIdAsync(Guid id);
     }
 }

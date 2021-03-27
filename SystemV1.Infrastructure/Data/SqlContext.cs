@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
 using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Infrastructure.Data
@@ -12,7 +15,10 @@ namespace SystemV1.Infrastructure.Data
 
         public SqlContext(DbContextOptions<SqlContext> options) : base(options)
         {
+            Connection = new SqlConnection(Database.GetDbConnection().ConnectionString);
         }
+
+        public SqlConnection Connection { get; set; }
 
         public DbSet<Client> Clients { get; set; }
         public DbSet<Address> Addresses { get; set; }
@@ -22,7 +28,7 @@ namespace SystemV1.Infrastructure.Data
         public DbSet<State> States { get; set; }
         public DbSet<Country> Countries { get; set; }
 
-        public override int SaveChanges()
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             foreach (var entry in ChangeTracker.Entries())
             {
@@ -35,8 +41,7 @@ namespace SystemV1.Infrastructure.Data
                     entry.Property("DateChange").CurrentValue = DateTime.Now;
                 }
             }
-
-            return base.SaveChanges();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
     }
 }

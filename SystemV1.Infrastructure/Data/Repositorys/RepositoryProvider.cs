@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using Dapper;
 using System.Collections.Generic;
-using System.Text;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Entitys;
 
@@ -11,10 +11,21 @@ namespace SystemV1.Infrastructure.Data.Repositorys
     {
         private readonly SqlContext _sqlContext;
 
-        public RepositoryProvider(SqlContext sqlContext,
-                                  IConfiguration configuration) : base(sqlContext, configuration)
+        public RepositoryProvider(SqlContext sqlContext) : base(sqlContext)
         {
             _sqlContext = sqlContext;
+        }
+
+        public async Task<IEnumerable<Provider>> GetByNameAsync(string name)
+        {
+            var sql = $@"
+                        SELECT  id,
+                                name,
+                                document
+                        FROM provider
+                        WHERE name LIKE '%{name}%'
+                        ";
+            return await _sqlContext.Connection.QueryAsync<Provider>(sql);
         }
     }
 }

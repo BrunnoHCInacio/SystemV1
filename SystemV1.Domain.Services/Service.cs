@@ -20,36 +20,36 @@ namespace SystemV1.Domain.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Add(TEntity entity)
+        public void Add(TEntity entity)
         {
-            await _repository.Add(entity);
+            _repository.Add(entity);
         }
 
-        public async Task AddUow(TEntity entity)
+        public async Task AddAsyncUow(TEntity entity)
         {
-            await Add(entity);
-            _unitOfWork.Commit();
+            Add(entity);
+            await _unitOfWork.CommitAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll(int page, int pageSize)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(int page, int pageSize)
         {
-            return await _repository.GetAll(page, pageSize);
+            return await _repository.GetAllAsync(page, pageSize);
         }
 
-        public async Task<TEntity> GetById(Guid id)
+        public async Task<TEntity> GetByIdAsync(Guid id)
         {
-            return await _repository.GetById(id);
+            return await _repository.GetByIdAsync(id);
         }
 
-        public async Task Update(TEntity entity)
+        public void Update(TEntity entity)
         {
-            await _repository.Update(entity);
+            _repository.Update(entity);
         }
 
-        public async Task UpdateUow(TEntity entity)
+        public async Task UpdateAsyncUow(TEntity entity)
         {
-            await Update(entity);
-            _unitOfWork.Commit();
+            Update(entity);
+            await _unitOfWork.CommitAsync();
         }
     }
 }

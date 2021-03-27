@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Text;
+using System.Data.SqlClient;
+using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Entitys;
 
@@ -11,10 +12,16 @@ namespace SystemV1.Infrastructure.Data.Repositorys
     {
         private readonly SqlContext _sqlContext;
 
-        public RepositoryProductItem(SqlContext sqlContext,
-                                     IConfiguration configuration) : base(sqlContext, configuration)
+        public RepositoryProductItem(SqlContext sqlContext) : base(sqlContext)
         {
             _sqlContext = sqlContext;
+        }
+
+        public async Task<IEnumerable<ProductItem>> GetByNameAsync(string name)
+        {
+            var sql = $@"SELECT * FROM productitem WHERE modelo LIKE '%{name}%'";
+
+            return await _sqlContext.Connection.QueryAsync<ProductItem>(sql);
         }
     }
 }

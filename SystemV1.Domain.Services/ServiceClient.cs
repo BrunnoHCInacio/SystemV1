@@ -13,8 +13,8 @@ namespace SystemV1.Domain.Services
         private readonly IRepositoryClient _repositoryClient;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ServiceClient(IRepositoryClient repositoruClient, 
-                             IUnitOfWork unitOfWork):base(repositoruClient, unitOfWork)
+        public ServiceClient(IRepositoryClient repositoruClient,
+                             IUnitOfWork unitOfWork) : base(repositoruClient, unitOfWork)
         {
             _repositoryClient = repositoruClient;
             _unitOfWork = unitOfWork;
@@ -29,7 +29,7 @@ namespace SystemV1.Domain.Services
         public void RemoveUow(Client client)
         {
             Remove(client);
-            _unitOfWork.Commit();
+            _unitOfWork.CommitAsync();
         }
     }
 }

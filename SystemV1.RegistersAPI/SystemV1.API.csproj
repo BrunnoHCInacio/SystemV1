@@ -5,7 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SystemV1.Application\SystemV1.Application.csproj" />
+    <ProjectReference Include="..\SystemV1.Domain.Services\SystemV1.Domain.Services.csproj" />
+    <ProjectReference Include="..\SystemV1.Infrastructure\SystemV1.Infrastructure.csproj" />
   </ItemGroup>
 
 

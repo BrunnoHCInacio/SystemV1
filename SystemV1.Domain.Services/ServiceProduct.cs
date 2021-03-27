@@ -13,8 +13,8 @@ namespace SystemV1.Domain.Services
         private readonly IRepositoryProduct _repositoryProduct;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ServiceProduct(IRepositoryProduct repositoryProduct, 
-                              IUnitOfWork unitOfWork):base(repositoryProduct, unitOfWork)
+        public ServiceProduct(IRepositoryProduct repositoryProduct,
+                              IUnitOfWork unitOfWork) : base(repositoryProduct, unitOfWork)
         {
             _repositoryProduct = repositoryProduct;
             _unitOfWork = unitOfWork;
@@ -29,7 +29,7 @@ namespace SystemV1.Domain.Services
         public void RemoveUow(Product product)
         {
             Remove(product);
-            _unitOfWork.Commit();
+            _unitOfWork.CommitAsync();
         }
     }
 }

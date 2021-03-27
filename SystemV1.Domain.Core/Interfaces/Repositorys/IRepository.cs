@@ -7,14 +7,14 @@ namespace SystemV1.Domain.Core.Interfaces.Repositorys
 {
     public interface IRepository<TEntity> where TEntity : Entity
     {
-        Task<IEnumerable<TEntity>> GetAll(int page, int pageSize);
+        Task<IEnumerable<TEntity>> GetAllAsync(int page, int pageSize);
 
-        Task<TEntity> GetById(Guid id);
+        Task<TEntity> GetByIdAsync(Guid id);
 
-        Task Add(TEntity entity);
+        void Add(TEntity entity);
 
-        Task Update(TEntity entity);
+        void Update(TEntity entity);
 
-        Task Remove(TEntity entity);
+        void Remove(TEntity entity);
     }
 }

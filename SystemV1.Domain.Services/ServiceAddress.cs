@@ -30,7 +30,7 @@ namespace SystemV1.Domain.Services
         public void RemoveUow(Address peopleAddress)
         {
             Remove(peopleAddress);
-            _unitOfWork.Commit();
+            _unitOfWork.CommitAsync();
         }
     }
 }

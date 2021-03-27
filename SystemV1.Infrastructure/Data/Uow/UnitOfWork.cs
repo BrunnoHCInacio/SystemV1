@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Uow;
 
 namespace SystemV1.Infrastructure.Data.Uow
@@ -14,14 +15,10 @@ namespace SystemV1.Infrastructure.Data.Uow
             _sqlContext = sqlContext;
         }
 
-        public void Commit()
+        public Task<bool> CommitAsync()
         {
-            _sqlContext.SaveChanges();
-        }
-
-        public void RoolBack()
-        {
-            //throw new NotImplementedException();
+            _sqlContext.SaveChangesAsync();
+            return new Task<bool>(() => false);
         }
     }
 }

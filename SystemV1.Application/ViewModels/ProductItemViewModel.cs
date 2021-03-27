@@ -11,7 +11,7 @@ namespace SystemV1.Application.ViewModels
         [Key]
         public Guid Id { get; set; }
 
-        public Guid IdProductItem { get; set; }
+        public Guid? IdProduct { get; set; }
 
         [Required(ErrorMessage = ConstantMessages.ProductItemModelRequired_PT)]
         [StringLength(150, ErrorMessage = ConstantMessages.ProductItemModelLength_PT, MinimumLength = 2)]

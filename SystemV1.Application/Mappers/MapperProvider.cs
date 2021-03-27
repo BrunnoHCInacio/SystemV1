@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
@@ -27,7 +28,8 @@ namespace SystemV1.Application.Mappers
                 Id = provider.Id,
                 Document = provider.Document,
                 Contacts = _mapperContact.ListEntityToViewModel(provider.Contacts),
-                Addresses = _mapperAddress.ListEntityToViewModel(provider.Addresses)
+                Addresses = _mapperAddress.ListEntityToViewModel(provider.Addresses),
+                Name = provider.Name
             };
         }
 
@@ -42,7 +44,9 @@ namespace SystemV1.Application.Mappers
             {
                 Id = providerViewModel.Id,
                 Document = providerViewModel.Document,
-                Name = providerViewModel.Name
+                Name = providerViewModel.Name,
+                Addresses = providerViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a)),
+                Contacts = providerViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c)),
             };
         }
     }

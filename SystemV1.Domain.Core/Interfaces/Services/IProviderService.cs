@@ -8,8 +8,12 @@ namespace SystemV1.Domain.Core.Interfaces.Services
 {
     public interface IProviderService : IService<Provider>
     {
-        Task Remove(Provider provider);
+        Task AddProviderAsync(Provider provider);
 
-        Task RemoveUow(Provider provider);
+        void Remove(Provider provider);
+
+        Task RemoveAsyncUow(Provider provider);
+
+        Task<IEnumerable<Provider>> GetByNameAsync(string name);
     }
 }

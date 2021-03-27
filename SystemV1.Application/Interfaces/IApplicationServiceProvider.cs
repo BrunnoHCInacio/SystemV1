@@ -5,18 +5,18 @@ using SystemV1.Application.ViewModels;
 
 namespace SystemV1.Application.Interfaces
 {
-    internal interface IApplicationServiceProvider
+    public interface IApplicationServiceProvider
     {
-        Task Add(ProviderViewModel providerViewModel);
+        Task AddAsync(ProviderViewModel providerViewModel);
 
-        Task Update(ProviderViewModel providerViewModel);
+        Task UpdateAsync(ProviderViewModel providerViewModel);
 
-        Task Remove(Guid id);
+        Task RemoveAsync(Guid id);
 
-        Task<IEnumerable<ProviderViewModel>> GetAll(int page, int pageSize);
+        Task<IEnumerable<ProviderViewModel>> GetAllAsync(int page, int pageSize);
 
-        Task<ProviderViewModel> GetById(Guid id);
+        Task<ProviderViewModel> GetByIdAsync(Guid id);
 
-        Task<IEnumerable<ProductItemViewModel>> GetByName(string name);
+        Task<IEnumerable<ProviderViewModel>> GetByNameAsync(string name);
     }
 }

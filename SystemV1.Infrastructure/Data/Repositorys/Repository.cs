@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -13,20 +12,18 @@ namespace SystemV1.Infrastructure.Data.Repositorys
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {
         private readonly SqlContext _sqlContext;
-        private SqlConnection _sqlConnection;
 
-        public Repository(SqlContext sqlContext, IConfiguration configuration)
+        public Repository(SqlContext sqlContext)
         {
             _sqlContext = sqlContext;
-            _sqlConnection = new SqlConnection(configuration.GetConnectionString("ConnectionString"));
         }
 
-        public async Task Add(TEntity entity)
+        public void Add(TEntity entity)
         {
             _sqlContext.Set<TEntity>().Add(entity);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll(int page, int pageSize)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(int page, int pageSize)
         {
             var skip = (page - 1) * pageSize;
             var sql = @$"SELECT *
@@ -36,23 +33,23 @@ namespace SystemV1.Infrastructure.Data.Repositorys
                          OFFSET {pageSize} ROWS
                          FETCH NEXT {skip} ROWS ONLY";
 
-            return _sqlConnection.Query<TEntity>(sql);
+            return await _sqlContext.Connection.QueryAsync<TEntity>(sql);
         }
 
-        public async Task<TEntity> GetById(Guid id)
+        public async Task<TEntity> GetByIdAsync(Guid id)
         {
             var sql = $@"SELECT *
                          FROM {typeof(TEntity).Name}
                          WHERE id = {id}";
-            return (TEntity)_sqlConnection.Query<TEntity>(sql);
+            return await _sqlContext.Connection.QueryAsync<TEntity>(sql) as TEntity;
         }
 
-        public async Task Remove(TEntity entity)
+        public void Remove(TEntity entity)
         {
             _sqlContext.Set<TEntity>().Remove(entity);
         }
 
-        public async Task Update(TEntity entity)
+        public void Update(TEntity entity)
         {
             _sqlContext.Entry(entity).State = EntityState.Modified;
             _sqlContext.Set<TEntity>().Update(entity);
