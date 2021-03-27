@@ -11,15 +11,19 @@ namespace SystemV1.Domain.Services
     public class ProviderService : Service<Provider>, IProviderService
     {
         private readonly IRepositoryProvider _repositoryProvider;
-        private readonly IRepositoryAddress _repositoryAddress;
-        private readonly IRepositoryContact _repositoryContact;
+        private readonly IServiceAddress _serviceAddress;
+        private readonly IServiceContact _serviceContact;
         private readonly IUnitOfWork _unitOfWork;
 
         public ProviderService(IRepositoryProvider repositoryProvider,
-                               IUnitOfWork unitOfWork) : base(repositoryProvider, unitOfWork)
+                               IUnitOfWork unitOfWork,
+                               IServiceAddress serviceAddress,
+                               IServiceContact serviceContact) : base(repositoryProvider, unitOfWork)
         {
             _repositoryProvider = repositoryProvider;
             _unitOfWork = unitOfWork;
+            _serviceAddress = serviceAddress;
+            _serviceContact = serviceContact;
         }
 
         public async Task AddProviderAsync(Provider provider)
@@ -28,14 +32,14 @@ namespace SystemV1.Domain.Services
             {
                 foreach (var address in provider.Addresses)
                 {
-                    _repositoryAddress.Add(address);
+                    _serviceAddress.Add(address);
                 }
             }
             if (provider.Contacts.Any())
             {
                 foreach (var contact in provider.Contacts)
                 {
-                    _repositoryContact.Add(contact);
+                    _serviceContact.Add(contact);
                 }
             }
 

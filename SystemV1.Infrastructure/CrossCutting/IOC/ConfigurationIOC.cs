@@ -18,6 +18,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             #region Application
 
             builder.RegisterType<ApplicationServiceProvider>().As<IApplicationServiceProvider>();
+            builder.RegisterType<ApplicationServiceClient>().As<IApplicationServiceClient>();
 
             #endregion Application
 
