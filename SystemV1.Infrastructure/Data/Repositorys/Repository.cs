@@ -40,7 +40,7 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         {
             var sql = $@"SELECT *
                          FROM {typeof(TEntity).Name}
-                         WHERE id = {id}";
+                         WHERE id = {id} and isactive";
             return await _sqlContext.Connection.QueryAsync<TEntity>(sql) as TEntity;
         }
 

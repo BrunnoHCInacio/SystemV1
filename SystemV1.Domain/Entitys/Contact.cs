@@ -1,9 +1,14 @@
-﻿namespace SystemV1.Domain.Entitys
+﻿using System;
+
+namespace SystemV1.Domain.Entitys
 {
     public class Contact : Entity
     {
-        public Client CLient { get; set; }
+        public Client Client { get; set; }
+        public Guid ClientId { get; set; }
         public Provider Provider { get; set; }
+
+        public Guid ProviderId { get; set; }
 
         public string TypeContact { get; set; }
         public string Ddd { get; set; }

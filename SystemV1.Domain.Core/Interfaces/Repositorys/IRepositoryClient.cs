@@ -6,6 +6,6 @@ namespace SystemV1.Domain.Core.Interfaces.Repositorys
 {
     public interface IRepositoryClient : IRepository<Client>
     {
-        Task<IEnumerable<Client>> GetByName(string name);
+        Task<IEnumerable<Client>> GetByNameAsync(string name);
     }
 }

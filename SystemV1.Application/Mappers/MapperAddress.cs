@@ -53,7 +53,7 @@ namespace SystemV1.Application.Mappers
 
             if (addressViewModel.IdCLient.HasValue)
             {
-                address.CLient = new Client { Id = addressViewModel.IdCLient.GetValueOrDefault() };
+                address.Client = new Client { Id = addressViewModel.IdCLient.GetValueOrDefault() };
             }
 
             if (addressViewModel.IdProvider.HasValue)

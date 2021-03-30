@@ -19,7 +19,14 @@ namespace SystemV1.Infrastructure.Data.Repositorys
 
         public async Task<IEnumerable<ProductItem>> GetByNameAsync(string name)
         {
-            var sql = $@"SELECT * FROM productitem WHERE modelo LIKE '%{name}%'";
+            var sql = $@"
+                        SELECT
+                            modelo,
+                            value,
+                            issold
+                            isavailable
+                        FROM productitem
+                        WHERE modelo LIKE '%{name}%' and isactive";
 
             return await _sqlContext.Connection.QueryAsync<ProductItem>(sql);
         }

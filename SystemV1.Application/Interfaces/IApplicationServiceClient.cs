@@ -18,6 +18,6 @@ namespace SystemV1.Application.Interfaces
 
         Task<IEnumerable<ClientViewModel>> GetAllAsync(int page, int pageSize);
 
-        Task<IEnumerable<ClientViewModel>> GetByName(string name);
+        Task<IEnumerable<ClientViewModel>> GetByNameAsync(string name);
     }
 }

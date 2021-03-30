@@ -14,6 +14,13 @@ namespace SystemV1.Application
         private readonly IMapperClient _mapperClient;
         private readonly IServiceClient _serviceClient;
 
+        public ApplicationServiceClient(IMapperClient mapperClient,
+                                        IServiceClient serviceClient)
+        {
+            _mapperClient = mapperClient;
+            _serviceClient = serviceClient;
+        }
+
         public async Task AddAsync(ClientViewModel clientViewModel)
         {
             var client = _mapperClient.ViewModelToEntity(clientViewModel);
@@ -32,19 +39,22 @@ namespace SystemV1.Application
             return _mapperClient.EntityToViewModel(client);
         }
 
-        public Task<IEnumerable<ClientViewModel>> GetByName(string name)
+        public async Task<IEnumerable<ClientViewModel>> GetByNameAsync(string name)
         {
-            var clients = _serviceClient.Ge
+            var clients = await _serviceClient.GetByNameAsync(name);
+            return _mapperClient.ListEntityToViewModel(clients);
         }
 
-        public Task RemoveAsync(Guid id)
+        public async Task RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var client = await _serviceClient.GetByIdAsync(id);
+            await _serviceClient.RemoveAsyncUow(client);
         }
 
-        public Task UpdateAsync(ClientViewModel clientViewModel)
+        public async Task UpdateAsync(ClientViewModel clientViewModel)
         {
-            throw new NotImplementedException();
+            var client = _mapperClient.ViewModelToEntity(clientViewModel);
+            await _serviceClient.UpdateAsyncUow(client);
         }
     }
 }

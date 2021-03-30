@@ -23,7 +23,7 @@ namespace SystemV1.Infrastructure.Data.Repositorys
                                 name,
                                 document
                         FROM provider
-                        WHERE name LIKE '%{name}%'
+                        WHERE name LIKE '%{name}%' and isactive
                         ";
             return await _sqlContext.Connection.QueryAsync<Provider>(sql);
         }

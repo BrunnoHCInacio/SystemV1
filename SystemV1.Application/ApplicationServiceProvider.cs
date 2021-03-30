@@ -13,9 +13,11 @@ namespace SystemV1.Application
         private readonly IProviderService _providerService;
         private readonly IMapperProvider _mapperProvider;
 
-        public ApplicationServiceProvider(IProviderService providerService)
+        public ApplicationServiceProvider(IProviderService providerService,
+                                          IMapperProvider mapperProvider)
         {
             _providerService = providerService;
+            _mapperProvider = mapperProvider;
         }
 
         public async Task AddAsync(ProviderViewModel providerViewModel)

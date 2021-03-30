@@ -13,5 +13,7 @@ namespace SystemV1.Domain.Core.Interfaces.Services
         Task RemoveAsyncUow(Client client);
 
         Task AddClientAsyncUow(Client client);
+
+        Task<IEnumerable<Client>> GetByNameAsync(string name);
     }
 }

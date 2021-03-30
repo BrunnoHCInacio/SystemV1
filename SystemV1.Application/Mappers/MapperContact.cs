@@ -49,7 +49,7 @@ namespace SystemV1.Application.Mappers
 
             if (contactViewModel.IdClient.HasValue)
             {
-                contact.CLient = new Client { Id = contactViewModel.IdClient.GetValueOrDefault() };
+                contact.Client = new Client { Id = contactViewModel.IdClient.GetValueOrDefault() };
             }
 
             return contact;

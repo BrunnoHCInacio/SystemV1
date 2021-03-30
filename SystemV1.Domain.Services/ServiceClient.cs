@@ -49,6 +49,11 @@ namespace SystemV1.Domain.Services
             await AddAsyncUow(client);
         }
 
+        public async Task<IEnumerable<Client>> GetByNameAsync(string name)
+        {
+            return await _repositoryClient.GetByNameAsync(name);
+        }
+
         public void Remove(Client client)
         {
             client.IsActive = false;
