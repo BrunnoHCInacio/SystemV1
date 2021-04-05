@@ -1,8 +1,12 @@
-﻿namespace SystemV1.Domain.Entitys
+﻿using System;
+
+namespace SystemV1.Domain.Entitys
 {
     public class ProductItem : Entity
     {
         public Product Product { get; set; }
+        public Guid ProductId { get; set; }
+
         public string Modelo { get; set; }
         public decimal Value { get; set; }
         public bool IsSold { get; set; }

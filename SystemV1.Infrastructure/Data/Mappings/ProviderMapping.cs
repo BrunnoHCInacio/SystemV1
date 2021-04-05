@@ -28,7 +28,7 @@ namespace SystemV1.Infrastructure.Data.Mappings
             builder.HasMany(c => c.Contacts)
                    .WithOne(ct => ct.Provider)
                    .HasForeignKey(ct => ct.ProviderId);
-
+            builder.Property(c => c.IsActive);
             builder.ToTable("Providers");
         }
     }

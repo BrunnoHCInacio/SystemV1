@@ -7,16 +7,16 @@ using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Infrastructure.Data.Mappings
 {
-    public class CountryMapping : IEntityTypeConfiguration<Country>
+    public class StateMapping : IEntityTypeConfiguration<State>
     {
-        public void Configure(EntityTypeBuilder<Country> builder)
+        public void Configure(EntityTypeBuilder<State> builder)
         {
-            builder.HasKey(c => c.Id);
-            builder.Property(c => c.Name)
+            builder.HasKey(s => s.Id);
+            builder.Property(s => s.Name)
                    .IsRequired()
                    .HasColumnType("varchar(200)");
-            builder.Property(c => c.IsActive);
-            builder.ToTable("Countries");
+            builder.Property(s => s.IsActive);
+            builder.ToTable("States");
         }
     }
 }

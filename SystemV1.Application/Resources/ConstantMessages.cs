@@ -19,8 +19,9 @@ namespace SystemV1.Application.Resources
         public const string DistrictRequired_PT = @"A cidade é obrigatória";
         public const string DistrictLength_PT = @"A cidade deve conter entre 2 e 50 caracteres.";
 
-        public const string CountryRequired_PT = @"O país é obrigatório";
-        public const string StateRequired_PT = @"O estado é obrigatório";
+        public const string CountryRequired_PT = @"O país é obrigatório.";
+        public const string CountryLengh_PT = @"O país deve conter entre 2 e 100 caracteres.";
+        public const string StateRequired_PT = @"O estado é obrigatório.";
 
         public const string TypeContactRequired_PT = @"O tipo de contato deve ser informado";
         public const string ProviderDocumentRequired_PT = @"O CNPJ é obrigatório";
@@ -30,6 +31,9 @@ namespace SystemV1.Application.Resources
 
         public const string ProductItemModelRequired_PT = @"O modelo é obrigatório.";
         public const string ProductItemModelLength_PT = @"O modelo deve conter entre 2 e 150 caracteres.";
-        public const string ProductItemValueRequired_PT = @"O valor é obrigatório";
+        public const string ProductItemValueRequired_PT = @"O valor é obrigatório.";
+
+        public const string StateNameRequired_Pt = "O nome do estado é obrigatório.";
+        public const string StateNameLenght_Pt = "O nome do estado deve conter entre 2 e 100 catacteres.";
     }
 }

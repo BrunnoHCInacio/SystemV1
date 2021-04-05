@@ -19,6 +19,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
 
             builder.RegisterType<ApplicationServiceProvider>().As<IApplicationServiceProvider>();
             builder.RegisterType<ApplicationServiceClient>().As<IApplicationServiceClient>();
+            builder.RegisterType<ApplicationServiceState>().As<IApplicationServiceState>();
 
             #endregion Application
 
@@ -30,6 +31,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<ServiceContact>().As<IServiceClient>();
             builder.RegisterType<ServiceProduct>().As<IServiceProduct>();
             builder.RegisterType<ServiceProductItem>().As<IServiceProductItem>();
+            builder.RegisterType<ServiceState>().As<IServiceState>();
 
             #endregion Services
 
@@ -41,6 +43,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<RepositoryProduct>().As<IRepositoryProduct>();
             builder.RegisterType<RepositoryProductItem>().As<IRepositoryProductItem>();
             builder.RegisterType<RepositoryProvider>().As<IRepositoryProvider>();
+            builder.RegisterType<RepositoryState>().As<IRepositoryState>();
 
             #endregion Repositorys
         }
