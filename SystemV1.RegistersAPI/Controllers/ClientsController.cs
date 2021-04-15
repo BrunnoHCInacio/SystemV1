@@ -14,25 +14,31 @@ namespace SystemV1.API.Controllers
     {
         private readonly IApplicationServiceClient _applicationServiceClient;
 
-        [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<ClientViewModel>>> GetAllAsync(int page, int pageSize)
+        public ClientsController(IApplicationServiceClient applicationServiceClient)
         {
-            var clients = await _applicationServiceClient.GetAllAsync(page, pageSize);
-            return OkResult(clients);
+            _applicationServiceClient = applicationServiceClient;
         }
 
-        [HttpGet("GetById/{guid:id}")]
-        public async Task<ActionResult<ClientViewModel>> GetByIdAsync(Guid id)
+        [HttpGet("GetAll")]
+        public async Task<ActionResult> GetAllAsync(int page, int pageSize)
+        {
+            var clients = await _applicationServiceClient.GetAllAsync(page, pageSize);
+            // return OkResult(clients);
+            return OkResult();
+        }
+
+        [HttpGet("GetById/{id:guid}")]
+        public async Task<ActionResult> GetByIdAsync(Guid id)
         {
             var client = await _applicationServiceClient.GetByIdAsync(id);
-            return OkResult(client);
+            return Ok(client);
         }
 
         [HttpGet("GetByName")]
-        public async Task<ActionResult<IEnumerable<ClientViewModel>>> GetByNameAsync(string name)
+        public async Task<ActionResult> GetByNameAsync(string name)
         {
             var clients = await _applicationServiceClient.GetByNameAsync(name);
-            return OkResult(clients);
+            return Ok(clients);
         }
 
         [HttpPost("Add")]
@@ -40,15 +46,15 @@ namespace SystemV1.API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return OkResult();
+                return Ok();
             }
 
             await _applicationServiceClient.AddAsync(clientViewModel);
 
-            return OkResult();
+            return Ok();
         }
 
-        [HttpPut("Update/{guid:id}")]
+        [HttpPut("Update/{id:guid}")]
         public async Task<ActionResult> UpdateAsync(Guid id, ClientViewModel clientViewModel)
         {
             var client = await _applicationServiceClient.GetByIdAsync(id);
@@ -64,14 +70,14 @@ namespace SystemV1.API.Controllers
             }
 
             await _applicationServiceClient.UpdateAsync(clientViewModel);
-            return OkResult();
+            return Ok();
         }
 
-        [HttpDelete("Delete/{guid:id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult> RemoveAsync(Guid id)
         {
             await _applicationServiceClient.RemoveAsync(id);
-            return OkResult();
+            return Ok();
         }
     }
 }

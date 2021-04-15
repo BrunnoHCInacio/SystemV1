@@ -32,6 +32,7 @@ namespace SystemV1.Infrastructure.Data.Repositorys
                          ORDER BY id
                          OFFSET {pageSize} ROWS
                          FETCH NEXT {skip} ROWS ONLY";
+          
 
             return await _sqlContext.Connection.QueryAsync<TEntity>(sql);
         }

@@ -17,6 +17,7 @@ namespace SystemV1.Domain.Services
         private readonly IServiceAddress _serviceAddress;
         private readonly IServiceContact _serviceContact;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly INotifier _notifier;
 
         public ServiceClient(IRepositoryClient repositoruClient,
                              IUnitOfWork unitOfWork,
@@ -28,6 +29,7 @@ namespace SystemV1.Domain.Services
             _unitOfWork = unitOfWork;
             _serviceAddress = serviceAddress;
             _serviceContact = serviceContact;
+            _notifier = notifier;
         }
 
         public void Add(Client client)

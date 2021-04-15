@@ -14,25 +14,30 @@ namespace SystemV1.API.Controllers
     {
         private readonly IApplicationServiceState _applicationServiceState;
 
+        public StateController(IApplicationServiceState applicationServiceState)
+        {
+            _applicationServiceState = applicationServiceState;
+        }
+
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<StateViewModel>>> GetAllAsync(int page, int pageSize)
         {
             var states = await _applicationServiceState.GetAllAsync(page, pageSize);
-            return OkResult(states);
+            return Ok(states);
         }
 
         [HttpGet("GetById/{id:guid}")]
         public async Task<ActionResult<StateViewModel>> GetByIdAsync(Guid id)
         {
             var state = await _applicationServiceState.GetByIdAsync(id);
-            return OkResult(state);
+            return Ok(state);
         }
 
         [HttpGet("GetByName")]
         public async Task<ActionResult> GetByNameAsync(string name)
         {
             var states = await _applicationServiceState.GetByNameAsync(name);
-            return OkResult(states);
+            return Ok(states);
         }
 
         [HttpPost("Add")]
@@ -40,10 +45,10 @@ namespace SystemV1.API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return OkResult();
+                return Ok();
             }
             await _applicationServiceState.AddAsync(stateViewModel);
-            return OkResult();
+            return Ok();
         }
 
         [HttpPut("Update/{id:guid}")]
@@ -62,7 +67,7 @@ namespace SystemV1.API.Controllers
             }
 
             await _applicationServiceState.UpdateAsync(stateViewModel);
-            return OkResult();
+            return Ok();
         }
 
         [HttpDelete("Delete/{id:guid}")]
@@ -70,7 +75,7 @@ namespace SystemV1.API.Controllers
         {
             var state = await _applicationServiceState.GetByIdAsync(id);
             await _applicationServiceState.RemoveAsync(state);
-            return OkResult();
+            return Ok();
         }
     }
 }

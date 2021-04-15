@@ -11,6 +11,11 @@ namespace SystemV1.Application
     {
         private readonly INotifier _notifier;
 
+        public ApplicationServiceNotifier(INotifier notifier)
+        {
+            _notifier = notifier;
+        }
+
         public List<Notification> GetNotifications()
         {
             return _notifier.GetNotifications();

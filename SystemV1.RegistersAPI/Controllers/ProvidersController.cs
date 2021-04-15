@@ -22,21 +22,21 @@ namespace SystemV1.API.Controllers
         public async Task<ActionResult<IEnumerable<ProviderViewModel>>> GetAllAsync(int page, int pageSize)
         {
             var prodivers = await _applicationServiceProvider.GetAllAsync(page, pageSize);
-            return OkResult(prodivers);
+            return Ok(prodivers);
         }
 
-        [HttpGet("GetById/{guid:id}")]
+        [HttpGet("GetById/{id:guid}")]
         public async Task<ActionResult<ProviderViewModel>> GetByIdAsync(Guid id)
         {
             var provider = await _applicationServiceProvider.GetByIdAsync(id);
-            return OkResult(provider);
+            return Ok(provider);
         }
 
         [HttpGet("GetByName")]
         public async Task<ActionResult<IEnumerable<ProviderViewModel>>> GetByNameAsync(string name)
         {
             var providers = await _applicationServiceProvider.GetByNameAsync(name);
-            return OkResult(providers);
+            return Ok(providers);
         }
 
         [HttpPost("Add")]
@@ -44,13 +44,13 @@ namespace SystemV1.API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                OkResult();
+                Ok();
             }
             await _applicationServiceProvider.AddAsync(providerViewModel);
-            return OkResult();
+            return Ok();
         }
 
-        [HttpPut("Update/{guid:id}")]
+        [HttpPut("Update/{id:guid}")]
         public async Task<ActionResult> UpdateAsync(Guid id, ProviderViewModel providerViewModel)
         {
             var provider = await _applicationServiceProvider.GetByIdAsync(id);
@@ -65,7 +65,14 @@ namespace SystemV1.API.Controllers
             }
 
             await _applicationServiceProvider.UpdateAsync(providerViewModel);
-            return OkResult();
+            return Ok();
+        }
+
+        [HttpDelete("Delete/{id:guid}")]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            await _applicationServiceProvider.RemoveAsync(id);
+            return Ok();
         }
     }
 }

@@ -10,23 +10,31 @@ namespace SystemV1.Infrastructure.Data
     public class SqlContext : DbContext
     {
         public SqlContext()
-        {
-        }
+        { }
 
         public SqlContext(DbContextOptions<SqlContext> options) : base(options)
         {
-            Connection = new SqlConnection(Database.GetDbConnection().ConnectionString);
         }
 
-        public SqlConnection Connection { get; set; }
+        private SqlConnection _connection;
 
-        public DbSet<Client> Clients { get; set; }
-        public DbSet<Address> Addresses { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<ProductItem> ProductItems { get; set; }
-        public DbSet<State> States { get; set; }
-        public DbSet<Country> Countries { get; set; }
+        public SqlConnection Connection { 
+            get { 
+                if(_connection == null)
+                {
+                    _connection = new SqlConnection(Database.GetDbConnection().ConnectionString);
+                }
+                return _connection;
+            }  
+        }
+
+        public DbSet<Client> Client { get; set; }
+        public DbSet<Address> Address { get; set; }
+        public DbSet<Contact> Contact { get; set; }
+        public DbSet<Product> Product { get; set; }
+        public DbSet<ProductItem> ProductItem { get; set; }
+        public DbSet<State> State { get; set; }
+        public DbSet<Country> Country { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {

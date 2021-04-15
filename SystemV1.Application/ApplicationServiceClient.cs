@@ -24,7 +24,7 @@ namespace SystemV1.Application
         public async Task AddAsync(ClientViewModel clientViewModel)
         {
             var client = _mapperClient.ViewModelToEntity(clientViewModel);
-            await _serviceClient.AddClientAsyncUow(client);
+            await _serviceClient.AddAsyncUow(client);
         }
 
         public async Task<IEnumerable<ClientViewModel>> GetAllAsync(int page, int pageSize)

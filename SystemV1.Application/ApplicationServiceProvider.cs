@@ -23,7 +23,7 @@ namespace SystemV1.Application
         public async Task AddAsync(ProviderViewModel providerViewModel)
         {
             var provider = _mapperProvider.ViewModelToEntity(providerViewModel);
-            await _providerService.AddProviderAsync(provider);
+            await _providerService.AddAsyncUow(provider);
         }
 
         public async Task<IEnumerable<ProviderViewModel>> GetAllAsync(int page, int pageSize)

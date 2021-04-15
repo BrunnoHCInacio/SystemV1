@@ -1,16 +1,21 @@
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using SystemV1.Infrastructure.CrossCutting.IOC;
 using SystemV1.Infrastructure.Data;
 
-namespace SystemV1.RegistersAPI
+namespace API2
 {
     public class Startup
     {
@@ -27,12 +32,14 @@ namespace SystemV1.RegistersAPI
             var connection = Configuration["SqlConnection:SqlConnectionString"];
 
             services.AddDbContext<SqlContext>(options => options.UseNpgsql(connection));
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            //services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "My Service", Version = "v1" }); });
             services.AddControllers();
             services.AddOptions();
-            
         }
 
-        public void ConfigureConteiner(ContainerBuilder builder)
+        public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new ModuleIOC());
         }
@@ -44,13 +51,6 @@ namespace SystemV1.RegistersAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("v1/swagger.json", "V1 Docs");
-                }
-            );
 
             app.UseHttpsRedirection();
 

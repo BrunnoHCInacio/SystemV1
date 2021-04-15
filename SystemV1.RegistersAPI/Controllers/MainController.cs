@@ -9,6 +9,7 @@ namespace SystemV1.RegistersAPI.Controllers
     [ApiController]
     public abstract class MainController : ControllerBase
     {
+        [NonAction]
         public ActionResult OkResult(object result = null)
         {
             if (result != null)
@@ -21,6 +22,7 @@ namespace SystemV1.RegistersAPI.Controllers
             return Ok();
         }
 
+        [NonAction]
         public void Notify(string message)
         {
         }

@@ -23,21 +23,21 @@ namespace SystemV1.API.Controllers
         public async Task<ActionResult<IEnumerable<CountryViewModel>>> GetAll(int page, int pageSize)
         {
             var countries = await _applicationServiceCountry.GetAllAsync(page, pageSize);
-            return OkResult(countries);
+            return Ok(countries);
         }
 
-        [HttpGet("GetById/{guid:id}")]
+        [HttpGet("GetById/{id:guid}")]
         public async Task<ActionResult<CountryViewModel>> GetById(Guid id)
         {
             var country = await _applicationServiceCountry.GetByIdAsync(id);
-            return OkResult(country);
+            return Ok(country);
         }
 
         [HttpGet("GetByName")]
         public async Task<ActionResult<IEnumerable<CountryViewModel>>> GetByName(string name)
         {
             var countries = await _applicationServiceCountry.GetByNameAsync(name);
-            return OkResult(countries);
+            return Ok(countries);
         }
 
         [HttpPost("Add")]
@@ -45,13 +45,13 @@ namespace SystemV1.API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return OkResult();
+                return Ok();
             }
             await _applicationServiceCountry.AddAsync(countryViewModel);
-            return OkResult();
+            return Ok();
         }
 
-        [HttpPut("Update/[guid:id}")]
+        [HttpPut("Update/{id:guid}")]
         public async Task<ActionResult> Update(Guid id, CountryViewModel countryViewModel)
         {
             var country = await _applicationServiceCountry.GetByIdAsync(id);
@@ -59,24 +59,24 @@ namespace SystemV1.API.Controllers
             if (country.Id != id)
             {
                 Notify("O Id informado é diferente do Id de país.");
-                return OkResult();
+                return Ok();
             }
             await _applicationServiceCountry.UpdateAsync(countryViewModel);
-            return OkResult();
+            return Ok();
         }
 
-        [HttpDelete("Delete/{guid:id}")]
+        [HttpDelete("Delete/{id:guid}")]
         public async Task<ActionResult> Remove(Guid id)
         {
             var country = _applicationServiceCountry.GetByIdAsync(id);
             if (country == null)
             {
                 Notify("Não foi encontrato o país com o id informado.");
-                return OkResult();
+                return Ok();
             }
 
             await _applicationServiceCountry.RemoveAsync(id);
-            return OkResult();
+            return Ok();
         }
     }
 }

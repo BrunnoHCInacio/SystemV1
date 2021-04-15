@@ -1,7 +1,13 @@
 ﻿using Autofac;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SystemV1.Application;
+using SystemV1.Application.Interfaces;
+using SystemV1.Application.Interfaces.Mapper;
+using SystemV1.Application.Mappers;
+using SystemV1.Domain.Core.Interfaces.Repositorys;
+using SystemV1.Domain.Core.Interfaces.Services;
+using SystemV1.Domain.Services;
+using SystemV1.Domain.Services.Notifications;
+using SystemV1.Infrastructure.Data.Repositorys;
 
 namespace SystemV1.Infrastructure.CrossCutting.IOC
 {
@@ -9,6 +15,8 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
     {
         protected override void Load(ContainerBuilder builder)
         {
+            base.Load(builder);
+
             ConfigurationIOC.Load(builder);
         }
     }

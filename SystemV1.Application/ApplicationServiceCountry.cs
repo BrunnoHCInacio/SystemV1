@@ -13,6 +13,13 @@ namespace SystemV1.Application
         private readonly IServiceCountry _serviceCountry;
         private readonly IMapperCountry _mapperCountry;
 
+        public ApplicationServiceCountry(IServiceCountry serviceCountry,
+                                         IMapperCountry mapperCountry)
+        {
+            _serviceCountry = serviceCountry;
+            _mapperCountry = mapperCountry;
+        }
+
         public async Task AddAsync(CountryViewModel countryViewModel)
         {
             var country = _mapperCountry.ViewModelToEntity(countryViewModel);
@@ -33,7 +40,7 @@ namespace SystemV1.Application
 
         public async Task<IEnumerable<CountryViewModel>> GetByNameAsync(string name)
         {
-            var countries = await _serviceCountry.GetBYNameAsync(name);
+            var countries = await _serviceCountry.GetByNameAsync(name);
             return _mapperCountry.ListEntityToViewModel(countries);
         }
 
@@ -44,7 +51,7 @@ namespace SystemV1.Application
             {
             }
 
-            await _serviceCountry.RemoveAsync(country);
+            await _serviceCountry.RemoveAsyncUow(country);
         }
 
         public async Task UpdateAsync(CountryViewModel countryViewModel)
