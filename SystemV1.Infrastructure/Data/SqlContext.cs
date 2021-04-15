@@ -35,6 +35,7 @@ namespace SystemV1.Infrastructure.Data
                 if (entry.Entity.GetType().GetProperty("DateRegister") != null && entry.State == EntityState.Added)
                 {
                     entry.Property("DateRegister").CurrentValue = DateTime.Now;
+                    entry.Property("IsActive").CurrentValue = true;
                 }
                 if (entry.Entity.GetType().GetProperty("DateChange") != null && entry.State == EntityState.Modified)
                 {

@@ -1,42 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Application.Interfaces;
+using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
+using SystemV1.Domain.Core.Interfaces.Services;
 
 namespace SystemV1.Application
 {
     public class ApplicationServiceCountry : IApplicationServiceCountry
     {
-        public Task Add(CountryViewModel countryViewModel)
+        private readonly IServiceCountry _serviceCountry;
+        private readonly IMapperCountry _mapperCountry;
+
+        public async Task AddAsync(CountryViewModel countryViewModel)
         {
-            throw new NotImplementedException();
+            var country = _mapperCountry.ViewModelToEntity(countryViewModel);
+            await _serviceCountry.AddAsyncUow(country);
         }
 
-        public Task<IEnumerable<CountryViewModel>> GetAllAsync(int page, int pageSize)
+        public async Task<IEnumerable<CountryViewModel>> GetAllAsync(int page, int pageSize)
         {
-            throw new NotImplementedException();
+            var countries = await _serviceCountry.GetAllAsync(page, pageSize);
+            return _mapperCountry.ListEntityToViewModel(countries);
         }
 
-        public Task<CountryViewModel> GetByIdAsync(Guid id)
+        public async Task<CountryViewModel> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var country = await _serviceCountry.GetByIdAsync(id);
+            return _mapperCountry.EntityToViewModel(country);
         }
 
-        public Task<IEnumerable<CountryViewModel>> GetByNameAsync(string name)
+        public async Task<IEnumerable<CountryViewModel>> GetByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            var countries = await _serviceCountry.GetBYNameAsync(name);
+            return _mapperCountry.ListEntityToViewModel(countries);
         }
 
-        public Task Remove(Guid id)
+        public async Task RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var country = await _serviceCountry.GetByIdAsync(id);
+            if (country == null)
+            {
+            }
+
+            await _serviceCountry.RemoveAsync(country);
         }
 
-        public Task Update(Guid id, CountryViewModel countryViewModel)
+        public async Task UpdateAsync(CountryViewModel countryViewModel)
         {
-            throw new NotImplementedException();
+            var country = _mapperCountry.ViewModelToEntity(countryViewModel);
+            await _serviceCountry.UpdateAsyncUow(country);
         }
     }
 }

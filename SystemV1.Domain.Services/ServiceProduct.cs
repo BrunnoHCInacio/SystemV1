@@ -1,35 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
 using SystemV1.Domain.Entitys;
+using SystemV1.Domain.Services.Validations;
 
 namespace SystemV1.Domain.Services
 {
-    public class ServiceProduct : Service<Product>, IServiceProduct
+    public class ServiceProduct : Service, IServiceProduct
     {
         private readonly IRepositoryProduct _repositoryProduct;
         private readonly IUnitOfWork _unitOfWork;
 
         public ServiceProduct(IRepositoryProduct repositoryProduct,
-                              IUnitOfWork unitOfWork) : base(repositoryProduct, unitOfWork)
+                              IUnitOfWork unitOfWork,
+                              INotifier notifier) : base(notifier)
         {
             _repositoryProduct = repositoryProduct;
             _unitOfWork = unitOfWork;
         }
 
+        public void Add(Product product)
+        {
+            _repositoryProduct.Add(product);
+        }
+
+        public async Task AddAsyncUow(Product product)
+        {
+            if (!RunValidation(new ProductValidation(), product))
+            {
+                return;
+            }
+
+            Add(product);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetAllAsync(int page, int pageSize)
+        {
+            return await _repositoryProduct.GetAllAsync(page, pageSize);
+        }
+
+        public async Task<Product> GetByIdAsync(Guid id)
+        {
+            return await _repositoryProduct.GetByIdAsync(id);
+        }
+
         public void Remove(Product product)
         {
             product.IsActive = false;
-            _repositoryProduct.Update(product);
+            Update(product);
         }
 
         public void RemoveUow(Product product)
         {
             Remove(product);
             _unitOfWork.CommitAsync();
+        }
+
+        public void Update(Product product)
+        {
+            _repositoryProduct.Update(product);
+        }
+
+        public async Task UpdateAsyncUow(Product product)
+        {
+            if (!RunValidation(new ProductValidation(), product))
+            {
+                return;
+            }
+            Update(product);
+            await _unitOfWork.CommitAsync();
         }
     }
 }

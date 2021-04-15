@@ -14,10 +14,10 @@ namespace SystemV1.Application.Interfaces
 
         Task<IEnumerable<CountryViewModel>> GetByNameAsync(string name);
 
-        Task Add(CountryViewModel countryViewModel);
+        Task AddAsync(CountryViewModel countryViewModel);
 
-        Task Update(Guid id, CountryViewModel countryViewModel);
+        Task UpdateAsync(CountryViewModel countryViewModel);
 
-        Task Remove(Guid id);
+        Task RemoveAsync(Guid id);
     }
 }

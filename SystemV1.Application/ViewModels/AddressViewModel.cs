@@ -32,8 +32,6 @@ namespace SystemV1.Application.ViewModels
 
         public string StateName { get; set; }
 
-        [Required(ErrorMessage = ConstantMessages.ZipCodeRequiredt_PT)]
-        [StringLength(8, ErrorMessage = ConstantMessages.ZipCodeLength_PT, MinimumLength = 7)]
         public int ZipCode { get; set; }
 
         public Guid? IdCLient { get; set; }

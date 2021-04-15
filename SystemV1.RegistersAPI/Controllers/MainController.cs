@@ -20,5 +20,9 @@ namespace SystemV1.RegistersAPI.Controllers
             }
             return Ok();
         }
+
+        public void Notify(string message)
+        {
+        }
     }
 }

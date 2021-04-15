@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
 using SystemV1.Domain.Entitys;
+using SystemV1.Domain.Services.Validations;
 
 namespace SystemV1.Domain.Services
 {
-    public class ProviderService : Service<Provider>, IProviderService
+    public class ProviderService : Service, IProviderService
     {
         private readonly IRepositoryProvider _repositoryProvider;
         private readonly IServiceAddress _serviceAddress;
@@ -18,7 +20,8 @@ namespace SystemV1.Domain.Services
         public ProviderService(IRepositoryProvider repositoryProvider,
                                IUnitOfWork unitOfWork,
                                IServiceAddress serviceAddress,
-                               IServiceContact serviceContact) : base(repositoryProvider, unitOfWork)
+                               IServiceContact serviceContact,
+                               INotifier notifier) : base(notifier)
         {
             _repositoryProvider = repositoryProvider;
             _unitOfWork = unitOfWork;
@@ -26,7 +29,7 @@ namespace SystemV1.Domain.Services
             _serviceContact = serviceContact;
         }
 
-        public async Task AddProviderAsync(Provider provider)
+        public void Add(Provider provider)
         {
             if (provider.Addresses.Any())
             {
@@ -35,7 +38,8 @@ namespace SystemV1.Domain.Services
                     _serviceAddress.Add(address);
                 }
             }
-            if (provider.Contacts.Any())
+
+            if (provider.Addresses.Any())
             {
                 foreach (var contact in provider.Contacts)
                 {
@@ -43,7 +47,30 @@ namespace SystemV1.Domain.Services
                 }
             }
 
-            await AddAsyncUow(provider);
+            _repositoryProvider.Add(provider);
+        }
+
+        public async Task AddAsyncUow(Provider provider)
+        {
+            if (!RunValidation(new ProviderValidation(), provider)
+                && provider.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
+                && provider.Contacts.Any(c => !RunValidation(new ContactValidation(), c)))
+            {
+                return;
+            }
+
+            Add(provider);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task<IEnumerable<Provider>> GetAllAsync(int page, int pageSize)
+        {
+            return await _repositoryProvider.GetAllAsync(page, pageSize);
+        }
+
+        public async Task<Provider> GetByIdAsync(Guid id)
+        {
+            return await _repositoryProvider.GetByIdAsync(id);
         }
 
         public async Task<IEnumerable<Provider>> GetByNameAsync(string name)
@@ -60,6 +87,24 @@ namespace SystemV1.Domain.Services
         public async Task RemoveAsyncUow(Provider provider)
         {
             Remove(provider);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public void Update(Provider provider)
+        {
+            _repositoryProvider.Update(provider);
+        }
+
+        public async Task UpdateAsyncUow(Provider provider)
+        {
+            if (!RunValidation(new ProviderValidation(), provider)
+                && provider.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
+                && provider.Contacts.Any(c => !RunValidation(new ContactValidation(), c)))
+            {
+                return;
+            }
+
+            Update(provider);
             await _unitOfWork.CommitAsync();
         }
     }

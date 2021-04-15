@@ -7,10 +7,11 @@ using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
 using SystemV1.Domain.Entitys;
+using SystemV1.Domain.Services.Validations;
 
 namespace SystemV1.Domain.Services
 {
-    public class ServiceClient : Service<Client>, IServiceClient
+    public class ServiceClient : Service, IServiceClient
     {
         private readonly IRepositoryClient _repositoryClient;
         private readonly IServiceAddress _serviceAddress;
@@ -20,7 +21,8 @@ namespace SystemV1.Domain.Services
         public ServiceClient(IRepositoryClient repositoruClient,
                              IUnitOfWork unitOfWork,
                              IServiceAddress serviceAddress,
-                             IServiceContact serviceContact) : base(repositoruClient, unitOfWork)
+                             IServiceContact serviceContact,
+                             INotifier notifier) : base(notifier)
         {
             _repositoryClient = repositoruClient;
             _unitOfWork = unitOfWork;
@@ -28,7 +30,7 @@ namespace SystemV1.Domain.Services
             _serviceContact = serviceContact;
         }
 
-        public async Task AddClientAsyncUow(Client client)
+        public void Add(Client client)
         {
             if (client.Addresses.Any())
             {
@@ -46,7 +48,30 @@ namespace SystemV1.Domain.Services
                 }
             }
 
-            await AddAsyncUow(client);
+            _repositoryClient.Add(client);
+        }
+
+        public async Task AddAsyncUow(Client client)
+        {
+            if (!RunValidation(new ClientValidation(), client)
+                && client.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
+                && client.Contacts.Any(c => !RunValidation(new ContactValidation(), c)))
+            {
+                return;
+            }
+
+            Add(client);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task<IEnumerable<Client>> GetAllAsync(int page, int pageSize)
+        {
+            return await _repositoryClient.GetAllAsync(page, pageSize);
+        }
+
+        public async Task<Client> GetByIdAsync(Guid id)
+        {
+            return await _repositoryClient.GetByIdAsync(id);
         }
 
         public async Task<IEnumerable<Client>> GetByNameAsync(string name)
@@ -63,6 +88,24 @@ namespace SystemV1.Domain.Services
         public async Task RemoveAsyncUow(Client client)
         {
             Remove(client);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public void Update(Client client)
+        {
+            _repositoryClient.Update(client);
+        }
+
+        public async Task UpdateAsyncUow(Client client)
+        {
+            if (!RunValidation(new ClientValidation(), client)
+                && client.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
+                && client.Contacts.Any(c => !RunValidation(new ContactValidation(), c)))
+            {
+                return;
+            }
+
+            Update(client);
             await _unitOfWork.CommitAsync();
         }
     }

@@ -32,6 +32,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<ServiceProduct>().As<IServiceProduct>();
             builder.RegisterType<ServiceProductItem>().As<IServiceProductItem>();
             builder.RegisterType<ServiceState>().As<IServiceState>();
+            builder.RegisterType<ServiceCountry>().As<IServiceCountry>();
 
             #endregion Services
 
@@ -44,6 +45,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<RepositoryProductItem>().As<IRepositoryProductItem>();
             builder.RegisterType<RepositoryProvider>().As<IRepositoryProvider>();
             builder.RegisterType<RepositoryState>().As<IRepositoryState>();
+            builder.RegisterType<RepositoryCountry>().As<IRepositoryCountry>();
 
             #endregion Repositorys
         }

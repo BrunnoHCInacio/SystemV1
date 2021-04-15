@@ -42,6 +42,10 @@ namespace SystemV1.API.Controllers
         [HttpPost("Add")]
         public async Task<ActionResult> AddAsync(ProviderViewModel providerViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                OkResult();
+            }
             await _applicationServiceProvider.AddAsync(providerViewModel);
             return OkResult();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
@@ -11,17 +12,17 @@ namespace SystemV1.Application.Mappers
     {
         public CountryViewModel EntityToViewModel(Country country)
         {
-            throw new NotImplementedException();
+            return new CountryViewModel { Id = country.Id, Name = country.Name };
         }
 
         public IEnumerable<CountryViewModel> ListEntityToViewModel(IEnumerable<Country> countries)
         {
-            throw new NotImplementedException();
+            return countries.Select(c => EntityToViewModel(c));
         }
 
         public Country ViewModelToEntity(CountryViewModel countryViewModel)
         {
-            throw new NotImplementedException();
+            return new Country { Id = countryViewModel.Id, Name = countryViewModel.Name };
         }
     }
 }

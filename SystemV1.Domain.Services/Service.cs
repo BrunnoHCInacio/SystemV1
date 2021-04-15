@@ -1,55 +1,47 @@
-﻿using System;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using System;
 using System.Collections.Generic;
+
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
 using SystemV1.Domain.Entitys;
+using SystemV1.Domain.Services.Notifications;
 
 namespace SystemV1.Domain.Services
 {
-    public class Service<TEntity> : IService<TEntity> where TEntity : Entity
+    public class Service
     {
-        private readonly IRepository<TEntity> _repository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly INotifier _notifier;
 
-        public Service(IRepository<TEntity> repository,
-                       IUnitOfWork unitOfWork)
+        public Service(INotifier notifier)
         {
-            _repository = repository;
-            _unitOfWork = unitOfWork;
+            _notifier = notifier;
         }
 
-        public void Add(TEntity entity)
+        public bool RunValidation<TValidation, TEntity>(TValidation validation, TEntity entity) where TValidation : AbstractValidator<TEntity> where TEntity : Entity
         {
-            _repository.Add(entity);
+            var validator = validation.Validate(entity);
+            if (validator.IsValid) return true;
+
+            Notify(validator);
+
+            return false;
         }
 
-        public async Task AddAsyncUow(TEntity entity)
+        public void Notify(ValidationResult validation)
         {
-            Add(entity);
-            await _unitOfWork.CommitAsync();
+            foreach (var error in validation.Errors)
+            {
+                Notify(error.ErrorMessage);
+            }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(int page, int pageSize)
+        public void Notify(string message)
         {
-            return await _repository.GetAllAsync(page, pageSize);
-        }
-
-        public async Task<TEntity> GetByIdAsync(Guid id)
-        {
-            return await _repository.GetByIdAsync(id);
-        }
-
-        public void Update(TEntity entity)
-        {
-            _repository.Update(entity);
-        }
-
-        public async Task UpdateAsyncUow(TEntity entity)
-        {
-            Update(entity);
-            await _unitOfWork.CommitAsync();
+            _notifier.Handle(new Notification(message));
         }
     }
 }

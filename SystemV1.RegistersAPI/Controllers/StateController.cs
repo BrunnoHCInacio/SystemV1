@@ -38,6 +38,10 @@ namespace SystemV1.API.Controllers
         [HttpPost("Add")]
         public async Task<ActionResult> AddAsync(StateViewModel stateViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return OkResult();
+            }
             await _applicationServiceState.AddAsync(stateViewModel);
             return OkResult();
         }
