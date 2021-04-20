@@ -15,10 +15,10 @@ namespace SystemV1.Infrastructure.Data.Uow
             _sqlContext = sqlContext;
         }
 
-        public Task<bool> CommitAsync()
+        public async Task<bool> CommitAsync()
         {
-            _sqlContext.SaveChangesAsync();
-            return new Task<bool>(() => false);
+            await _sqlContext.SaveChangesAsync();
+            return true;
         }
     }
 }

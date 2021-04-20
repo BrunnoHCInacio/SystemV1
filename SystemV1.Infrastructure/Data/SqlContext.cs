@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System;
 using System.Data.SqlClient;
 using System.Threading;
@@ -16,16 +17,22 @@ namespace SystemV1.Infrastructure.Data
         {
         }
 
-        private SqlConnection _connection;
+        private NpgsqlConnection _connection;
 
-        public SqlConnection Connection { 
-            get { 
-                if(_connection == null)
+        public NpgsqlConnection Connection
+        {
+            get
+            {
+                if (_connection == null)
                 {
-                    _connection = new SqlConnection(Database.GetDbConnection().ConnectionString);
+                    _connection = new NpgsqlConnection(Database.GetDbConnection().ConnectionString);
+                    _connection.Open();
+                }
+                else
+                {
                 }
                 return _connection;
-            }  
+            }
         }
 
         public DbSet<Client> Client { get; set; }
@@ -40,8 +47,9 @@ namespace SystemV1.Infrastructure.Data
         {
             foreach (var entry in ChangeTracker.Entries())
             {
-                if (entry.Entity.GetType().GetProperty("DateRegister") != null && entry.State == EntityState.Added)
+                if (entry.State == EntityState.Added)
                 {
+                    entry.Property("Id").CurrentValue = Guid.NewGuid();
                     entry.Property("DateRegister").CurrentValue = DateTime.Now;
                     entry.Property("IsActive").CurrentValue = true;
                 }

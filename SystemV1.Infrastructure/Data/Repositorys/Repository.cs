@@ -27,12 +27,12 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         {
             var skip = (page - 1) * pageSize;
             var sql = @$"SELECT *
-                         FROM {typeof(TEntity).Name}
-                         WHERE isactive
-                         ORDER BY id
-                         OFFSET {pageSize} ROWS
-                         FETCH NEXT {skip} ROWS ONLY";
-          
+                         FROM {"\""}{typeof(TEntity).Name}{"\""}
+                         WHERE {"\""}IsActive{"\""}
+                         ORDER BY {"\""}Id{"\""}
+                         LIMIT {pageSize}
+                         OFFSET {skip}"
+                         ;
 
             return await _sqlContext.Connection.QueryAsync<TEntity>(sql);
         }
@@ -40,8 +40,9 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         public async Task<TEntity> GetByIdAsync(Guid id)
         {
             var sql = $@"SELECT *
-                         FROM {typeof(TEntity).Name}
-                         WHERE id = {id} and isactive";
+                         FROM {"\""}{typeof(TEntity).Name}{"\""}
+                         WHERE {"\""}id{"\""} = {id}
+                            and {"\""}IsActive{"\""}";
             return await _sqlContext.Connection.QueryAsync<TEntity>(sql) as TEntity;
         }
 

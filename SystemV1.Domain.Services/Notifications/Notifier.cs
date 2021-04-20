@@ -13,6 +13,11 @@ namespace SystemV1.Domain.Services.Notifications
             _notifications = new List<Notification>();
         }
 
+        public void Dispose()
+        {
+            _notifications = new List<Notification>();
+        }
+
         public List<Notification> GetNotifications()
         {
             return _notifications;

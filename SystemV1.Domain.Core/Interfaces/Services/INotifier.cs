@@ -5,7 +5,7 @@ using SystemV1.Domain.Services.Notifications;
 
 namespace SystemV1.Domain.Core.Interfaces.Services
 {
-    public interface INotifier
+    public interface INotifier : IDisposable
     {
         void Handle(Notification notification);
 

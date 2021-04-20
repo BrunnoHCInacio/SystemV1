@@ -6,10 +6,10 @@ namespace SystemV1.Domain.Entitys
     {
         public Guid Id { get; set; }
 
-        protected DateTime DateRegister { get; set; }
-        protected DateTime? DateChange { get; set; }
-        protected int IdUserRegister { get; set; }
-        protected int IdUserChange { get; set; }
+        public DateTime DateRegister { get; set; }
+        public DateTime? DateChange { get; set; }
+        public int IdUserRegister { get; set; }
+        public int IdUserChange { get; set; }
         public bool IsActive { get; set; }
     }
 }
