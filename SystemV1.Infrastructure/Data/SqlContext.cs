@@ -8,7 +8,7 @@ using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Infrastructure.Data
 {
-    public class SqlContext : DbContext
+    public class SqlContext : DbContext, IDisposable
     {
         public SqlContext()
         { }
@@ -59,6 +59,12 @@ namespace SystemV1.Infrastructure.Data
                 }
             }
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _connection.Close();
         }
     }
 }
