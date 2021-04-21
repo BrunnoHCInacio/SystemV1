@@ -64,7 +64,10 @@ namespace SystemV1.Infrastructure.Data
         public override void Dispose()
         {
             base.Dispose();
-            _connection.Close();
+            if (_connection != null)
+            {
+                _connection.Close();
+            }
         }
     }
 }

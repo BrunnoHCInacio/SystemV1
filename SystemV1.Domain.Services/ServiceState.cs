@@ -34,6 +34,7 @@ namespace SystemV1.Domain.Services
             {
                 return;
             }
+
             Add(state);
             await _unitOfWork.CommitAsync();
         }
@@ -50,6 +51,11 @@ namespace SystemV1.Domain.Services
 
         public async Task<IEnumerable<State>> GetByNameAsync(string name)
         {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            {
+                Notify("Informe o nome a consultar");
+                return null;
+            }
             return await _repositoryState.GetByNameAsync(name);
         }
 

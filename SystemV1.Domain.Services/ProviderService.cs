@@ -75,6 +75,12 @@ namespace SystemV1.Domain.Services
 
         public async Task<IEnumerable<Provider>> GetByNameAsync(string name)
         {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            {
+                Notify("Informe o nome a consultar");
+                return null;
+            }
+
             return await _repositoryProvider.GetByNameAsync(name);
         }
 

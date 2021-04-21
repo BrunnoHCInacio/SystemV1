@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SystemV1.Infrastructure.Data;
@@ -9,9 +10,10 @@ using SystemV1.Infrastructure.Data;
 namespace SystemV1.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SqlContextModelSnapshot : ModelSnapshot
+    [Migration("20210420015150_update_entity_country")]
+    partial class update_entity_country
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,6 +180,9 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<DateTime>("DateRegister")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<Guid>("IdState")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("IdUserChange")
                         .HasColumnType("integer");
 
@@ -333,9 +338,6 @@ namespace SystemV1.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
-
-                    b.Property<Guid>("StateId")
-                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

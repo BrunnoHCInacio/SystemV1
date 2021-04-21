@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
@@ -13,6 +14,7 @@ namespace SystemV1.Domain.Services
     public class ServiceCountry : Service, IServiceCountry
     {
         private readonly IRepositoryCountry _repositoryCountry;
+        private readonly IRepositoryState _repositoryState;
         private readonly IUnitOfWork _unitOfWork;
 
         public ServiceCountry(IRepositoryCountry repositoryCountry,
@@ -35,6 +37,19 @@ namespace SystemV1.Domain.Services
                 return;
             }
 
+            if (country.States.Any())
+            {
+                if (country.States.Any(s => !RunValidation(new StateValidation(), s)))
+                {
+                    return;
+                }
+
+                foreach (var state in country.States)
+                {
+                    _repositoryState.Add(state);
+                }
+            }
+
             Add(country);
             await _unitOfWork.CommitAsync();
         }
@@ -51,6 +66,12 @@ namespace SystemV1.Domain.Services
 
         public async Task<IEnumerable<Country>> GetByNameAsync(string name)
         {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            {
+                Notify("Informe o nome a consultar");
+                return null;
+            }
+
             return await _repositoryCountry.GetByNameAsync(name);
         }
 
@@ -76,6 +97,14 @@ namespace SystemV1.Domain.Services
             if (!RunValidation(new CountryValidation(), country))
             {
                 return;
+            }
+
+            if (country.States.Any())
+            {
+                if (country.States.Any(s => !RunValidation(new StateValidation(), s)))
+                {
+                    return;
+                }
             }
 
             Update(country);

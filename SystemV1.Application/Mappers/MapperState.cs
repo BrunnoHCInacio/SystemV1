@@ -15,7 +15,8 @@ namespace SystemV1.Application.Mappers
             return new StateViewModel
             {
                 Id = state.Id,
-                Name = state.Name
+                Name = state.Name,
+                CountryId = state.Country != null ? state.Country.Id : new Guid()
             };
         }
 
@@ -26,11 +27,21 @@ namespace SystemV1.Application.Mappers
 
         public State ViewModelToEntity(StateViewModel stateViewModel)
         {
-            return new State
+            var state = new State
             {
                 Id = stateViewModel.Id,
                 Name = stateViewModel.Name
             };
+
+            if (stateViewModel.CountryId != new Guid())
+            {
+                state.Country = new Country
+                {
+                    Id = stateViewModel.CountryId
+                };
+            }
+
+            return state;
         }
     }
 }

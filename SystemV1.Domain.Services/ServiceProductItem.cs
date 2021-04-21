@@ -49,6 +49,17 @@ namespace SystemV1.Domain.Services
             return await _repositoryProductItem.GetByIdAsync(id);
         }
 
+        public async Task<IEnumerable<ProductItem>> GetByNameAsync(string name)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            {
+                Notify("Informe o nome a consultar");
+                return null;
+            }
+
+            return await _repositoryProductItem.GetByNameAsync(name);
+        }
+
         public void Remove(ProductItem productItem)
         {
             productItem.IsActive = false;
