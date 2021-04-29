@@ -5,9 +5,14 @@ namespace SystemV1.Domain.Entitys
 {
     public class Country : Entity
     {
-        public Country()
+        public Country(string name,
+                       Guid id = new Guid(),
+                       IEnumerable<State> states = null)
         {
             States = new List<State>();
+            Id = id;
+            Name = name;
+            States = states;
         }
 
         public string Name { get; set; }

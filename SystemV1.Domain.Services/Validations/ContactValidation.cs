@@ -4,40 +4,40 @@ using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Domain.Services.Validations
 {
-    internal class ContactValidation : AbstractValidator<Contact>
+    public class ContactValidation : AbstractValidator<Contact>
     {
         public ContactValidation()
         {
             RuleFor(c => c.TypeContact)
                 .NotEmpty()
-                .WithMessage("O tipo de contato deve ser informado.");
+                .WithMessage(ConstantsContactMessages.TypeContactRequired);
 
             When(c => c.TypeContact == Constants.TypeContactPhone,
                 () =>
                 {
                     RuleFor(c => c.PhoneNumber)
                         .NotEmpty()
-                        .WithMessage("O telefone fixo é obrigatório.");
+                        .WithMessage(ConstantsContactMessages.PhoneNumberRequired);
 
                     RuleFor(c => c.PhoneNumber)
                         .MinimumLength(8)
-                        .WithMessage("O telefone fixo deve conter 8 caracteres.");
+                        .WithMessage(ConstantsContactMessages.PhoneNumberMinLength);
 
                     RuleFor(c => c.PhoneNumber)
                         .MaximumLength(8)
-                        .WithMessage("O telefone fixo deve conter 8 caracteres.");
+                        .WithMessage(ConstantsContactMessages.PhoneNumberMaxLength);
 
                     RuleFor(c => c.Ddd)
                         .NotEmpty()
-                        .WithMessage("O DDD é obrigatório");
+                        .WithMessage(ConstantsContactMessages.DddRequired);
 
                     RuleFor(c => c.Ddd)
                         .MinimumLength(2)
-                        .WithMessage("O DDD deve conter 2 caracteres.");
+                        .WithMessage(ConstantsContactMessages.DddMinLength);
 
                     RuleFor(c => c.Ddd)
-                        .MaximumLength(2)
-                        .WithMessage("O DDD deve conter 2 caracteres.");
+                        .MaximumLength(3)
+                        .WithMessage(ConstantsContactMessages.DddMaxLength);
                 });
 
             When(c => c.TypeContact == Constants.TypeContactCellPhone,
@@ -45,27 +45,27 @@ namespace SystemV1.Domain.Services.Validations
                 {
                     RuleFor(c => c.Ddd)
                         .NotEmpty()
-                        .WithMessage("O DDD é obrigatório.");
+                        .WithMessage(ConstantsContactMessages.DddRequired);
 
                     RuleFor(c => c.Ddd)
                         .MinimumLength(2)
-                        .WithMessage("O DDD deve conter 2 caracteres.");
+                        .WithMessage(ConstantsContactMessages.DddMinLength);
 
                     RuleFor(c => c.Ddd)
-                        .MaximumLength(2)
-                        .WithMessage("O DDD deve conter 2 caracteres.");
+                        .MaximumLength(3)
+                        .WithMessage(ConstantsContactMessages.DddMaxLength);
 
                     RuleFor(c => c.CellPhoneNumber)
                         .NotEmpty()
-                        .WithMessage("O celular é obrigatório.");
+                        .WithMessage(ConstantsContactMessages.CellPhoneRequired);
 
                     RuleFor(c => c.CellPhoneNumber)
                         .MinimumLength(8)
-                        .WithMessage("O celular deve conter 8 caracteres.");
+                        .WithMessage(ConstantsContactMessages.CellPhoneMinLength);
 
                     RuleFor(c => c.CellPhoneNumber)
-                        .MaximumLength(8)
-                        .WithMessage("O celular deve conter 8 caracteres.");
+                        .MaximumLength(9)
+                        .WithMessage(ConstantsContactMessages.CellPhoneMaxLength);
                 });
 
             When(c => c.TypeContact == Constants.TypeContactEmail,
@@ -73,11 +73,11 @@ namespace SystemV1.Domain.Services.Validations
                 {
                     RuleFor(c => c.Email)
                         .NotEmpty()
-                        .WithMessage("O email é obrigatório.");
+                        .WithMessage(ConstantsContactMessages.EmailRequired);
 
                     RuleFor(c => c.Email)
                         .EmailAddress()
-                        .WithMessage("Informe um email válido.");
+                        .WithMessage(ConstantsContactMessages.EmailValid);
                 });
         }
     }

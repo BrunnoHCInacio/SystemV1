@@ -7,20 +7,6 @@ using System.Text.Json;
 
 namespace SystemV1.Infrastructure.Test
 {
-    public class Tests
-    {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
-        [Test]
-        public void Test1()
-        {
-            Assert.Pass();
-        }
-    }
-
     public class AccessDataBaseTest
     {
         [SetUp]

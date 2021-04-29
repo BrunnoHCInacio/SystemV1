@@ -31,7 +31,7 @@ namespace SystemV1.API2.Controllers
         [HttpGet("GetById/{id:guid}")]
         public async Task<ActionResult> GetById(Guid id)
         {
-            var state = _applicationServiceState.GetByIdAsync(id);
+            var state = await _applicationServiceState.GetByIdAsync(id);
             return OkResult(state);
         }
 

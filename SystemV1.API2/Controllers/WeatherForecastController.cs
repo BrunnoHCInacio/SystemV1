@@ -25,14 +25,5 @@ namespace API2.Controllers
             _logger = logger;
             _applicationServiceClient = applicationServiceClient;
         }
-
-        [HttpGet]
-        public async Task<ActionResult<object>> Get()
-        {
-            var rng = new Random();
-
-            var a = _applicationServiceClient.GetAllAsync(1, 10);
-            return Ok(a);
-        }
     }
 }

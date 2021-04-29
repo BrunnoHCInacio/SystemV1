@@ -18,11 +18,13 @@ namespace SystemV1.Domain.Services
         private readonly IUnitOfWork _unitOfWork;
 
         public ServiceCountry(IRepositoryCountry repositoryCountry,
+                              IRepositoryState repositoryState,
                               IUnitOfWork unitOfWork,
                               INotifier notifier) : base(notifier)
         {
             _repositoryCountry = repositoryCountry;
             _unitOfWork = unitOfWork;
+            _repositoryState = repositoryState;
         }
 
         public void Add(Country country)

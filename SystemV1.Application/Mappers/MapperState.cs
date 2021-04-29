@@ -27,18 +27,11 @@ namespace SystemV1.Application.Mappers
 
         public State ViewModelToEntity(StateViewModel stateViewModel)
         {
-            var state = new State
-            {
-                Id = stateViewModel.Id,
-                Name = stateViewModel.Name
-            };
-
+            var state = new State(stateViewModel.Name,
+                                  stateViewModel.Id);
             if (stateViewModel.CountryId != new Guid())
             {
-                state.Country = new Country
-                {
-                    Id = stateViewModel.CountryId
-                };
+                state.Country = new Country("", stateViewModel.CountryId);
             }
 
             return state;

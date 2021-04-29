@@ -33,23 +33,14 @@ namespace SystemV1.Application.Mappers
 
         public Address ViewModelToEntity(AddressViewModel addressViewModel)
         {
-            var address = new Address
-            {
-                Id = addressViewModel.Id,
-                Street = addressViewModel.Street,
-                Complement = addressViewModel.Complement,
-                District = addressViewModel.District,
-                Number = addressViewModel.Number,
-                ZipCode = addressViewModel.ZipCode,
-                Country = new Country
-                {
-                    Id = addressViewModel.IdCountry.GetValueOrDefault()
-                },
-                State = new State
-                {
-                    Id = addressViewModel.IdState.GetValueOrDefault()
-                },
-            };
+            var state = new State("", addressViewModel.IdState.GetValueOrDefault());
+
+            var address = new Address(addressViewModel.ZipCode,
+                                      addressViewModel.Street,
+                                      addressViewModel.Number,
+                                      addressViewModel.Complement,
+                                      addressViewModel.District,
+                                      state);
 
             if (addressViewModel.IdCLient.HasValue)
             {
