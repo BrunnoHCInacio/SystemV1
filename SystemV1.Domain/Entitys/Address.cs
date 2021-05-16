@@ -4,15 +4,12 @@ namespace SystemV1.Domain.Entitys
 {
     public class Address : Entity
     {
-        public Address(int zipCode,
+        public Address(Guid id,
+                       int zipCode,
                        string street,
                        string number,
                        string complement,
-                       string district,
-                       State state,
-                       Guid id = new Guid(),
-                       Client client = null,
-                       Provider provider = null)
+                       string district)
         {
             Id = id;
             ZipCode = zipCode;
@@ -20,9 +17,6 @@ namespace SystemV1.Domain.Entitys
             Number = number;
             Complement = complement;
             District = district;
-            State = state;
-            Client = client;
-            Provider = provider;
         }
 
         public Client Client { get; set; }

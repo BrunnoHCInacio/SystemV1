@@ -28,7 +28,7 @@ namespace SystemV1.Infrastructure.Test
             var mockSet = new Mock<DbSet<State>>();
             var mockContext = new Mock<SqlContext>();
 
-            mockContext.Setup(m => m.State).Returns(mockSet.Object);
+            mockContext.Setup(m => m.States).Returns(mockSet.Object);
             var stateRepository = new RepositoryState(mockContext.Object);
 
             var state = new State("Goiás");

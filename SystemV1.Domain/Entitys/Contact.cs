@@ -10,9 +10,7 @@ namespace SystemV1.Domain.Entitys
                        string cellPhoneNumber,
                        string phoneNumber,
                        string email,
-                       Guid id = new Guid(),
-                       Client client = null,
-                       Provider provider = null)
+                       Guid id = new Guid())
         {
             Id = id;
             TypeContact = typeContact;
@@ -21,8 +19,6 @@ namespace SystemV1.Domain.Entitys
             CellPhoneNumber = cellPhoneNumber;
             PhoneNumber = phoneNumber;
             Email = email;
-            Client = client;
-            Provider = provider;
         }
 
         public Client Client { get; set; }

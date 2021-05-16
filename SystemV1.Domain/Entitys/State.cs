@@ -4,13 +4,11 @@ namespace SystemV1.Domain.Entitys
 {
     public class State : Entity
     {
-        public State(string name,
-                     Guid id = new Guid(),
-                     Country country = null)
+        public State(Guid id,
+                     string name)
         {
             Id = id;
             Name = name;
-            Country = country;
         }
 
         public string Name { get; set; }
