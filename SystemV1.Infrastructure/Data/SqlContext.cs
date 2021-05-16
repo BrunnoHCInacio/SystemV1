@@ -40,7 +40,7 @@ namespace SystemV1.Infrastructure.Data
         public DbSet<Contact> Contact { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<ProductItem> ProductItem { get; set; }
-        public DbSet<State> State { get; set; }
+        public DbSet<State> States { get; set; }
         public DbSet<Country> Country { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
