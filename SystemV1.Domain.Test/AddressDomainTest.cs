@@ -39,16 +39,16 @@ namespace SystemV1.Domain.Test
                                       stateExpected.Country.Id);
 
             var state = new State(stateExpected.Name,
-                                  stateExpected.Id,
-                                  country);
-
+                                  stateExpected.Id);
+            state.Country = country;
             var address = new Address(addressExpected.ZipCode,
                                       addressExpected.Street,
                                       addressExpected.Number,
                                       addressExpected.Complement,
                                       addressExpected.District,
-                                      state,
                                       addressExpected.Id);
+
+            address.State = state;
 
             Assert.Equal(address.Id, addressExpected.Id);
             Assert.Equal(address.Street, addressExpected.Street);
