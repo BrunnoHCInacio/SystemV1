@@ -38,14 +38,14 @@ namespace SystemV1.Application.Mappers
 
         public Client ViewModelToEntity(ClientViewModel clientViewModel)
         {
-            return new Client
-            {
-                Id = clientViewModel.Id,
-                Document = clientViewModel.Document,
-                Name = clientViewModel.Name,
-                Addresses = clientViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a)),
-                Contacts = clientViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c))
-            };
+            var client = new Client(clientViewModel.Id,
+                                    clientViewModel.Name,
+                                    clientViewModel.Document);
+
+            client.Addresses = clientViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a));
+            client.Contacts = clientViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c));
+
+            return client;
         }
     }
 }

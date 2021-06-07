@@ -11,19 +11,6 @@ namespace SystemV1.Domain.Services.Validations
     {
         public AddressValidation()
         {
-            RuleFor(a => a.Street)
-                .NotEmpty()
-                .WithMessage(ConstantsAddressMessages.StreetRequired);
-            RuleFor(a => a.Street)
-                .Length(2, 100)
-                .WithMessage(ConstantsAddressMessages.StreetLength2_100);
-            RuleFor(a => a.District)
-                .NotEmpty()
-                .WithMessage(ConstantsAddressMessages.DistrictRequired);
-
-            RuleFor(a => a.District)
-                .Length(2, 50)
-                .WithMessage(ConstantsAddressMessages.DistrictLenght2_50);
         }
     }
 }

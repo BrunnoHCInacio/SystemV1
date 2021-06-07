@@ -55,9 +55,9 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Client client)
         {
-            if (!RunValidation(new ClientValidation(), client)
-                && client.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
-                && client.Contacts.Any(c => !RunValidation(new ContactValidation(), c)))
+            if (!RunValidation(client.ValidateClient())
+                && client.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
+                && client.Contacts.Any(c => !RunValidation(c.ValidateContact())))
             {
                 return;
             }
@@ -106,9 +106,9 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Client client)
         {
-            if (!RunValidation(new ClientValidation(), client)
-                && client.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
-                && client.Contacts.Any(c => !RunValidation(new ContactValidation(), c)))
+            if (!RunValidation(client.ValidateClient())
+                && client.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
+                && client.Contacts.Any(c => !RunValidation(c.ValidateContact())))
             {
                 return;
             }

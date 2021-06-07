@@ -21,6 +21,15 @@ namespace SystemV1.Domain.Services
             _notifier = notifier;
         }
 
+        public bool RunValidation(ValidationResult entity)
+        {
+            if (entity.IsValid) return true;
+
+            Notify(entity);
+
+            return false;
+        }
+
         public bool RunValidation<TValidation, TEntity>(TValidation validation, TEntity entity) where TValidation : AbstractValidator<TEntity> where TEntity : Entity
         {
             var validator = validation.Validate(entity);

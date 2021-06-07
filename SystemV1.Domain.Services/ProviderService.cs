@@ -54,7 +54,7 @@ namespace SystemV1.Domain.Services
         {
             if (!RunValidation(new ProviderValidation(), provider)
                 && provider.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
-                && provider.Contacts.Any(c => !RunValidation(new ContactValidation(), c)))
+                && provider.Contacts.Any(c => !RunValidation(c.ValidateContact())))
             {
                 return;
             }
@@ -105,7 +105,7 @@ namespace SystemV1.Domain.Services
         {
             if (!RunValidation(new ProviderValidation(), provider)
                 && provider.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
-                && provider.Contacts.Any(c => !RunValidation(new ContactValidation(), c)))
+                && provider.Contacts.Any(c => !RunValidation(c.ValidateContact())))
             {
                 return;
             }

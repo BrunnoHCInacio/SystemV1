@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentValidation.Results;
+using System;
+using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Entitys
 {
@@ -11,8 +13,18 @@ namespace SystemV1.Domain.Entitys
             Name = name;
         }
 
-        public string Name { get; set; }
-        public Guid StateId { get; set; }
-        public Country Country { get; set; }
+        public string Name { get; private set; }
+        public Guid StateId { get; private set; }
+        public Country Country { get; private set; }
+
+        public void SetCountry(Country country)
+        {
+            Country = country;
+        }
+
+        public ValidationResult ValidateState()
+        {
+            return new StateValidation().Validate(this);
+        }
     }
 }

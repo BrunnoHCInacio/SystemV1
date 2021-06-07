@@ -1,16 +1,19 @@
-﻿using System;
+﻿using FluentValidation.Results;
+using System;
+using SystemV1.Domain.Enums;
+using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Entitys
 {
     public class Contact : Entity
     {
-        public Contact(string typeContact,
-                       string ddd,
-                       string ddi,
-                       string cellPhoneNumber,
-                       string phoneNumber,
-                       string email,
-                       Guid id = new Guid())
+        public Contact(Guid id,
+                       EnumTypeContact typeContact,
+                       string ddd = "",
+                       string ddi = "",
+                       string cellPhoneNumber = "",
+                       string phoneNumber = "",
+                       string email = "")
         {
             Id = id;
             TypeContact = typeContact;
@@ -21,17 +24,32 @@ namespace SystemV1.Domain.Entitys
             Email = email;
         }
 
-        public Client Client { get; set; }
+        public Client Client { get; private set; }
         public Guid ClientId { get; set; }
-        public Provider Provider { get; set; }
+        public Provider Provider { get; private set; }
 
         public Guid ProviderId { get; set; }
 
-        public string TypeContact { get; set; }
-        public string Ddd { get; set; }
-        public string Ddi { get; set; }
-        public string CellPhoneNumber { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Email { get; set; }
+        public EnumTypeContact TypeContact { get; private set; }
+        public string Ddd { get; private set; }
+        public string Ddi { get; private set; }
+        public string CellPhoneNumber { get; private set; }
+        public string PhoneNumber { get; private set; }
+        public string Email { get; private set; }
+
+        public ValidationResult ValidateContact()
+        {
+            return new ContactValidation().Validate(this);
+        }
+
+        public void SetClient(Client client)
+        {
+            Client = client;
+        }
+
+        public void SetProvider(Provider provider)
+        {
+            Provider = provider;
+        }
     }
 }

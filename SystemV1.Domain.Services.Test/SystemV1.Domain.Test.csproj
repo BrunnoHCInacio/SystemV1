@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="33.0.2" />
     <PackageReference Include="ExpectedObjects" Version="3.5.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="Npgsql" Version="5.0.5" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
@@ -19,5 +22,4 @@
     <ProjectReference Include="..\SystemV1.Domain.Services\SystemV1.Domain.Services.csproj" />
     <ProjectReference Include="..\SystemV1.Domain\SystemV1.Domain.csproj" />
   </ItemGroup>
-
 </Project>

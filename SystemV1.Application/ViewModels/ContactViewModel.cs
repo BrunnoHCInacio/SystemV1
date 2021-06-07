@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using SystemV1.Application.Resources;
+using SystemV1.Domain.Enums;
 
 namespace SystemV1.Application.ViewModels
 {
@@ -12,7 +13,7 @@ namespace SystemV1.Application.ViewModels
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = ConstantMessages.TypeContactRequired_PT)]
-        public string TypeContact { get; set; }
+        public EnumTypeContact TypeContact { get; set; }
 
         public string Ddd { get; set; }
         public string Ddi { get; set; }

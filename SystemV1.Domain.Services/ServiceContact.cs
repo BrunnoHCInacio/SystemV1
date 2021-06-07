@@ -30,7 +30,7 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Contact contact)
         {
-            if (!RunValidation(new ContactValidation(), contact))
+            if (!RunValidation(contact.ValidateContact()))
             {
                 return;
             }
@@ -67,7 +67,7 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Contact contact)
         {
-            if (!RunValidation(new ContactValidation(), contact))
+            if (!RunValidation(contact.ValidateContact()))
             {
                 return;
             }

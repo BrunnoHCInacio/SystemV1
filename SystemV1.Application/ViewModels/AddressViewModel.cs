@@ -32,7 +32,8 @@ namespace SystemV1.Application.ViewModels
 
         public string StateName { get; set; }
 
-        public int ZipCode { get; set; }
+        public string ZipCode { get; set; }
+        public string City { get; set; }
 
         public Guid? IdCLient { get; set; }
         public Guid? IdProvider { get; set; }

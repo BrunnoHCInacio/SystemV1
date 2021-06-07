@@ -8,6 +8,7 @@ using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services.Validations;
+using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Services
 {
@@ -34,14 +35,14 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Country country)
         {
-            if (!RunValidation(new CountryValidation(), country))
+            if (!RunValidation(country.ValidadeCountry()))
             {
                 return;
             }
 
             if (country.States.Any())
             {
-                if (country.States.Any(s => !RunValidation(new StateValidation(), s)))
+                if (country.States.Any(s => !RunValidation(s.ValidateState())))
                 {
                     return;
                 }
@@ -96,14 +97,14 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Country country)
         {
-            if (!RunValidation(new CountryValidation(), country))
+            if (!RunValidation(country.ValidadeCountry()))
             {
                 return;
             }
 
             if (country.States.Any())
             {
-                if (country.States.Any(s => !RunValidation(new StateValidation(), s)))
+                if (country.States.Any(s => !RunValidation(s.ValidateState())))
                 {
                     return;
                 }

@@ -31,21 +31,21 @@ namespace SystemV1.Application.Mappers
 
         public Contact ViewModelToEntity(ContactViewModel contactViewModel)
         {
-            var contact = new Contact(contactViewModel.TypeContact,
+            var contact = new Contact(contactViewModel.Id,
+                                      contactViewModel.TypeContact,
                                       contactViewModel.Ddd,
                                       contactViewModel.Ddi,
                                       contactViewModel.CellPhoneNumber,
                                       contactViewModel.PhoneNumber,
-                                      contactViewModel.Email,
-                                      contactViewModel.Id);
+                                      contactViewModel.Email);
 
             if (contactViewModel.IdProvider.HasValue)
             {
-                contact.Provider = new Provider { Id = contactViewModel.IdProvider.GetValueOrDefault() };
+                // contact.Provider = new Provider { Id = contactViewModel.IdProvider.GetValueOrDefault() };
             }
             if (contactViewModel.IdClient.HasValue)
             {
-                contact.Client = new Client { Id = contactViewModel.IdClient.GetValueOrDefault() };
+                // contact.Client = new Client(contactViewModel.IdClient.GetValueOrDefault(), null, null);
             }
 
             return contact;

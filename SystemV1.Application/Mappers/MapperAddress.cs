@@ -38,12 +38,13 @@ namespace SystemV1.Application.Mappers
                                       addressViewModel.Street,
                                       addressViewModel.Number,
                                       addressViewModel.Complement,
-                                      addressViewModel.District);
+                                      addressViewModel.District,
+                                      addressViewModel.City);
             address.State = new State(addressViewModel.IdState.GetValueOrDefault(), "");
 
             if (addressViewModel.IdCLient.HasValue)
             {
-                address.Client = new Client { Id = addressViewModel.IdCLient.GetValueOrDefault() };
+                address.Client = new Client(addressViewModel.IdCLient.GetValueOrDefault(), null, null);
             }
 
             if (addressViewModel.IdProvider.HasValue)

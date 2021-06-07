@@ -22,8 +22,7 @@ namespace SystemV1.Application.Mappers
 
         public Country ViewModelToEntity(CountryViewModel countryViewModel)
         {
-            return new Country(countryViewModel.Name,
-                               countryViewModel.Id);
+            return new Country(countryViewModel.Id, countryViewModel.Name);
         }
     }
 }

@@ -1,12 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SystemV1.Domain.Entitys
 {
     public class Product : Entity
     {
-        public string Name { get; set; }
-        public Provider Provider { get; set; }
+        public Product(Guid id,
+                       string name)
+        {
+            Id = id;
+            Name = name;
+        }
 
-        public IEnumerable<ProductItem> ProductItems { get; set; }
+        public string Name { get; private set; }
+        public Provider Provider { get; private set; }
+
+        public List<ProductItem> ProductItems { get; private set; }
     }
 }

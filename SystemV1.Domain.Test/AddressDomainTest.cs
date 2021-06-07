@@ -38,15 +38,15 @@ namespace SystemV1.Domain.Test
             var country = new Country(stateExpected.Country.Name,
                                       stateExpected.Country.Id);
 
-            var state = new State(stateExpected.Name,
-                                  stateExpected.Id);
+            var state = new State(stateExpected.Id,
+                                  stateExpected.Name);
             state.Country = country;
-            var address = new Address(addressExpected.ZipCode,
+            var address = new Address(addressExpected.Id,
+                                      addressExpected.ZipCode,
                                       addressExpected.Street,
                                       addressExpected.Number,
                                       addressExpected.Complement,
-                                      addressExpected.District,
-                                      addressExpected.Id);
+                                      addressExpected.District);
 
             address.State = state;
 

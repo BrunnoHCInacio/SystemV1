@@ -30,7 +30,7 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(State state)
         {
-            if (!RunValidation(new StateValidation(), state))
+            if (!RunValidation(state.ValidateState()))
             {
                 return;
             }
@@ -78,7 +78,7 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(State state)
         {
-            if (!RunValidation(new StateValidation(), state))
+            if (!RunValidation(state.ValidateState()))
             {
                 return;
             }
