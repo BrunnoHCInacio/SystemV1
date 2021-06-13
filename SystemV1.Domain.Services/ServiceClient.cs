@@ -42,7 +42,7 @@ namespace SystemV1.Domain.Services
                 }
             }
 
-            if (client.Addresses.Any())
+            if (client.Contacts.Any())
             {
                 foreach (var contact in client.Contacts)
                 {

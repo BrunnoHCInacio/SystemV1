@@ -30,7 +30,7 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Product product)
         {
-            if (!RunValidation(new ProductValidation(), product))
+            if (!RunValidation(product.ValidateProduct()))
             {
                 return;
             }
@@ -79,7 +79,7 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Product product)
         {
-            if (!RunValidation(new ProductValidation(), product))
+            if (!RunValidation(product.ValidateProduct()))
             {
                 return;
             }

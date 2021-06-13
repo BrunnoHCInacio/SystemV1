@@ -1,4 +1,6 @@
 using Moq;
+using Moq.AutoMock;
+using System.Threading.Tasks;
 using SystemV1.Domain.Core.Constants;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
@@ -21,99 +23,40 @@ namespace SystemV1.Domain.Test.ServiceTests
             _stateTestFixture = stateTestFixture;
         }
 
-        [Fact(DisplayName = "Refatorar")]
-        [Trait("Categoria", "Serviço - Estado")]
-        public void State_ValidateNewState_ReturnTrueToValidateState()
-        {
-            ////Arrange
-            //var state = _stateTestFixture.GenerateValidState();
-
-            //var repositoryState = new Mock<IRepositoryState>();
-            //var unitOfWork = new Mock<IUnitOfWork>();
-            //var notifier = new Mock<INotifier>();
-            //var stateService = new ServiceState(repositoryState.Object,
-            //                                    unitOfWork.Object,
-            //                                    notifier.Object);
-
-            ////Act
-            //var resultValidation = stateService.RunValidation(new StateValidation(), state);
-
-            ////Assert
-            //Assert.True(resultValidation);
-        }
-
-        [Fact(DisplayName = "Validar novo cadastro de estado inválido REFATORAR")]
-        [Trait("Categoria", "Serviço - Estado")]
-        public void State_ValidadeNewState_ReturnFalseToValidadeState()
-        {
-            //Arrange
-            var state = _stateTestFixture.GenerateInvalidState();
-
-            var repositoryState = new Mock<IRepositoryState>();
-            var unitOfWork = new Mock<IUnitOfWork>();
-            var notifier = new Mock<INotifier>();
-
-            var stateService = new ServiceState(repositoryState.Object,
-                                                unitOfWork.Object,
-                                                notifier.Object);
-
-            //Act
-            // var resultValidation = stateService.RunValidation(new StateValidation(), state);
-
-            //Assert
-            // Assert.False(resultValidation);
-        }
-
-        [Fact(DisplayName = "Validar notificações de novo cadastro de estado inválido")]
-        [Trait("State", "Teste de validação de cadastro")]
-        public void State_ValidadeNewState_ValidateMessagesNotificationFromValidationState()
-        {
-            //Arrange
-            var state = _stateTestFixture.GenerateInvalidState();
-
-            var repositoryState = new Mock<IRepositoryState>();
-            var unitOfWork = new Mock<IUnitOfWork>();
-            var notifier = new Mock<INotifier>();
-
-            var stateService = new ServiceState(repositoryState.Object,
-                                                unitOfWork.Object,
-                                                notifier.Object);
-
-            //Act
-            var resultValidation = stateService.RunValidation(state.ValidateState());
-
-            //Assert
-            Assert.False(resultValidation);
-
-            repositoryState.Verify(r => r.Add(state), Times.Never);
-            unitOfWork.Verify(u => u.CommitAsync(), Times.Never);
-            notifier.Verify(n => n.Handle(new Notification("")), Times.Once);
-        }
-
-        [Fact(DisplayName = "Cadastrar novo estado REFATORAR")]
-        [Trait("Categoria", "Serviço - Estado")]
-        public async void State_NewState_ShouldHaveSuccess()
+        [Fact(DisplayName = "Add state with success")]
+        [Trait("Categoria", "Estado - Serviço")]
+        public async Task State_NewState_ShouldHaveSuccess()
         {
             //Arrange
             var state = _stateTestFixture.GenerateValidState();
-
-            var repositoryState = new Mock<IRepositoryState>();
-            var unitOfWork = new Mock<IUnitOfWork>();
-            var notifier = new Mock<INotifier>();
-
-            var stateService = new ServiceState(repositoryState.Object,
-                                                unitOfWork.Object,
-                                                notifier.Object);
+            var mocker = new AutoMocker();
+            var stateService = mocker.CreateInstance<ServiceState>();
+            mocker.GetMock<IUnitOfWork>().Setup(u => u.CommitAsync()).Returns(Task.FromResult(true));
 
             //Act
-            //var resultValidation = stateService.RunValidation(new StateValidation(), state);
+            await stateService.AddAsyncUow(state);
+
+            //Assert
+            mocker.GetMock<IRepositoryState>().Verify(r => r.Add(state), Times.Once);
+            mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Once);
+        }
+
+        [Fact(DisplayName = "Add state with don't success")]
+        [Trait("Categoria", "Serviço - Estado")]
+        public async Task State_NewState_ShouldntHaveSuccess()
+        {
+            //Arrange
+            var state = _stateTestFixture.GenerateInvalidState();
+            var mocker = new AutoMocker();
+            var stateService = mocker.CreateInstance<ServiceState>();
+
+            //Act
             await stateService.AddAsyncUow(state);
 
             //Asert
-            //Assert.True(resultValidation);
-            repositoryState.Verify(r => r.Add(state), Times.Once);
-            unitOfWork.Verify(u => u.CommitAsync(), Times.Once);
-            notifier.Verify(n => n.Handle(new Notification("")), Times.Never);
+            mocker.GetMock<IRepositoryState>().Verify(r => r.Add(state), Times.Never);
+            mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
+            mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Exactly(2));
         }
     }
 }

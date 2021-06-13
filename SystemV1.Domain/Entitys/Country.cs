@@ -17,11 +17,21 @@ namespace SystemV1.Domain.Entitys
 
         public string Name { get; private set; }
 
-        public IEnumerable<State> States { get; set; }
+        public List<State> States { get; private set; }
 
         public ValidationResult ValidadeCountry()
         {
             return new CountryValidation().Validate(this);
+        }
+
+        public void AddStates(List<State> states)
+        {
+            States.AddRange(states);
+        }
+
+        public void AddState(State state)
+        {
+            States.Add(state);
         }
     }
 }

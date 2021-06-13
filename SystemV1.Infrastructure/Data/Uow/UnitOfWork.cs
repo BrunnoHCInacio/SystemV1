@@ -17,8 +17,7 @@ namespace SystemV1.Infrastructure.Data.Uow
 
         public async Task<bool> CommitAsync()
         {
-            await _sqlContext.SaveChangesAsync();
-            return true;
+            return await _sqlContext.SaveChangesAsync() > 1;
         }
     }
 }

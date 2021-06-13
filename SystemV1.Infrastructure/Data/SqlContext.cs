@@ -49,7 +49,6 @@ namespace SystemV1.Infrastructure.Data
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Property("Id").CurrentValue = Guid.NewGuid();
                     entry.Property("DateRegister").CurrentValue = DateTime.Now;
                     entry.Property("IsActive").CurrentValue = true;
                 }

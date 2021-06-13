@@ -30,7 +30,7 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Address address)
         {
-            if (!RunValidation(new AddressValidation(), address))
+            if (!RunValidation(address.ValidateAddress()))
             {
                 return;
             }

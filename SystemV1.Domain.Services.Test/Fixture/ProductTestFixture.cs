@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Test.DomainTests;
@@ -17,25 +18,36 @@ namespace SystemV1.Domain.Test.Fixture
     {
         public dynamic GenerateProductExpected()
         {
-            return new object
+            var faker = new Faker("pt_BR");
+            return new
             {
-            }
+                Id = Guid.NewGuid(),
+                Name = faker.Commerce.ProductName()
+            };
         }
 
         public List<Product> GenerateProduct(int quantity)
         {
+            var productItemFixture = new ProductItemTestFixture();
             var product = new Faker<Product>()
                 .CustomInstantiator(f =>
-                                    new Product(Guid.NewGuid(), f.Commerce.ProductName()));
+                                    new Product(Guid.NewGuid(), f.Commerce.ProductName()))
+                .FinishWith((f, p) =>
+                {
+                    p.AddProductItems(productItemFixture.GenerateProduct(3));
+                });
+
             return product.Generate(quantity);
         }
 
-        public List<Product> GenerateProduct(int quantity)
+        public Product GenerateValidProduct()
         {
-            var product = new Faker<Product>()
-                .CustomInstantiator(f =>
-                                    new Product(Guid.NewGuid(), f.Commerce.ProductName()));
-            return product.Generate(quantity);
+            return GenerateProduct(1).FirstOrDefault();
+        }
+
+        public Product GenerateInvalidProduct()
+        {
+            return new Product(Guid.NewGuid(), "");
         }
 
         public void Dispose()

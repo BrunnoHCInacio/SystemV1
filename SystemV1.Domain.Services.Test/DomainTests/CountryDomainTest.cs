@@ -31,13 +31,15 @@ namespace SystemV1.Domain.Test
 
             var countryExpected = _countryTestFixture.GenerateCountryExpected();
 
-            //Act
-            var country = new Country(countryExpected.Id, countryExpected.Name);
-            country.States = new List<State>
+            var states = new List<State>
             {
                 new State(state1Expected.Id, state1Expected.Name),
                 new State(state2Expected.Id, state2Expected.Name)
             };
+
+            //Act
+            var country = new Country(countryExpected.Id, countryExpected.Name);
+            country.AddStates(states);
 
             //Assert
             Assert.Equal(country.Id, countryExpected.Id);

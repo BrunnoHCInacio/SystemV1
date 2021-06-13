@@ -16,7 +16,7 @@ namespace SystemV1.Domain.Services.Test.Fixture
 
     public class StateTestFixture : IDisposable
     {
-        public IEnumerable<State> GenerateStates(int quantity)
+        public List<State> GenerateStates(int quantity)
         {
             //return new State(Guid.NewGuid(), "Goias");
             var countryFixture = new CountryTestFixture();
