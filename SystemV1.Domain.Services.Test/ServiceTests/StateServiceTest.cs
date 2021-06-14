@@ -24,7 +24,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add state with success")]
-        [Trait("Categoria", "Estado - Serviço")]
+        [Trait("Categoria", "Serviço - Estado")]
         public async Task State_NewState_ShouldHaveSuccess()
         {
             //Arrange

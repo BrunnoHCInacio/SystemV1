@@ -23,7 +23,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add contact email with success")]
-        [Trait("Categoria", "Contato - Serviço")]
+        [Trait("Categoria", "Serviço - Contato")]
         public async Task ContactService_NewContactTypeEmail_ShouldHaveSuccess()
         {
             //Arrange
@@ -42,7 +42,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add contact phone with success")]
-        [Trait("Categoria", "Contato - Serviço")]
+        [Trait("Categoria", "Serviço - Contato")]
         public async Task ContactService_NewContactTypePhone_ShouldHaveSuccess()
         {
             //Arrange

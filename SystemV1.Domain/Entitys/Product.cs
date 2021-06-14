@@ -11,6 +11,7 @@ namespace SystemV1.Domain.Entitys
         public Product(Guid id,
                        string name)
         {
+            ProductItems = new List<ProductItem>();
             Id = id;
             Name = name;
         }

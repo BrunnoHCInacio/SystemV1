@@ -37,7 +37,9 @@ namespace SystemV1.Domain.Test.Fixture
 
         public List<Client> GenerateClient(int quantity,
                                            bool withAddress = true,
-                                           bool withContact = true)
+                                           bool hasValidAddress = true,
+                                           bool withContact = true,
+                                           bool hasValidContact = true)
         {
             var addressFixture = new AddressTestFixture();
             var contactsFixture = new ContactTestFixture();
@@ -50,12 +52,28 @@ namespace SystemV1.Domain.Test.Fixture
                             {
                                 if (withAddress)
                                 {
-                                    c.AddAddresses(addressFixture.GenerateAddress(2));
+                                    if (hasValidAddress)
+                                    {
+                                        c.AddAddresses(addressFixture.GenerateAddress(2));
+                                    }
+                                    else
+                                    {
+                                        c.AddAddress(addressFixture.GenerateInvalidAddress());
+                                    }
                                 }
                                 if (withContact)
                                 {
-                                    c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactCellPhone, 2));
-                                    c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactEmail, 1));
+                                    if (hasValidContact)
+                                    {
+                                        c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactCellPhone, 2));
+                                        c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactEmail, 1));
+                                    }
+                                    else
+                                    {
+                                        c.AddContact(contactsFixture.GenerateInvalidContactTypeCellPhone());
+                                        c.AddContact(contactsFixture.GenerateInvalidContactTypeEmail());
+                                        c.AddContact(contactsFixture.GenerateInvalidContactTypePhone());
+                                    }
                                 }
                             });
 

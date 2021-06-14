@@ -56,8 +56,8 @@ namespace SystemV1.Domain.Services
         public async Task AddAsyncUow(Client client)
         {
             if (!RunValidation(client.ValidateClient())
-                && client.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
-                && client.Contacts.Any(c => !RunValidation(c.ValidateContact())))
+                || client.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
+                || client.Contacts.Any(c => !RunValidation(c.ValidateContact())))
             {
                 return;
             }

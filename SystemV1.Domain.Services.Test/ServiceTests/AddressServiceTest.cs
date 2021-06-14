@@ -23,7 +23,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add new address with success")]
-        [Trait("Categoria", "Endereço - Serviço")]
+        [Trait("Categoria", "Serviço - Endereço")]
         public async Task AddressService_NewAddress_ShouldBeSuccess()
         {
             //Arrange
@@ -42,7 +42,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add new address with fail")]
-        [Trait("Categoria", "Endereço - Serviço")]
+        [Trait("Categoria", "Serviço - Endereço")]
         public async Task AddressService_NewAddress_ShouldBeFail()
         {
             //Arrange
