@@ -35,7 +35,9 @@ namespace SystemV1.Domain.Test.Fixture
             };
         }
 
-        public List<Client> GenerateClient(int quantity)
+        public List<Client> GenerateClient(int quantity,
+                                           bool withAddress = true,
+                                           bool withContact = true)
         {
             var addressFixture = new AddressTestFixture();
             var contactsFixture = new ContactTestFixture();
@@ -46,9 +48,15 @@ namespace SystemV1.Domain.Test.Fixture
                                                                 f.Person.Cpf()))
                             .FinishWith((f, c) =>
                             {
-                                c.AddAddresses(addressFixture.GenerateAddress(2));
-                                c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactCellPhone, 2));
-                                c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactEmail, 1));
+                                if (withAddress)
+                                {
+                                    c.AddAddresses(addressFixture.GenerateAddress(2));
+                                }
+                                if (withContact)
+                                {
+                                    c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactCellPhone, 2));
+                                    c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactEmail, 1));
+                                }
                             });
 
             return client.Generate(quantity);

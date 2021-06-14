@@ -2,6 +2,7 @@
 using Moq.AutoMock;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
@@ -43,6 +44,26 @@ namespace SystemV1.Domain.Test.ServiceTests
             mocker.GetMock<IServiceAddress>().Verify(r => r.Add(It.IsAny<Address>()), Times.Exactly(client.Addresses.Count));
             mocker.GetMock<IServiceContact>().Verify(r => r.Add(It.IsAny<Contact>()), Times.Exactly(client.Contacts.Count));
             mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Once);
+        }
+
+        [Fact(DisplayName = "Add new client and contacts with fail")]
+        [Trait("Categoria", "Cliente - Serviço")]
+        public async Task ClienteService_NewClientAndContacts_ShouldBeFail()
+        {
+            //Arrange
+            var client = _clientTestFixture.GenerateClient(1, false).FirstOrDefault();
+            var mocker = new AutoMocker();
+            var serviceclient = mocker.CreateInstance<ServiceClient>();
+
+            //Act
+            await serviceclient.AddAsyncUow(client);
+
+            //Assert
+            Assert.True(client.ValidateClient().IsValid);
+            mocker.GetMock<IRepositoryClient>().Verify(r => r.Add(It.IsAny<Client>()), Times.Once);
+            mocker.GetMock<IServiceAddress>().Verify(r => r.Add(It.IsAny<Address>()), Times.Never);
+            mocker.GetMock<IServiceContact>().Verify(r => r.Add(It.IsAny<Contact>()), Times.Never);
+            mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
         }
     }
 }
