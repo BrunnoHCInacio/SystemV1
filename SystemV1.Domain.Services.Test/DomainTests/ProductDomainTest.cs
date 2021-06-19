@@ -55,7 +55,7 @@ namespace SystemV1.Domain.Test.DomainTests
         public void Product_NewProduct_ShouldBeInvalid()
         {
             //Arrange
-            var product = _productTestFixture.GenerateValidProduct();
+            var product = _productTestFixture.GenerateInvalidProduct();
 
             //Act
             var result = product.ValidateProduct();

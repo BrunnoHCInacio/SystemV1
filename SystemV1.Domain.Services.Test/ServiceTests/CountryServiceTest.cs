@@ -24,7 +24,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add country with success")]
-        [Trait("Categoria", "Pais - Serviço")]
+        [Trait("Categoria", "Serviço - País")]
         public async Task CountryService_NewCountry_ShouldHaveSuccess()
         {
             //Arrange
@@ -42,7 +42,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add country with state should have success")]
-        [Trait("Categoria", "Pais - Serviço")]
+        [Trait("Categoria", "Serviço - País")]
         public async Task CountryService_NewCountryWithState_ShouldHaveSuccess()
         {
             //Arrange
@@ -61,7 +61,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add country with fail")]
-        [Trait("Categoria", "Pais - Serviço")]
+        [Trait("Categoria", "Serviço - País")]
         public async Task CountryService_NewCountry_ShouldHaveFail()
         {
             //Arrange
@@ -79,7 +79,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add country with state should be fail")]
-        [Trait("Categoria", "Pais - Serviço")]
+        [Trait("Categoria", "Serviço - País")]
         public async Task CountryService_NewCountryWithState_ShouldBeFail()
         {
             //Arrange
@@ -107,7 +107,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add valid country with invalid state should be fail")]
-        [Trait("Categoria", "Pais - Serviço")]
+        [Trait("Categoria", "Serviço - País")]
         public async Task CountryService_NewValidCountryWithInvalidState_ShouldBeFail()
         {
             //Arrange
