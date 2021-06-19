@@ -6,7 +6,7 @@ namespace SystemV1.Domain.Services.Notifications
 {
     public class Notifier : INotifier
     {
-        public List<Notification> _notifications;
+        private List<Notification> _notifications;
 
         public Notifier()
         {

@@ -15,6 +15,24 @@ namespace SystemV1.Domain.Entitys
             Name = name;
         }
 
+        public Country(Guid id,
+                       string name,
+                       DateTime dateRegister,
+                       DateTime dateChange,
+                       int idUserRegister,
+                       int idUserChange,
+                       bool isActive)
+        {
+            States = new List<State>();
+            Id = id;
+            Name = name;
+            DateRegister = dateRegister;
+            DateChange = dateChange;
+            IdUserRegister = idUserRegister;
+            IdUserChange = idUserChange;
+            IsActive = isActive;
+        }
+
         public string Name { get; private set; }
 
         public List<State> States { get; private set; }

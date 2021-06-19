@@ -70,7 +70,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             #endregion Application
 
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
-            builder.RegisterType<Notifier>().As<INotifier>();
+            builder.RegisterType<Notifier>().As<INotifier>().InstancePerLifetimeScope();
         }
     }
 }

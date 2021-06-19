@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,15 @@ namespace SystemV1.API2.Controllers
     {
         private readonly INotifier _notifier;
 
-        public MainController(INotifier notifier)
+        protected MainController(INotifier notifier)
         {
             _notifier = notifier;
+        }
+
+        protected ActionResult OkResult(ModelStateDictionary modelState)
+        {
+            NotifyErrorModelInvalid(modelState);
+            return OkResult();
         }
 
         [NonAction]
@@ -23,16 +30,31 @@ namespace SystemV1.API2.Controllers
         {
             if (HasNotification())
             {
-                return BadRequest(_notifier.GetNotifications().SelectMany(n => n.Message));
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = _notifier.GetNotifications().SelectMany(n => n.Message)
+                });
             }
             if (result != null)
             {
                 return Ok(new
                 {
-                    result
+                    Success = true,
+                    Data = result
                 });
             }
             return Ok();
+        }
+
+        [NonAction]
+        protected void NotifyErrorModelInvalid(ModelStateDictionary modelState)
+        {
+            var errors = modelState.Values.SelectMany(e => e.Errors);
+            foreach (var error in errors)
+            {
+                Notify(error.Exception == null ? error.ErrorMessage : error.Exception.Message);
+            }
         }
 
         [NonAction]

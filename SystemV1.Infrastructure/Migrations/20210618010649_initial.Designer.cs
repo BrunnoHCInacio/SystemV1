@@ -10,7 +10,7 @@ using SystemV1.Infrastructure.Data;
 namespace SystemV1.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20210415205115_initial")]
+    [Migration("20210618010649_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ namespace SystemV1.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.5")
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Address", b =>
@@ -26,6 +26,9 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
@@ -36,8 +39,20 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid?>("CountryId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DateChange")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateRegister")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("District")
                         .HasColumnType("text");
+
+                    b.Property<int>("IdUserChange")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUserRegister")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -54,8 +69,8 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("text");
 
-                    b.Property<int>("ZipCode")
-                        .HasColumnType("integer");
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -76,8 +91,20 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DateChange")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateRegister")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Document")
                         .HasColumnType("text");
+
+                    b.Property<int>("IdUserChange")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUserRegister")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -102,6 +129,12 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DateChange")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateRegister")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Ddd")
                         .HasColumnType("text");
 
@@ -110,6 +143,12 @@ namespace SystemV1.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
+
+                    b.Property<int>("IdUserChange")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUserRegister")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -120,8 +159,8 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("ProviderId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("TypeContact")
-                        .HasColumnType("text");
+                    b.Property<int>("TypeContact")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -137,6 +176,18 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DateChange")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateRegister")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("IdUserChange")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUserRegister")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -154,6 +205,18 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DateChange")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateRegister")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("IdUserChange")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUserRegister")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -176,6 +239,18 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DateChange")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateRegister")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("IdUserChange")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUserRegister")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ImageZip")
                         .HasColumnType("text");
@@ -211,8 +286,20 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DateChange")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateRegister")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Document")
                         .HasColumnType("text");
+
+                    b.Property<int>("IdUserChange")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUserRegister")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -231,13 +318,33 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("CountryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DateChange")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateRegister")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("IdUserChange")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUserRegister")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
 
                     b.ToTable("State");
                 });
@@ -312,11 +419,25 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("SystemV1.Domain.Entitys.State", b =>
+                {
+                    b.HasOne("SystemV1.Domain.Entitys.Country", "Country")
+                        .WithMany("States")
+                        .HasForeignKey("CountryId");
+
+                    b.Navigation("Country");
+                });
+
             modelBuilder.Entity("SystemV1.Domain.Entitys.Client", b =>
                 {
                     b.Navigation("Addresses");
 
                     b.Navigation("Contacts");
+                });
+
+            modelBuilder.Entity("SystemV1.Domain.Entitys.Country", b =>
+                {
+                    b.Navigation("States");
                 });
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Product", b =>

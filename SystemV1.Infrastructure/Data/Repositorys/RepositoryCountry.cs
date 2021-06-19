@@ -26,5 +26,34 @@ namespace SystemV1.Infrastructure.Data.Repositorys
                             AND isactive";
             return await _sqlContext.Connection.QueryAsync<Country>(sql);
         }
+
+        public async Task<IEnumerable<Country>> GetAllCountriesAsync(int page, int pageSize)
+        {
+            var skip = (page - 1) * pageSize;
+            var sql = @$"SELECT {"\""}Id{"\""},
+                                {"\""}Name{"\""}
+                         FROM {"\""}Country{"\""}
+                         WHERE {"\""}IsActive{"\""}
+                         ORDER BY {"\""}Id{"\""}
+                         LIMIT {pageSize}
+                         OFFSET {skip}";
+
+            return await _sqlContext.Connection.QueryAsync<Country>(sql);
+        }
+
+        public async Task<Country> GetCountryByIdAsync(Guid id)
+        {
+            var sql = $@"SELECT {"\""}Id{"\""},
+                                {"\""}Name{"\""},
+                                {"\""}DateRegister{"\""},
+                                {"\""}DateChange{"\""},
+                                {"\""}IdUserRegister{"\""},
+                                {"\""}IdUserChange{"\""},
+                                {"\""}IsActive{"\""}
+                         FROM {"\""}Country{"\""}
+                         WHERE {"\""}Id{"\""} = '{id}'
+                            and {"\""}IsActive{"\""}";
+            return await _sqlContext.Connection.QuerySingleOrDefaultAsync<Country>(sql);
+        }
     }
 }

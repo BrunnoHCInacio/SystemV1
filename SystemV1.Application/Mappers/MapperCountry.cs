@@ -12,7 +12,8 @@ namespace SystemV1.Application.Mappers
     {
         public CountryViewModel EntityToViewModel(Country country)
         {
-            return new CountryViewModel { Id = country.Id, Name = country.Name };
+            if (country is null) return null;
+            return new CountryViewModel { Id = country?.Id, Name = country?.Name };
         }
 
         public IEnumerable<CountryViewModel> ListEntityToViewModel(IEnumerable<Country> countries)
@@ -22,7 +23,7 @@ namespace SystemV1.Application.Mappers
 
         public Country ViewModelToEntity(CountryViewModel countryViewModel)
         {
-            return new Country(countryViewModel.Id, countryViewModel.Name);
+            return new Country(countryViewModel.Id.GetValueOrDefault(), countryViewModel.Name);
         }
     }
 }

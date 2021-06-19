@@ -5,10 +5,11 @@ namespace SystemV1.Domain.Entitys
 {
     public class Provider : People
     {
-        public Provider(Guid id, string name)
+        public Provider(Guid id, string name, string document)
         {
             Id = id;
             Name = name;
+            Document = document;
             Addresses = new List<Address>();
             Contacts = new List<Contact>();
         }

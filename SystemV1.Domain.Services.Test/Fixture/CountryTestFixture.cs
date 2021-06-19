@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services.Test.Fixture;
 using Xunit;
@@ -75,6 +76,18 @@ namespace SystemV1.Domain.Test.Fixture
         {
             var stateFixture = new StateTestFixture();
             return stateFixture.GenerateStateValidExpected();
+        }
+
+        public List<CountryViewModel> GenerateCountryViewModel(int quantity)
+        {
+            var country = new Faker<CountryViewModel>("pt_BR").RuleFor(c => c.Name, f => f.Address.Country());
+
+            return country.Generate(quantity);
+        }
+
+        public CountryViewModel GenerateValidContryViewModel()
+        {
+            return GenerateCountryViewModel(1).FirstOrDefault();
         }
 
         public void Dispose()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -14,12 +15,15 @@ namespace SystemV1.Application.ViewModels
         }
 
         [Key]
-        public Guid Id { get; set; }
+        [JsonProperty("id")]
+        public Guid? Id { get; set; }
 
         [Required(ErrorMessage = ConstantMessages.CountryRequired_PT)]
         [StringLength(100, ErrorMessage = ConstantMessages.CountryLengh_PT, MinimumLength = 2)]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("states")]
         public IEnumerable<StateViewModel> States { get; set; }
     }
 }

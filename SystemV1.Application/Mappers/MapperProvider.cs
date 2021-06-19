@@ -40,14 +40,14 @@ namespace SystemV1.Application.Mappers
 
         public Provider ViewModelToEntity(ProviderViewModel providerViewModel)
         {
-            return new Provider()
-            {
-                Id = providerViewModel.Id,
-                Document = providerViewModel.Document,
-                Name = providerViewModel.Name,
-                Addresses = providerViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a)),
-                Contacts = providerViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c)),
-            };
+            var provider = new Provider(providerViewModel.Id,
+                                        providerViewModel.Name,
+                                        providerViewModel.Document);
+
+            provider.AddAddresses(providerViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a)).ToList());
+            provider.AddContacts(providerViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c)).ToList());
+
+            return provider;
         }
     }
 }

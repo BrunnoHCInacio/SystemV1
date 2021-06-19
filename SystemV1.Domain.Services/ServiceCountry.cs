@@ -59,12 +59,30 @@ namespace SystemV1.Domain.Services
 
         public async Task<IEnumerable<Country>> GetAllAsync(int page, int pageSize)
         {
-            return await _repositoryCountry.GetAllAsync(page, pageSize);
+            try
+            {
+                return await _repositoryCountry.GetAllCountriesAsync(page, pageSize);
+            }
+            catch (Exception ex)
+            {
+                var t = ex;
+                Notify("Falha ao obter todos os países");
+            }
+            return null;
         }
 
         public async Task<Country> GetByIdAsync(Guid id)
         {
-            return await _repositoryCountry.GetByIdAsync(id);
+            try
+            {
+                return await _repositoryCountry.GetCountryByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                var t = ex;
+                Notify("Falha ao obter país por id");
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Country>> GetByNameAsync(string name)

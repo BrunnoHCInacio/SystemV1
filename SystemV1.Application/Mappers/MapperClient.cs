@@ -42,8 +42,8 @@ namespace SystemV1.Application.Mappers
                                     clientViewModel.Name,
                                     clientViewModel.Document);
 
-            client.Addresses = clientViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a));
-            client.Contacts = clientViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c));
+            client.AddAddresses(clientViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a)).ToList());
+            client.AddContacts(clientViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c)).ToList());
 
             return client;
         }

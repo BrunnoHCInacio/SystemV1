@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Test.Fixture;
 using Xunit;
@@ -61,6 +62,24 @@ namespace SystemV1.Domain.Services.Test.Fixture
                 Id = Guid.NewGuid(),
                 Name = faker.Address.State()
             };
+        }
+
+        public List<StateViewModel> GenerateStatesViewModel(int quantity)
+        {
+            var state = new Faker<StateViewModel>("pt_BR")
+                            .RuleFor(s => s.Name, f => f.Address.StreetName());
+
+            return state.Generate(quantity);
+        }
+
+        public StateViewModel GenerateValidStateViewModel()
+        {
+            return GenerateStatesViewModel(1).FirstOrDefault();
+        }
+
+        public StateViewModel GenerateInvalidStateViewModel()
+        {
+            return new StateViewModel { Name = "" };
         }
 
         public void Dispose()

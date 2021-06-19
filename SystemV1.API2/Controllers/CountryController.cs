@@ -31,6 +31,8 @@ namespace SystemV1.API2.Controllers
         [HttpGet("GetById/{id:guid}")]
         public async Task<ActionResult<CountryViewModel>> GetById(Guid id)
         {
+            if (id == Guid.Empty) return NotFound();
+
             var country = await _applicationServiceCountry.GetByIdAsync(id);
             return OkResult(country);
         }

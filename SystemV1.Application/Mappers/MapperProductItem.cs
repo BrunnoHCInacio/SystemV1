@@ -30,13 +30,10 @@ namespace SystemV1.Application.Mappers
 
         public ProductItem ViewModelToEntity(ProductItemViewModel productViewModel)
         {
-            return new ProductItem
-            {
-                Id = productViewModel.Id,
-                Modelo = productViewModel.Modelo,
-                Value = productViewModel.Value,
-                Product = new Product { Id = productViewModel.IdProduct.GetValueOrDefault() }
-            };
+            var productItem = new ProductItem(productViewModel.Id, productViewModel.Modelo, productViewModel.Value);
+
+            productItem.SetProduct(new Product(productViewModel.IdProduct.GetValueOrDefault(), null));
+            return productItem;
         }
     }
 }

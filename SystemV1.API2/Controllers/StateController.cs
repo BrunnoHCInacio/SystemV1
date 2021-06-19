@@ -40,7 +40,7 @@ namespace SystemV1.API2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return OkResult();
+                return OkResult(ModelState);
             }
             await _applicationServiceState.AddAsync(stateViewModel);
 

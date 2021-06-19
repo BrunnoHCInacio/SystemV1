@@ -34,13 +34,12 @@ namespace SystemV1.Application.Mappers
 
         public Product ViewModelToEntity(ProductViewModel productViewModel)
         {
-            return new Product
-            {
-                Id = productViewModel.Id,
-                Name = productViewModel.Name,
-                Provider = new Provider { Id = productViewModel.IdProvider.GetValueOrDefault() },
-                ProductItems = productViewModel.ProductItems.Select(pi => _mapperProductItem.ViewModelToEntity(pi))
-            };
+            var product = new Product(productViewModel.Id, productViewModel.Name);
+
+            product.SetProvider(new Provider(productViewModel.IdProvider.GetValueOrDefault(), null, null));
+            product.AddProductItems(productViewModel.ProductItems.Select(pi => _mapperProductItem.ViewModelToEntity(pi)).ToList());
+
+            return product;
         }
     }
 }

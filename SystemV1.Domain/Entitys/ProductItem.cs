@@ -46,6 +46,11 @@ namespace SystemV1.Domain.Entitys
             IsAvailable = false;
         }
 
+        public void SetProduct(Product product)
+        {
+            Product = product;
+        }
+
         public ValidationResult ValidateProductItem()
         {
             return new ProductItemValidation().Validate(this);

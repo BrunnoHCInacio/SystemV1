@@ -15,14 +15,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemV1.Infrastructure.CrossCutting.IOC;
 using SystemV1.Infrastructure.Data;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace API2
 {
-    public class Startup
+    public class StartupApiTests
     {
-        public Startup(IConfiguration configuration)
+        public StartupApiTests(IHostingEnvironment hostEnvironment)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                              .SetBasePath(hostEnvironment.ContentRootPath)
+                              .AddJsonFile("appsettings.json", true, true)
+                              .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
+                              .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -34,10 +41,6 @@ namespace API2
 
             services.AddDbContext<SqlContext>(options => options.UseNpgsql(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
 
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "My Service", Version = "v1" }); });
             services.AddControllers();

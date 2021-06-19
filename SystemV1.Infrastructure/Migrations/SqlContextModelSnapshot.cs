@@ -16,7 +16,7 @@ namespace SystemV1.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.5")
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Address", b =>
@@ -24,6 +24,9 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
@@ -64,8 +67,8 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("text");
 
-                    b.Property<int>("ZipCode")
-                        .HasColumnType("integer");
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -154,8 +157,8 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("ProviderId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("TypeContact")
-                        .HasColumnType("text");
+                    b.Property<int>("TypeContact")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -341,7 +344,7 @@ namespace SystemV1.Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("States");
+                    b.ToTable("State");
                 });
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Address", b =>

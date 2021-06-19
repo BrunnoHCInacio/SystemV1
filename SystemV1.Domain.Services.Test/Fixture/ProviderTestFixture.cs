@@ -1,8 +1,9 @@
 ﻿using Bogus;
+using Bogus.DataSets;
+using Bogus.Extensions.Brazil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SystemV1.Domain.Entitys;
 using Xunit;
 
@@ -20,7 +21,7 @@ namespace SystemV1.Domain.Test.Fixture
             var addressFixture = new AddressTestFixture();
             var contactFixtute = new ContactTestFixture();
             var provider = new Faker<Provider>()
-                            .CustomInstantiator(f => new Provider(Guid.NewGuid(), f.Person.FullName))
+                            .CustomInstantiator(f => new Provider(Guid.NewGuid(), f.Person.FullName, f.Company.Cnpj()))
                             .FinishWith((f, p) =>
                             {
                                 p.AddAddresses(addressFixture.GenerateAddress(2));
@@ -38,7 +39,7 @@ namespace SystemV1.Domain.Test.Fixture
 
         public Provider GenerateInvalidProvider()
         {
-            return new Provider(new Guid(), "");
+            return new Provider(new Guid(), null, null);
         }
 
         public dynamic GenerateProviderExpected()

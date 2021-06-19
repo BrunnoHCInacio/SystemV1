@@ -16,5 +16,15 @@ namespace SystemV1.Domain.Entitys
         public int IdUserRegister { get; set; }
         public int IdUserChange { get; set; }
         public bool IsActive { get; set; }
+
+        public void DisableRegister()
+        {
+            IsActive = false;
+        }
+
+        public void EnableRegister()
+        {
+            IsActive = true;
+        }
     }
 }

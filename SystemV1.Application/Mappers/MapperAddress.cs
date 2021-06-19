@@ -40,16 +40,16 @@ namespace SystemV1.Application.Mappers
                                       addressViewModel.Complement,
                                       addressViewModel.District,
                                       addressViewModel.City);
-            address.State = new State(addressViewModel.IdState.GetValueOrDefault(), "");
+            address.SetState(new State(addressViewModel.IdState.GetValueOrDefault(), ""));
 
             if (addressViewModel.IdCLient.HasValue)
             {
-                address.Client = new Client(addressViewModel.IdCLient.GetValueOrDefault(), null, null);
+                address.SetClient(new Client(addressViewModel.IdCLient.GetValueOrDefault(), null, null));
             }
 
             if (addressViewModel.IdProvider.HasValue)
             {
-                address.Provider = new Provider { Id = addressViewModel.IdProvider.GetValueOrDefault() };
+                address.SetProvider(new Provider(addressViewModel.IdProvider.GetValueOrDefault(), null, null));
             }
 
             return address;
