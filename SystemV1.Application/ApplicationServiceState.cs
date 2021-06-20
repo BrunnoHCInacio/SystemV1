@@ -12,17 +12,23 @@ namespace SystemV1.Application
     public class ApplicationServiceState : IApplicationServiceState
     {
         private readonly IServiceState _serviceState;
+        private readonly IServiceCountry _serviceCountry;
         private readonly IMapperState _mapperState;
 
-        public ApplicationServiceState(IServiceState serviceState, IMapperState mapperState)
+        public ApplicationServiceState(IServiceState serviceState, 
+                                       IMapperState mapperState, 
+                                       IServiceCountry serviceCountry)
         {
             _serviceState = serviceState;
             _mapperState = mapperState;
+            _serviceCountry = serviceCountry;
         }
 
         public async Task AddAsync(StateViewModel stateViewModel)
         {
             var state = _mapperState.ViewModelToEntity(stateViewModel);
+            state.SetCountry(await _serviceCountry.GetByIdAsync(stateViewModel.CountryId));
+
             await _serviceState.AddAsyncUow(state);
         }
 

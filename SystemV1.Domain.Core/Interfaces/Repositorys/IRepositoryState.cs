@@ -9,5 +9,7 @@ namespace SystemV1.Domain.Core.Interfaces.Repositorys
     public interface IRepositoryState : IRepository<State>
     {
         Task<IEnumerable<State>> GetByNameAsync(string name);
+        Task<IEnumerable<State>> GetAllStatesAsync(int page, int pageSize);
+        Task<State> GetStateByIdAsync(Guid id);
     }
 }

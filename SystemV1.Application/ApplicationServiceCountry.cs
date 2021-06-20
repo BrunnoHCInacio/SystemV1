@@ -23,6 +23,7 @@ namespace SystemV1.Application
         public async Task AddAsync(CountryViewModel countryViewModel)
         {
             var country = _mapperCountry.ViewModelToEntity(countryViewModel);
+
             await _serviceCountry.AddAsyncUow(country);
         }
 

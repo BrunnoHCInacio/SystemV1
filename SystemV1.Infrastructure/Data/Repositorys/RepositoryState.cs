@@ -28,5 +28,35 @@ namespace SystemV1.Infrastructure.Data.Repositorys
                             and isactive";
             return await _sqlContext.Connection.QueryAsync<State>(sql);
         }
+
+        public async Task<IEnumerable<State>> GetAllStatesAsync(int page, int pageSize)
+        {
+            var skip = (page - 1) * pageSize;
+            var sql = @$"SELECT {"\""}Id{"\""},
+                                {"\""}Name{"\""}
+                         FROM {"\""}State{"\""}
+                         WHERE {"\""}IsActive{"\""}
+                         ORDER BY {"\""}Id{"\""}
+                         LIMIT {pageSize}
+                         OFFSET {skip}"
+                         ;
+
+            return await _sqlContext.Connection.QueryAsync<State>(sql);
+        }
+
+        public async Task<State> GetStateByIdAsync(Guid id)
+        {
+            var sql = $@"SELECT {"\""}Id{"\""},
+                                {"\""}Name{"\""},
+                                {"\""}DateRegister{"\""},
+                                {"\""}DateChange{"\""},
+                                {"\""}IdUserRegister{"\""},
+                                {"\""}IdUserChange{"\""},
+                                {"\""}IsActive{"\""}
+                         FROM {"\""}State{"\""}
+                         WHERE {"\""}id{"\""} = {id}
+                            and {"\""}IsActive{"\""}";
+            return await _sqlContext.Connection.QuerySingleAsync<State>(sql);
+        }
     }
 }

@@ -24,6 +24,13 @@ namespace SystemV1.API2.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult> GetAll(int page, int pageSize)
         {
+            if(page == 0 && pageSize == 0)
+            {
+                Notify("É necessário informar a página e a quantidade de itens por página");
+                OkResult();
+            }
+                
+
             var states = await _applicationServiceState.GetAllAsync(page, pageSize);
             return OkResult(states);
         }

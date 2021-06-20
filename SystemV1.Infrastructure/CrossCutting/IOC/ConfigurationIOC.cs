@@ -40,7 +40,6 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<ServiceAddress>().As<IServiceAddress>();
             builder.RegisterType<ServiceContact>().As<IServiceContact>();
             builder.RegisterType<ServiceProduct>().As<IServiceProduct>();
-            builder.RegisterType<ServiceProductItem>().As<IServiceProductItem>();
             builder.RegisterType<ServiceState>().As<IServiceState>();
             builder.RegisterType<ServiceCountry>().As<IServiceCountry>();
 

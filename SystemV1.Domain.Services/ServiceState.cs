@@ -13,14 +13,17 @@ namespace SystemV1.Domain.Services
     public class ServiceState : Service, IServiceState
     {
         private readonly IRepositoryState _repositoryState;
+        private readonly IRepositoryCountry _repositoryCountry;
         private readonly IUnitOfWork _unitOfWork;
 
         public ServiceState(IRepositoryState repositoryState,
                             IUnitOfWork unitOfWork,
-                            INotifier notifier) : base(notifier)
+                            INotifier notifier, 
+                            IRepositoryCountry repositoryCountry) : base(notifier)
         {
             _repositoryState = repositoryState;
             _unitOfWork = unitOfWork;
+            _repositoryCountry = repositoryCountry;
         }
 
         public void Add(State state)
@@ -35,13 +38,21 @@ namespace SystemV1.Domain.Services
                 return;
             }
 
-            Add(state);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Add(state);
+                await _unitOfWork.CommitAsync();
+            }
+            catch(Exception ex)
+            {
+                var t = ex;
+                Notify("Falha ao adicionar novo estado");
+            }
         }
 
         public async Task<IEnumerable<State>> GetAllAsync(int page, int pageSize)
         {
-            return await _repositoryState.GetAllAsync(page, pageSize);
+            return await _repositoryState.GetAllStatesAsync(page, pageSize);
         }
 
         public async Task<State> GetByIdAsync(Guid id)
