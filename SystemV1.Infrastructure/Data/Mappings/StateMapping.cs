@@ -15,6 +15,11 @@ namespace SystemV1.Infrastructure.Data.Mappings
             builder.Property(s => s.Name)
                    .IsRequired()
                    .HasColumnType("varchar(200)");
+
+            builder.HasOne(s => s.Country)
+                   .WithMany(c => c.States)
+                   .HasForeignKey(s => s.CountryId);
+
             builder.Property(s => s.IsActive);
             builder.ToTable("States");
         }

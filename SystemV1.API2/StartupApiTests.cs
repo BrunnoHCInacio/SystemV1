@@ -41,6 +41,10 @@ namespace API2
 
             services.AddDbContext<SqlContext>(options => options.UseNpgsql(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
 
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "My Service", Version = "v1" }); });
             services.AddControllers();

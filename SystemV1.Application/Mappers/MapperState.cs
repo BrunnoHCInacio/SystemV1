@@ -12,11 +12,14 @@ namespace SystemV1.Application.Mappers
     {
         public StateViewModel EntityToViewModel(State state)
         {
+            if (state is null) return null;
+
             return new StateViewModel
             {
                 Id = state.Id,
                 Name = state.Name,
-                CountryId = state.Country != null ? state.Country.Id : new Guid()
+                CountryId = state.Country != null ? state.Country.Id : Guid.Empty,
+                CountryName = state.Country != null ? state.Country?.Name : null
             };
         }
 
@@ -29,9 +32,9 @@ namespace SystemV1.Application.Mappers
         {
             var state = new State(stateViewModel.Id,
                                   stateViewModel.Name);
-            if (stateViewModel.CountryId != new Guid())
+            if (stateViewModel.CountryId != Guid.Empty)
             {
-                //state.Country = new Country(stateViewModel.CountryId, "");
+                state.SetCountry(stateViewModel.CountryId);
             }
 
             return state;

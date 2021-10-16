@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Core.Constants;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Enums;
@@ -88,6 +89,61 @@ namespace SystemV1.Domain.Test.Fixture
         public Client GenerateInvalidClient()
         {
             return new Client(new Guid(), null, null);
+        }
+
+        public List<ClientViewModel> GenerateClientViewModel(int qtyClients,
+                                                             int qtyAddress,
+                                                             int qtyContacts,
+                                                             bool withAddress = true,
+                                                             bool hasValidAddress = true,
+                                                             bool withContact = true,
+                                                             bool hasValidContact = true)
+        {
+            var addressFixture = new AddressTestFixture();
+            var contactsFixture = new ContactTestFixture();
+
+            var client = new Faker<ClientViewModel>("pt_BR")
+                                .FinishWith(
+                                (f, c) =>
+                                {
+                                    c.Name = f.Name.FullName();
+                                    c.Document = f.Person.Cpf();
+                                    if (withAddress)
+                                    {
+                                        if (hasValidAddress)
+                                        {
+                                            c.Addresses = addressFixture.GenerateValidAddressViewModel(qtyAddress);
+                                        }
+                                        else
+                                        {
+                                            c.Addresses = addressFixture.GenerateInvalidAddressViewModel();
+                                        }
+                                    }
+                                    if (withContact)
+                                    {
+                                        if (hasValidContact)
+                                        {
+                                            List<ContactViewModel> contacts = contactsFixture.GenerateValidContactViewModel(EnumTypeContact.TypeContactCellPhone, qtyContacts);
+                                            contacts.AddRange(contactsFixture.GenerateValidContactViewModel(EnumTypeContact.TypeContactEmail, qtyContacts));
+
+                                            c.Contacts = contacts;
+                                        }
+                                        else
+                                        {
+                                            List<ContactViewModel> contacts = new List<ContactViewModel>();
+
+                                            contacts.AddRange(contactsFixture.GenerateInvalidContactViewModel(EnumTypeContact.TypeContactCellPhone, qtyContacts));
+                                            contacts.AddRange(contactsFixture.GenerateInvalidContactViewModel(EnumTypeContact.TypeContactPhone, qtyContacts));
+                                            contacts.AddRange(contactsFixture.GenerateInvalidContactViewModel(EnumTypeContact.TypeContactEmail, qtyContacts));
+                                        }
+                                    }
+                                });
+            return client.Generate(qtyClients);
+        }
+
+        public ClientViewModel GenerateInvalidClientViewModel()
+        {
+            return new ClientViewModel();
         }
 
         public void Dispose()

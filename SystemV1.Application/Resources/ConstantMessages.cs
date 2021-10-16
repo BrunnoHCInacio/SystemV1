@@ -19,8 +19,8 @@ namespace SystemV1.Application.Resources
         public const string DistrictRequired_PT = @"A cidade é obrigatória";
         public const string DistrictLength_PT = @"A cidade deve conter entre 2 e 50 caracteres.";
 
-        public const string CountryRequired_PT = @"O país é obrigatório.";
-        public const string CountryLengh_PT = @"O país deve conter entre 2 e 100 caracteres.";
+        public const string CountryNameRequired_PT = @"O nome do país é obrigatório.";
+        public const string CountryNameLengh_PT = @"O nome do país deve conter entre 2 e 100 caracteres.";
         public const string StateRequired_PT = @"O estado é obrigatório.";
 
         public const string TypeContactRequired_PT = @"O tipo de contato deve ser informado";

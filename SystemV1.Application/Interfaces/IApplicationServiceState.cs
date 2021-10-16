@@ -19,5 +19,7 @@ namespace SystemV1.Application.Interfaces
         Task<IEnumerable<StateViewModel>> GetByNameAsync(string name);
 
         Task<StateViewModel> GetByIdAsync(Guid id);
+
+        Task<StateViewModel> GetStateCountryByIdAsync(Guid id);
     }
 }

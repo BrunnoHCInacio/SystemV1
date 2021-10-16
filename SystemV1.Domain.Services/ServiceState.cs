@@ -18,7 +18,7 @@ namespace SystemV1.Domain.Services
 
         public ServiceState(IRepositoryState repositoryState,
                             IUnitOfWork unitOfWork,
-                            INotifier notifier, 
+                            INotifier notifier,
                             IRepositoryCountry repositoryCountry) : base(notifier)
         {
             _repositoryState = repositoryState;
@@ -43,7 +43,7 @@ namespace SystemV1.Domain.Services
                 Add(state);
                 await _unitOfWork.CommitAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var t = ex;
                 Notify("Falha ao adicionar novo estado");
@@ -57,7 +57,30 @@ namespace SystemV1.Domain.Services
 
         public async Task<State> GetByIdAsync(Guid id)
         {
-            return await _repositoryState.GetByIdAsync(id);
+            try
+            {
+                return await _repositoryState.GetStateByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                var t = ex;
+                Notify("Falha ao consultar o estado por id");
+            }
+            return null;
+        }
+
+        public async Task<State> GetStateCountryByIdAsync(Guid id)
+        {
+            try
+            {
+                return await _repositoryState.GetStateCountryByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                var t = ex;
+                Notify("Falha ao consultar o estado por id");
+            }
+            return null;
         }
 
         public async Task<IEnumerable<State>> GetByNameAsync(string name)
@@ -72,14 +95,22 @@ namespace SystemV1.Domain.Services
 
         public void Remove(State state)
         {
-            state.IsActive = false;
+            state.DisableRegister();
             Update(state);
         }
 
         public async Task RemoveAsyncUow(State state)
         {
-            Remove(state);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Remove(state);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                var t = ex;
+                Notify("Falha ao remover estado.");
+            }
         }
 
         public void Update(State state)

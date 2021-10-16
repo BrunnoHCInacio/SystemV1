@@ -18,7 +18,7 @@ namespace SystemV1.Application.ViewModels
         public string Number { get; set; }
         public string Complement { get; set; }
 
-        [Required(ErrorMessage = ConstantMessages.CountryRequired_PT)]
+        [Required(ErrorMessage = ConstantMessages.CountryNameRequired_PT)]
         public Guid? IdCountry { get; set; }
 
         public string CountryName { get; set; }

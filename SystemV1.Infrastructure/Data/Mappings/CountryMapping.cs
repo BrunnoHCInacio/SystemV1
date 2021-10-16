@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Infrastructure.Data.Mappings
@@ -20,7 +17,7 @@ namespace SystemV1.Infrastructure.Data.Mappings
 
             builder.HasMany(c => c.States)
                    .WithOne(s => s.Country)
-                   .HasForeignKey(s => s.StateId);
+                   .HasForeignKey(s => s.CountryId);
 
             builder.ToTable("Countries");
         }

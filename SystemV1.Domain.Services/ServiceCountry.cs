@@ -98,7 +98,7 @@ namespace SystemV1.Domain.Services
 
         public void Remove(Country country)
         {
-            country.IsActive = false;
+            country.DisableRegister();
             Update(country);
         }
 

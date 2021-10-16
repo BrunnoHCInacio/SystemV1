@@ -72,7 +72,7 @@ namespace SystemV1.API2.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id:guid}")]
+        [HttpDelete("Delete/{id:guid}")]
         public async Task<ActionResult> RemoveAsync(Guid id)
         {
             await _applicationServiceClient.RemoveAsync(id);

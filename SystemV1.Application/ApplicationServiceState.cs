@@ -15,8 +15,8 @@ namespace SystemV1.Application
         private readonly IServiceCountry _serviceCountry;
         private readonly IMapperState _mapperState;
 
-        public ApplicationServiceState(IServiceState serviceState, 
-                                       IMapperState mapperState, 
+        public ApplicationServiceState(IServiceState serviceState,
+                                       IMapperState mapperState,
                                        IServiceCountry serviceCountry)
         {
             _serviceState = serviceState;
@@ -27,7 +27,6 @@ namespace SystemV1.Application
         public async Task AddAsync(StateViewModel stateViewModel)
         {
             var state = _mapperState.ViewModelToEntity(stateViewModel);
-            state.SetCountry(await _serviceCountry.GetByIdAsync(stateViewModel.CountryId));
 
             await _serviceState.AddAsyncUow(state);
         }
@@ -41,6 +40,12 @@ namespace SystemV1.Application
         public async Task<StateViewModel> GetByIdAsync(Guid id)
         {
             var state = await _serviceState.GetByIdAsync(id);
+            return _mapperState.EntityToViewModel(state);
+        }
+
+        public async Task<StateViewModel> GetStateCountryByIdAsync(Guid id)
+        {
+            var state = await _serviceState.GetStateCountryByIdAsync(id);
             return _mapperState.EntityToViewModel(state);
         }
 

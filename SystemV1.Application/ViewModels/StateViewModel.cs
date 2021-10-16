@@ -16,5 +16,6 @@ namespace SystemV1.Application.ViewModels
         public string Name { get; set; }
 
         public Guid CountryId { get; set; }
+        public string CountryName { get; set; }
     }
 }

@@ -24,6 +24,12 @@ namespace SystemV1.API2.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<CountryViewModel>>> GetAll(int page, int pageSize)
         {
+            if (page == 0 && pageSize == 0)
+            {
+                Notify("É necessário informar a página e a quantidade de itens por página");
+                OkResult();
+            }
+
             var countries = await _applicationServiceCountry.GetAllAsync(page, pageSize);
             return OkResult(countries);
         }
@@ -49,7 +55,7 @@ namespace SystemV1.API2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return OkResult();
+                return OkResult(ModelState);
             }
             await _applicationServiceCountry.AddAsync(countryViewModel);
             return OkResult();
@@ -58,6 +64,11 @@ namespace SystemV1.API2.Controllers
         [HttpPut("Update/{id:guid}")]
         public async Task<ActionResult> Update(Guid id, CountryViewModel countryViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return OkResult(ModelState);
+            }
+
             var country = await _applicationServiceCountry.GetByIdAsync(id);
 
             if (country.Id != id)

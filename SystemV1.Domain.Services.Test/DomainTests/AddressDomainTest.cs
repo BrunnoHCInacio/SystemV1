@@ -42,8 +42,7 @@ namespace SystemV1.Domain.Test
                                       addressExpected.District,
                                       addressExpected.City);
             address.SetState(state);
-            address.State?.SetCountry(country);
-
+            
             //Assert
             Assert.Equal(address.Id, addressExpected.Id);
             Assert.Equal(address.Street, addressExpected.Street);

@@ -7,6 +7,7 @@ namespace SystemV1.Domain.Entitys
         public Entity()
         {
             Id = Guid.NewGuid();
+            EnableRegister();
         }
 
         public Guid Id { get; set; }

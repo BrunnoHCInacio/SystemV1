@@ -15,7 +15,8 @@ namespace SystemV1.Domain.Test.IntegrationTest.Config
     {
         public readonly AppFactory<TStartup> Factory;
         public HttpClient Client;
-        public Guid IdForRetreave { get; set; }
+        public Guid CountryId { get; set; }
+        public Guid StateId { get; set; }
 
         public IntegrationTestFixture()
         {

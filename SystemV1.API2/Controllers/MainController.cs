@@ -33,7 +33,7 @@ namespace SystemV1.API2.Controllers
                 return BadRequest(new
                 {
                     success = false,
-                    errors = _notifier.GetNotifications().SelectMany(n => n.Message)
+                    errors = _notifier.GetNotifications().Select(n => n.Message)
                 });
             }
             if (result != null)

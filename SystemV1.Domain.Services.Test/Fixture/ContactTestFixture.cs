@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Core.Constants;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Enums;
@@ -70,7 +71,7 @@ namespace SystemV1.Domain.Test.Fixture
 
         public Contact GenerateInvalidContactTypeEmail()
         {
-            return new Contact(new Guid(), EnumTypeContact.TypeContactEmail, null, null, null, null, null);
+            return new Contact(new Guid(), EnumTypeContact.TypeContactEmail);
         }
 
         public Contact GenerateInvalidPhoneContactWithInvalidProperties()
@@ -128,6 +129,58 @@ namespace SystemV1.Domain.Test.Fixture
             }
 
             return contacts.Generate(quantity);
+        }
+
+        public List<ContactViewModel> GenerateValidContactViewModel(EnumTypeContact typeContact,
+                                                                    int qty)
+        {
+            var contacts = GenerateContact(typeContact, qty);
+            var contactsViewModel = new List<ContactViewModel>();
+
+            contactsViewModel.AddRange(contacts.Select(c => new ContactViewModel
+            {
+                Id = c.Id,
+                Ddd = c.Ddd,
+                Ddi = c.Ddi,
+                CellPhoneNumber = c.CellPhoneNumber,
+                Email = c.Email,
+                PhoneNumber = c.PhoneNumber
+            }));
+            return contactsViewModel;
+        }
+
+        public List<ContactViewModel> GenerateInvalidContactViewModel(EnumTypeContact typeContact,
+                                                                    int qty)
+        {
+            var invalidContacts = new List<ContactViewModel>();
+            Contact contact;
+
+            for (int i = 0; i < qty; i++)
+            {
+                if (typeContact == EnumTypeContact.TypeContactCellPhone)
+                {
+                    contact = GenerateInvalidContactTypeCellPhone();
+                }
+                else if (typeContact == EnumTypeContact.TypeContactEmail)
+                {
+                    contact = GenerateInvalidContactTypeEmail();
+                }
+                else
+                {
+                    contact = GenerateInvalidContactTypePhone();
+                }
+
+                invalidContacts.Add(new ContactViewModel
+                {
+                    Id = contact.Id,
+                    Ddd = contact.Ddd,
+                    Ddi = contact.Ddi,
+                    CellPhoneNumber = contact.CellPhoneNumber,
+                    Email = contact.Email,
+                    PhoneNumber = contact.PhoneNumber
+                });
+            }
+            return invalidContacts;
         }
 
         public void Dispose()

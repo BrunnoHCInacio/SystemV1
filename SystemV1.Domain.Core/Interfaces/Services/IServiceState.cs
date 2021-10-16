@@ -10,6 +10,8 @@ namespace SystemV1.Domain.Core.Interfaces.Services
     {
         Task<IEnumerable<State>> GetByNameAsync(string name);
 
+        Task<State> GetStateCountryByIdAsync(Guid id);
+
         void Remove(State state);
 
         Task RemoveAsyncUow(State state);

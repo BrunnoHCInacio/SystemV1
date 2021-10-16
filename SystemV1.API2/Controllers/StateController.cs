@@ -24,12 +24,11 @@ namespace SystemV1.API2.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult> GetAll(int page, int pageSize)
         {
-            if(page == 0 && pageSize == 0)
+            if (page == 0 && pageSize == 0)
             {
                 Notify("É necessário informar a página e a quantidade de itens por página");
                 OkResult();
             }
-                
 
             var states = await _applicationServiceState.GetAllAsync(page, pageSize);
             return OkResult(states);
@@ -39,6 +38,13 @@ namespace SystemV1.API2.Controllers
         public async Task<ActionResult> GetById(Guid id)
         {
             var state = await _applicationServiceState.GetByIdAsync(id);
+            return OkResult(state);
+        }
+
+        [HttpGet("GetStateCountryById/{id:guid}")]
+        public async Task<ActionResult> GetStateCountryById(Guid id)
+        {
+            var state = await _applicationServiceState.GetStateCountryByIdAsync(id);
             return OkResult(state);
         }
 
@@ -72,10 +78,10 @@ namespace SystemV1.API2.Controllers
             return OkResult();
         }
 
-        [HttpDelete("{id:guid}")]
+        [HttpDelete("Delete/{id:guid}")]
         public async Task<ActionResult> Remove(Guid id)
         {
-            var state = await _applicationServiceState.GetByIdAsync(id);
+            var state = await _applicationServiceState.GetStateCountryByIdAsync(id);
 
             if (state == null)
             {

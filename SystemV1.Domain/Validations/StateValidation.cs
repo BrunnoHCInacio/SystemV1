@@ -17,8 +17,8 @@ namespace SystemV1.Domain.Validations
                 .NotEmpty()
                 .WithMessage(StateNameRequired);
 
-            RuleFor(s => s.Country)
-                .NotNull()
+            RuleFor(s => s.CountryId)
+                .NotEqual(Guid.Empty)
                 .WithMessage(CountryRequired);
         }
     }

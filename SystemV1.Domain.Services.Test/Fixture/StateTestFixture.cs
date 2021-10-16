@@ -27,7 +27,7 @@ namespace SystemV1.Domain.Services.Test.Fixture
                                                     f.Address.State()))
                                 .FinishWith((f, s) =>
                                 {
-                                    s.SetCountry(countryFixture.GenerateValidCountry());
+                                    // s.SetCountry(countryFixture.GenerateValidCountry());
                                 });
             return state.Generate(quantity);
         }
@@ -67,7 +67,7 @@ namespace SystemV1.Domain.Services.Test.Fixture
         public List<StateViewModel> GenerateStatesViewModel(int quantity)
         {
             var state = new Faker<StateViewModel>("pt_BR")
-                            .RuleFor(s => s.Name, f => f.Address.StreetName());
+                            .RuleFor(s => s.Name, f => f.Address.State());
 
             return state.Generate(quantity);
         }

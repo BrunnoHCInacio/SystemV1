@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
@@ -20,12 +21,12 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         public async Task<IEnumerable<State>> GetByNameAsync(string name)
         {
             var sql = $@"
-                        select
-                            id,
-                            name
-                        from state
-                        where name like '%{name}%'
-                            and isactive";
+                        SELECT
+                            {"\""}Id{"\""},
+                            {"\""}Name{"\""}
+                        FROM {"\""}State{"\""}
+                        WHERE name LIKE '%{name}%'
+                            AND {"\""}IsActive{"\""}";
             return await _sqlContext.Connection.QueryAsync<State>(sql);
         }
 
@@ -52,11 +53,44 @@ namespace SystemV1.Infrastructure.Data.Repositorys
                                 {"\""}DateChange{"\""},
                                 {"\""}IdUserRegister{"\""},
                                 {"\""}IdUserChange{"\""},
+                                {"\""}CountryId{"\""},
                                 {"\""}IsActive{"\""}
                          FROM {"\""}State{"\""}
-                         WHERE {"\""}id{"\""} = {id}
+                         WHERE {"\""}Id{"\""} = '{id}'
                             and {"\""}IsActive{"\""}";
-            return await _sqlContext.Connection.QuerySingleAsync<State>(sql);
+
+            var r = await _sqlContext.Connection.QuerySingleAsync<State>(sql);
+            return r;
+        }
+
+        public async Task<State> GetStateCountryByIdAsync(Guid id)
+        {
+            var sql = $@"SELECT s.{"\""}Id{"\""},
+                                s.{"\""}Name{"\""},
+                                s.{"\""}DateRegister{"\""},
+                                s.{"\""}DateChange{"\""},
+                                s.{"\""}IdUserRegister{"\""},
+                                s.{"\""}IdUserChange{"\""},
+                                s.{"\""}CountryId{"\""},
+                                s.{"\""}IsActive{"\""},
+                                c.{"\""}Id{"\""},
+                                c.{"\""}Name{"\""}
+                         FROM {"\""}State{"\""} AS s
+                            LEFT JOIN {"\""}Country{"\""} AS c
+                                ON s.{"\""}CountryId{"\""} = c.{"\""}Id{"\""}
+                         WHERE s.{"\""}Id{"\""} = '{id}'
+                            and s.{"\""}IsActive{"\""}";
+
+            var state = await _sqlContext.Connection.QueryAsync<State, Country, State>(sql,
+                (state, country) =>
+                {
+                    state.SetCountry(country);
+                    return state;
+                },
+                splitOn: "Id"
+                );
+
+            return state.FirstOrDefault();
         }
     }
 }
