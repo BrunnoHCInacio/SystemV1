@@ -48,8 +48,9 @@ namespace SystemV1.Domain.Test.Fixture
             return countryFixture.GenerateCountryExpected();
         }
 
-        public List<Address> GenerateAddress(int quantity)
+        public List<Address> GenerateAddress(int quantity, bool registerEnable = true)
         {
+
             var address = new Faker<Address>("pt_BR")
                             .CustomInstantiator(f => new Address(Guid.NewGuid(),
                                                                 f.Address.ZipCode(),
@@ -57,13 +58,24 @@ namespace SystemV1.Domain.Test.Fixture
                                                                 f.Random.Number(1, 99999).ToString(),
                                                                 f.Address.SecondaryAddress(),
                                                                 f.Address.Direction(),
-                                                                f.Address.City()));
+                                                                f.Address.City()))
+                            .FinishWith((f,a) => 
+                                        {
+                                            a.SetState(new StateTestFixture().GenerateValidState());
+
+                                            if (!registerEnable) a.DisableRegister();
+                                        });
             return address.Generate(quantity).ToList();
         }
 
         public Address GenerateValidAddress()
         {
             return GenerateAddress(1).FirstOrDefault();
+        }
+
+        public Address GenerateValidAddressNotActive()
+        {
+            return GenerateAddress(1, false).FirstOrDefault();
         }
 
         public Address GenerateInvalidAddress()
@@ -85,11 +97,11 @@ namespace SystemV1.Domain.Test.Fixture
                 Complement = a.Complement,
                 ZipCode = a.ZipCode,
                 City = a.City,
-                IdCountry = a.Country.Id,
-                CountryName = a.Country.Name,
+                IdCountry = a.State?.Country?.Id ?? null,
+                CountryName = a.State?.Country?.Name ?? "",
                 District = a.District,
-                IdState = a.State.Id,
-                StateName = a.State.Name
+                IdState = a.State?.Id ?? null,
+                StateName = a.State.Name ?? ""
             }));
 
             return addressesViewModel;
@@ -107,11 +119,11 @@ namespace SystemV1.Domain.Test.Fixture
                     Complement = invalidAddress.Complement,
                     ZipCode = invalidAddress.ZipCode,
                     City = invalidAddress.City,
-                    IdCountry = invalidAddress.Country?.Id != null ? invalidAddress.Country?.Id : null,
-                    CountryName = invalidAddress.Country?.Name != null ? invalidAddress.Country?.Name : "",
+                    IdCountry = invalidAddress.Country?.Id ?? null,
+                    CountryName = invalidAddress.Country?.Name ?? "",
                     District = invalidAddress.District,
-                    IdState = invalidAddress.State?.Id != null ? invalidAddress.State?.Id : null,
-                    StateName = invalidAddress.State?.Name != null ? invalidAddress.State?.Name : ""
+                    IdState = invalidAddress.State?.Id ?? null,
+                    StateName = invalidAddress.State?.Name ?? ""
                 } };
         }
     }

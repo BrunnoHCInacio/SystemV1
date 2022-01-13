@@ -27,7 +27,7 @@ namespace SystemV1.Domain.Services.Test.Fixture
                                                     f.Address.State()))
                                 .FinishWith((f, s) =>
                                 {
-                                    // s.SetCountry(countryFixture.GenerateValidCountry());
+                                     s.SetCountry(countryFixture.GenerateValidCountry());
                                 });
             return state.Generate(quantity);
         }

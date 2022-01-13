@@ -25,8 +25,7 @@ namespace SystemV1.Domain.Test.Fixture
                 Name = faker.Commerce.ProductName()
             };
         }
-
-        public List<Product> GenerateProduct(int quantity)
+        public List<Product> GenerateProduct(int quantity, bool registerActive = true)
         {
             var productItemFixture = new ProductItemTestFixture();
             var product = new Faker<Product>()
@@ -34,7 +33,27 @@ namespace SystemV1.Domain.Test.Fixture
                                     new Product(Guid.NewGuid(), f.Commerce.ProductName()))
                 .FinishWith((f, p) =>
                 {
-                    p.AddProductItems(productItemFixture.GenerateProduct(3));
+                    if(!registerActive) p.DisableRegister();
+                });
+
+            return product.Generate(quantity);
+        }
+
+        public List<Product> GenerateProductWithItems(int quantity, bool registerActive = true)
+        {
+            var productItemFixture = new ProductItemTestFixture();
+            var product = new Faker<Product>()
+                .CustomInstantiator(f =>
+                                    new Product(Guid.NewGuid(), f.Commerce.ProductName()))
+                .FinishWith((f, p) =>
+                {
+                    if (!registerActive)
+                    {
+                        p.DisableRegister();
+                        p.AddProductItems(productItemFixture.GenerateProductItem(3, registerActive));
+                    }
+
+                    p.AddProductItems(productItemFixture.GenerateProductItem(3));
                 });
 
             return product.Generate(quantity);
@@ -48,6 +67,11 @@ namespace SystemV1.Domain.Test.Fixture
         public Product GenerateInvalidProduct()
         {
             return new Product(Guid.NewGuid(), "");
+        }
+
+        public Product GenerateValidProductDisabled()
+        {
+            return GenerateProduct(1, false).FirstOrDefault();
         }
 
         public void Dispose()

@@ -68,7 +68,7 @@ namespace SystemV1.Domain.Test.DomainTests
             Assert.True(result.Errors.Any());
 
             Assert.Single(result.Errors);
-            Assert.Contains(ProductItemValidation.ModelRequired, result.Errors.Select(e => e.ErrorMessage));
+            Assert.Contains(ProductItemValidation.ProductItemRequired, result.Errors.Select(e => e.ErrorMessage));
         }
     }
 }

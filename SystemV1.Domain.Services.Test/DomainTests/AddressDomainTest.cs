@@ -41,6 +41,7 @@ namespace SystemV1.Domain.Test
                                       addressExpected.Complement,
                                       addressExpected.District,
                                       addressExpected.City);
+            state.SetCountry(country);
             address.SetState(state);
             
             //Assert
@@ -71,6 +72,23 @@ namespace SystemV1.Domain.Test
 
             //Assert
             Assert.True(result.IsValid);
+        }
+
+        [Fact(DisplayName = "Validate a disable valid address")]
+        [Trait("Categoria", "Cadastro - Endereço")]
+        public void Address_ValidateAddress_ShouldFailed()
+        {
+            //Arrange 
+            var address = _addressTestFixture.GenerateValidAddressNotActive();
+
+            //Act
+            var result = address.ValidateAddress();
+
+            //Assert
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Any());
+            Assert.Single(result.Errors);
+            Assert.Contains(AddressValidation.AddressNotActive, result.Errors.Select(e => e.ErrorMessage));
         }
 
         [Fact(DisplayName = "Validate invalid address")]

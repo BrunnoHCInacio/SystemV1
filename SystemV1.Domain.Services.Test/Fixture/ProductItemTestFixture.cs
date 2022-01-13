@@ -15,7 +15,7 @@ namespace SystemV1.Domain.Test.Fixture
 
     public class ProductItemTestFixture : IDisposable
     {
-        public List<ProductItem> GenerateProduct(int quantity)
+        public List<ProductItem> GenerateProductItem(int quantity, bool registerActive = true)
         {
             var product = new Faker<ProductItem>()
                 .CustomInstantiator(f => new ProductItem(Guid.NewGuid(),
@@ -23,6 +23,8 @@ namespace SystemV1.Domain.Test.Fixture
                                                          f.Random.Decimal(0.00M, 999999999.99M)))
                 .FinishWith((f, pi) =>
                 {
+                    if (!registerActive) pi.DisableRegister();
+
                     pi.SetProductItemAvailable();
                     pi.SetProductItemSold();
                 });
@@ -31,12 +33,17 @@ namespace SystemV1.Domain.Test.Fixture
 
         public ProductItem GenerateValidProduct()
         {
-            return GenerateProduct(1).FirstOrDefault();
+            return GenerateProductItem(1).FirstOrDefault();
         }
 
         public ProductItem GenerateInvalidProduct()
         {
             return new ProductItem(new Guid(), null, 0.0M);
+        }
+
+        public ProductItem GenerateValidProductDisabled()
+        {
+            return GenerateProductItem(1, false).FirstOrDefault();
         }
 
         public dynamic GenerateProductExpected()

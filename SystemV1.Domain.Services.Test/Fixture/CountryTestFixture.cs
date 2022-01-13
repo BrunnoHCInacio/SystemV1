@@ -15,10 +15,15 @@ namespace SystemV1.Domain.Test.Fixture
 
     public class CountryTestFixture : IDisposable
     {
-        public List<Country> GenerateCountry(int quantity)
+        #region Generate valid data
+        public List<Country> GenerateCountry(int quantity, bool registerActive = true)
         {
             var country = new Faker<Country>("pt_BR")
-                                .CustomInstantiator(f => new Country(Guid.NewGuid(), f.Address.Country()));
+                                .CustomInstantiator(f => new Country(Guid.NewGuid(), f.Address.Country()))
+                                .FinishWith((f,c)=>
+                                {
+                                    if (!registerActive) c.DisableRegister();
+                                });
             return country.Generate(quantity);
         }
 
@@ -35,6 +40,8 @@ namespace SystemV1.Domain.Test.Fixture
             return country;
         }
 
+        #endregion
+        #region Generate invalid data
         public Country GenerateInvalidCountry()
         {
             return new Country(Guid.NewGuid(), "");
@@ -61,7 +68,8 @@ namespace SystemV1.Domain.Test.Fixture
 
             return country;
         }
-
+        #endregion
+        #region Generate expected data
         public dynamic GenerateCountryExpected()
         {
             var faker = new Faker("pt_BR");
@@ -77,7 +85,13 @@ namespace SystemV1.Domain.Test.Fixture
             var stateFixture = new StateTestFixture();
             return stateFixture.GenerateStateValidExpected();
         }
-
+        #endregion
+        #region Generation valid disable data
+        public Country GenerateValidCountryDisabled()
+        {
+            return GenerateCountry(1, false).FirstOrDefault();
+        }
+        #endregion
         public List<CountryViewModel> GenerateCountryViewModel(int quantity)
         {
             var country = new Faker<CountryViewModel>("pt_BR").RuleFor(c => c.Name, f => f.Address.Country());

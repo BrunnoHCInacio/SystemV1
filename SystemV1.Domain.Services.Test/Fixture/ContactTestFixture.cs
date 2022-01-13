@@ -17,6 +17,7 @@ namespace SystemV1.Domain.Test.Fixture
 
     public class ContactTestFixture : IDisposable
     {
+        #region Generate Expected data
         public dynamic GenerateValidContactExpectedTypeEmail()
         {
             var faker = new Faker("pt_BR");
@@ -54,6 +55,53 @@ namespace SystemV1.Domain.Test.Fixture
             };
         }
 
+        #endregion
+
+        #region Generate Valid data
+        public List<Contact> GenerateContact(EnumTypeContact typeContact, int quantity, bool registerActive = true)
+        {
+            var contacts = new Faker<Contact>("pt_BR");
+
+            if (typeContact == EnumTypeContact.TypeContactCellPhone)
+            {
+                contacts.CustomInstantiator(f => new Contact(Guid.NewGuid(),
+                                                            typeContact,
+                                                            f.Random.Number(1, 999).ToString(),
+                                                            $"+{f.Random.Number(1, 999)}",
+                                                            f.Phone.PhoneNumber("#########")))
+                        .FinishWith((f, c) =>
+                        {
+                            if (!registerActive) c.DisableRegister();
+                        });
+            }
+            else if (typeContact == EnumTypeContact.TypeContactPhone)
+            {
+                contacts.CustomInstantiator(f => new Contact(Guid.NewGuid(),
+                                                            typeContact,
+                                                            f.Random.Number(1, 99).ToString(),
+                                                            $"+{f.Random.Number(1, 99)}",
+                                                            null,
+                                                            f.Phone.PhoneNumber("########"),
+                                                            null))
+                        .FinishWith((f, c) =>
+                        {
+                            if (!registerActive) c.DisableRegister();
+                        }); ;
+            }
+            else if (typeContact == EnumTypeContact.TypeContactEmail)
+            {
+                contacts.CustomInstantiator(f => new Contact(Guid.NewGuid(),
+                                                           typeContact,
+                                                           email: f.Internet.Email()))
+                        .FinishWith((f, c) =>
+                        {
+                            if (!registerActive) c.DisableRegister();
+                        }); ;
+            }
+
+            return contacts.Generate(quantity);
+        }
+
         public Contact GenerateValidContactTypePhone()
         {
             return GenerateContact(EnumTypeContact.TypeContactPhone, 1).FirstOrDefault();
@@ -68,10 +116,20 @@ namespace SystemV1.Domain.Test.Fixture
         {
             return GenerateContact(EnumTypeContact.TypeContactEmail, 1).FirstOrDefault();
         }
+        #endregion
 
+        #region Generate invalid data
         public Contact GenerateInvalidContactTypeEmail()
         {
             return new Contact(new Guid(), EnumTypeContact.TypeContactEmail);
+        }
+        public Contact GenerateInvalidContactTypePhone()
+        {
+            return new Contact(new Guid(), EnumTypeContact.TypeContactPhone);
+        }
+        public Contact GenerateInvalidContactTypeCellPhone()
+        {
+            return new Contact(new Guid(), EnumTypeContact.TypeContactCellPhone);
         }
 
         public Contact GenerateInvalidPhoneContactWithInvalidProperties()
@@ -88,49 +146,9 @@ namespace SystemV1.Domain.Test.Fixture
         {
             return new Contact(new Guid(), EnumTypeContact.TypeContactEmail, email: "brunno");
         }
+        #endregion
 
-        public Contact GenerateInvalidContactTypePhone()
-        {
-            return new Contact(new Guid(), EnumTypeContact.TypeContactPhone);
-        }
-
-        public Contact GenerateInvalidContactTypeCellPhone()
-        {
-            return new Contact(new Guid(), EnumTypeContact.TypeContactCellPhone);
-        }
-
-        public List<Contact> GenerateContact(EnumTypeContact typeContact, int quantity)
-        {
-            var contacts = new Faker<Contact>("pt_BR");
-
-            if (typeContact == EnumTypeContact.TypeContactCellPhone)
-            {
-                contacts.CustomInstantiator(f => new Contact(Guid.NewGuid(),
-                                                            typeContact,
-                                                            f.Random.Number(1, 999).ToString(),
-                                                            $"+{f.Random.Number(1, 999)}",
-                                                            f.Phone.PhoneNumber("#########")));
-            }
-            else if (typeContact == EnumTypeContact.TypeContactPhone)
-            {
-                contacts.CustomInstantiator(f => new Contact(Guid.NewGuid(),
-                                                            typeContact,
-                                                            f.Random.Number(1, 99).ToString(),
-                                                            $"+{f.Random.Number(1, 99)}",
-                                                            null,
-                                                            f.Phone.PhoneNumber("########"),
-                                                            null));
-            }
-            else if (typeContact == EnumTypeContact.TypeContactEmail)
-            {
-                contacts.CustomInstantiator(f => new Contact(Guid.NewGuid(),
-                                                           typeContact,
-                                                           email: f.Internet.Email()));
-            }
-
-            return contacts.Generate(quantity);
-        }
-
+        
         public List<ContactViewModel> GenerateValidContactViewModel(EnumTypeContact typeContact,
                                                                     int qty)
         {
@@ -182,6 +200,24 @@ namespace SystemV1.Domain.Test.Fixture
             }
             return invalidContacts;
         }
+
+        #region Disabled valid data
+
+        public Contact GenerateValidContactTypeCellPhoneDisabled()
+        {
+            return GenerateContact(EnumTypeContact.TypeContactCellPhone, 1, false).FirstOrDefault();
+        }
+
+        public Contact GenerateValidContactTypeEmailDisabled()
+        {
+            return GenerateContact(EnumTypeContact.TypeContactEmail, 1, false).FirstOrDefault();
+        }
+
+        public Contact GenerateValidContactTypePhoneDisabled()
+        {
+            return GenerateContact(EnumTypeContact.TypeContactPhone, 1, false).FirstOrDefault();
+        }
+        #endregion
 
         public void Dispose()
         {

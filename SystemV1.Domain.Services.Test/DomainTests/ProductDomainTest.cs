@@ -34,6 +34,8 @@ namespace SystemV1.Domain.Test.DomainTests
             Assert.Equal(productExpected.Name, productExpected.Name);
         }
 
+        //TODO: Criar teste para validar as propriedades de produto e produto com item(s).
+
         [Fact(DisplayName = "Validate valid product")]
         [Trait("Categoria", "Cadastro - Produto")]
         public void Product_NewProduct_ShouldBeValid()
@@ -49,6 +51,8 @@ namespace SystemV1.Domain.Test.DomainTests
             Assert.True(product.ProductItems.Any());
             Assert.Equal(3, product.ProductItems.Count());
         }
+
+        //TODO: Criar teste para validar a entidade de produto e produto com item(s).
 
         [Fact(DisplayName = "Validate invalid product")]
         [Trait("Categoria", "Cadastro - Produto")]
@@ -66,5 +70,7 @@ namespace SystemV1.Domain.Test.DomainTests
 
             Assert.Contains(ProductValidation.NameRequired, result.Errors.Select(e => e.ErrorMessage));
         }
+
+        //TODO: Criar teste de validação para produto desabilitado.
     }
 }

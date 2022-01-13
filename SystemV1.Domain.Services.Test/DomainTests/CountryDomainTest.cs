@@ -20,9 +20,10 @@ namespace SystemV1.Domain.Test
             _countryTestFixture = countryTestFixture;
         }
 
+        #region Test validate for each property from entity
         [Fact(DisplayName = "Validate set as correct properties")]
         [Trait("Categoria", "Cadastro - País")]
-        public void Country_NewCountry_ShouldSetCorrectProperties()
+        public void Country_NewCountryWithState_ShouldSetCorrectProperties()
         {
             //Arrange
 
@@ -59,7 +60,11 @@ namespace SystemV1.Domain.Test
                 }
             }
         }
+        #endregion
 
+        // TODO: Criar teste para testar as propriedades genericas: data cadastro, data alteração, usuário cadastro e usuário alteração
+
+        #region Test validation for data
         [Fact(DisplayName = "Validate country valid")]
         [Trait("Categoria", "Cadastro - País")]
         public void Country_ValidateNewCountry_ShouldBeValid()
@@ -87,8 +92,30 @@ namespace SystemV1.Domain.Test
             //Assert
             Assert.False(result.IsValid);
             Assert.True(result.Errors.Any());
-            Assert.Single(result.Errors);
+            
             Assert.Contains(CountryValidation.CountryNameRequired, result.Errors.Select(e => e.ErrorMessage));
+            Assert.Contains(CountryValidation.NameMinLength, result.Errors.Select(e => e.ErrorMessage));
         }
+
+        [Fact(DisplayName = "Validate country invalid")]
+        [Trait("Categoria", "Cadastro - País")]
+        public void Country_ValidateNewCountryDisabled_ShouldFailed()
+        {
+            //Arrange
+            var country = _countryTestFixture.GenerateValidCountryDisabled();
+
+            //Act
+            var result = country.ValidadeCountry();
+
+            //Assert
+            Assert.False(result.IsValid);
+            Assert.True(result.Errors.Any());
+            Assert.Single(result.Errors);
+            
+            Assert.Contains(CountryValidation.CountryNotActive, result.Errors.Select(e => e.ErrorMessage));
+            
+        }
+
+        #endregion
     }
 }
