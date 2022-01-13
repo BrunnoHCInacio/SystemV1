@@ -27,7 +27,6 @@ namespace SystemV1.Application
         public async Task AddAsync(StateViewModel stateViewModel)
         {
             var state = _mapperState.ViewModelToEntity(stateViewModel);
-
             await _serviceState.AddAsyncUow(state);
         }
 

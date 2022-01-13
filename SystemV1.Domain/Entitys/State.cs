@@ -33,7 +33,6 @@ namespace SystemV1.Domain.Entitys
         }
 
         public string Name { get; private set; }
-        public Guid StateId { get; private set; }
         public Guid CountryId { get; private set; }
         public Country Country { get; private set; }
 
