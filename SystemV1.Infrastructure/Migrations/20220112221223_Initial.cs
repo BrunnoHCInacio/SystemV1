@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SystemV1.Infrastructure.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -66,8 +66,7 @@ namespace SystemV1.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    StateId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CountryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     IdUserRegister = table.Column<int>(type: "integer", nullable: false),
@@ -82,7 +81,7 @@ namespace SystemV1.Infrastructure.Migrations
                         column: x => x.CountryId,
                         principalTable: "Country",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

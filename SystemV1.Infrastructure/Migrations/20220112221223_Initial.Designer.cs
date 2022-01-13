@@ -10,15 +10,15 @@ using SystemV1.Infrastructure.Data;
 namespace SystemV1.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20210621100127_update_relation_state_with_country")]
-    partial class update_relation_state_with_country
+    [Migration("20220112221223_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Address", b =>
@@ -318,7 +318,7 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("CountryId")
+                    b.Property<Guid>("CountryId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DateChange")
@@ -338,9 +338,6 @@ namespace SystemV1.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
-
-                    b.Property<Guid>("StateId")
-                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -423,7 +420,9 @@ namespace SystemV1.Infrastructure.Migrations
                 {
                     b.HasOne("SystemV1.Domain.Entitys.Country", "Country")
                         .WithMany("States")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Country");
                 });
