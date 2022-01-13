@@ -16,6 +16,7 @@ namespace SystemV1.Domain.Validations
 
         public static string DistrictLenght2_50 => "O bairro deve conter entre 2 e 50 caracteres.";
 
+        public static string AddressNotActive => "O endereço deve estar ativo.";
         public AddressValidation()
         {
             RuleFor(a => a.Street)
@@ -31,6 +32,10 @@ namespace SystemV1.Domain.Validations
             RuleFor(a => a.District)
                 .Length(2, 50)
                 .WithMessage(DistrictLenght2_50);
+
+            RuleFor(a => a.IsActive)
+                .Equal(true)
+                .WithMessage(AddressNotActive);
         }
     }
 }

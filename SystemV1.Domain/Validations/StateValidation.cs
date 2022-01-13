@@ -8,8 +8,9 @@ namespace SystemV1.Domain.Validations
 {
     public class StateValidation : AbstractValidator<State>
     {
-        public static string StateNameRequired => "O nome do estado é obrigatório";
-        public static string CountryRequired => "O país é obrigatório";
+        public static string StateNameRequired => "O nome do estado é obrigatório.";
+        public static string CountryRequired => "O país é obrigatório.";
+        public static string CountryNotActive => "O pais deve estar ativo.";
 
         public StateValidation()
         {
@@ -18,8 +19,12 @@ namespace SystemV1.Domain.Validations
                 .WithMessage(StateNameRequired);
 
             RuleFor(s => s.CountryId)
-                .NotEqual(Guid.Empty)
+                .Must( s=> s != Guid.Empty || s != Guid.NewGuid())
                 .WithMessage(CountryRequired);
+
+            RuleFor(s => s.IsActive)
+                .Equal(true)
+                .WithMessage(CountryNotActive);
         }
     }
 }

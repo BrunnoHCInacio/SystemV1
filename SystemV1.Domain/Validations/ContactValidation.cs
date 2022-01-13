@@ -23,12 +23,17 @@ namespace SystemV1.Domain.Validations
 
         public static string EmailRequired => "O email é obrigatório.";
         public static string EmailValid => "Informe um email válido.";
+        public static string ContactNotActive => "O contato deve estar ativo.";
 
         public ContactValidation()
         {
             RuleFor(c => c.TypeContact)
                 .NotNull()
                 .WithMessage(TypeContactRequired);
+
+            RuleFor(c => c.IsActive)
+                .Equal(true)
+                .WithMessage(ContactNotActive);
 
             When(c => c.TypeContact == EnumTypeContact.TypeContactPhone,
                 () =>

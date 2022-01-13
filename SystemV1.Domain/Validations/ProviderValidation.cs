@@ -11,19 +11,25 @@ namespace SystemV1.Domain.Validations
         private static string NameRequired => "O nome é obrigatório.";
         private static string NameMinLength => "O nome deve conter pelo menos 2 caracteres.";
         private static string NameMaxLength => "O nome deve conter até 100 caracteres.";
+        public static string ProviderNotActive => "O fornecedor deve estar ativo.";
 
         public ProviderValidation()
         {
-            RuleFor(c => c.Name)
+            RuleFor(p => p.Name)
                .NotEmpty()
                .WithMessage(NameRequired);
 
-            RuleFor(c => c.Name)
+            RuleFor(p => p.Name)
                 .MinimumLength(2)
                 .WithMessage(NameMinLength);
-            RuleFor(c => c.Name)
+            
+            RuleFor(p => p.Name)
                 .MaximumLength(100)
                 .WithMessage(NameMaxLength);
+
+            RuleFor(p => p.IsActive)
+                .Equal(true)
+                .WithMessage(ProviderNotActive);
         }
     }
 }

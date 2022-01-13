@@ -12,7 +12,7 @@ namespace SystemV1.Domain.Validations
         public static string NameMinLength => "O nome do cliente deve conter pelo menos 2 caracteres";
         public static string NameMaxLength => "O nome do cliente deve conter até 100 caracteres";
         public static string DocumentRequired => "O documento do cliente é obrigatório.";
-
+        public static string ClientNotActive => "O cliente deve estar ativo.";
         public ClientValidation()
         {
             RuleFor(c => c.Name)
@@ -30,6 +30,10 @@ namespace SystemV1.Domain.Validations
             RuleFor(c => c.Document)
                 .NotEmpty()
                 .WithMessage(DocumentRequired);
+
+            RuleFor(c => c.IsActive)
+                .Equal(true)
+                .WithMessage(ClientNotActive);
         }
     }
 }
