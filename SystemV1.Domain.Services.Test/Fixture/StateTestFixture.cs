@@ -17,9 +17,10 @@ namespace SystemV1.Domain.Services.Test.Fixture
 
     public class StateTestFixture : IDisposable
     {
-        public List<State> GenerateStates(int quantity)
+        public List<State> GenerateStates(int quantity, 
+                                          bool registerActive = true,
+                                          bool getRelationShip = false)
         {
-            //return new State(Guid.NewGuid(), "Goias");
             var countryFixture = new CountryTestFixture();
 
             var state = new Faker<State>("pt_BR")
@@ -27,7 +28,11 @@ namespace SystemV1.Domain.Services.Test.Fixture
                                                     f.Address.State()))
                                 .FinishWith((f, s) =>
                                 {
-                                     s.SetCountry(countryFixture.GenerateValidCountry());
+                                    if (!registerActive) s.DisableRegister();
+                                    if (getRelationShip)
+                                    {
+                                        s.SetCountry(countryFixture.GenerateValidCountry());
+                                    }
                                 });
             return state.Generate(quantity);
         }
@@ -35,6 +40,11 @@ namespace SystemV1.Domain.Services.Test.Fixture
         public State GenerateValidState()
         {
             return GenerateStates(1).FirstOrDefault();
+        }
+
+        public State GenerateValidStateDisabled()
+        {
+            return GenerateStates(1, false).FirstOrDefault();
         }
 
         public State GenerateInvalidState()

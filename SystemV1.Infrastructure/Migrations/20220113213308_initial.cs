@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SystemV1.Infrastructure.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,8 +14,8 @@ namespace SystemV1.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IdUserRegister = table.Column<int>(type: "integer", nullable: false),
-                    IdUserChange = table.Column<int>(type: "integer", nullable: false),
+                    IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdUserChange = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Document = table.Column<string>(type: "text", nullable: true)
@@ -33,8 +33,8 @@ namespace SystemV1.Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: true),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IdUserRegister = table.Column<int>(type: "integer", nullable: false),
-                    IdUserChange = table.Column<int>(type: "integer", nullable: false),
+                    IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdUserChange = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -49,8 +49,8 @@ namespace SystemV1.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IdUserRegister = table.Column<int>(type: "integer", nullable: false),
-                    IdUserChange = table.Column<int>(type: "integer", nullable: false),
+                    IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdUserChange = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Document = table.Column<string>(type: "text", nullable: true)
@@ -69,8 +69,8 @@ namespace SystemV1.Infrastructure.Migrations
                     CountryId = table.Column<Guid>(type: "uuid", nullable: false),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IdUserRegister = table.Column<int>(type: "integer", nullable: false),
-                    IdUserChange = table.Column<int>(type: "integer", nullable: false),
+                    IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdUserChange = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -99,8 +99,8 @@ namespace SystemV1.Infrastructure.Migrations
                     Email = table.Column<string>(type: "text", nullable: true),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IdUserRegister = table.Column<int>(type: "integer", nullable: false),
-                    IdUserChange = table.Column<int>(type: "integer", nullable: false),
+                    IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdUserChange = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -129,8 +129,8 @@ namespace SystemV1.Infrastructure.Migrations
                     ProviderId = table.Column<Guid>(type: "uuid", nullable: true),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IdUserRegister = table.Column<int>(type: "integer", nullable: false),
-                    IdUserChange = table.Column<int>(type: "integer", nullable: false),
+                    IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdUserChange = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -161,8 +161,8 @@ namespace SystemV1.Infrastructure.Migrations
                     CountryId = table.Column<Guid>(type: "uuid", nullable: true),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IdUserRegister = table.Column<int>(type: "integer", nullable: false),
-                    IdUserChange = table.Column<int>(type: "integer", nullable: false),
+                    IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdUserChange = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -207,8 +207,8 @@ namespace SystemV1.Infrastructure.Migrations
                     ImageZip = table.Column<string>(type: "text", nullable: true),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IdUserRegister = table.Column<int>(type: "integer", nullable: false),
-                    IdUserChange = table.Column<int>(type: "integer", nullable: false),
+                    IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdUserChange = table.Column<Guid>(type: "uuid", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>

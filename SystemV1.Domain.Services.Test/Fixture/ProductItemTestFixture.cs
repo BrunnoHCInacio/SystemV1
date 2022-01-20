@@ -25,7 +25,6 @@ namespace SystemV1.Domain.Test.Fixture
                 {
                     if (!registerActive) pi.DisableRegister();
 
-                    pi.SetProductItemAvailable();
                     pi.SetProductItemSold();
                 });
             return product.Generate(quantity);
@@ -58,6 +57,14 @@ namespace SystemV1.Domain.Test.Fixture
                 IsAvailable = true,
                 ImageZip = "image.jpg"
             };
+        }
+
+        private void GenerateDataLog(ProductItem product)
+        {
+            product.DateRegister = new DateTime();
+            product.DateChange = new DateTime();
+            product.IdUserRegister = Guid.NewGuid();
+            product.IdUserChange = Guid.NewGuid();
         }
 
         public void Dispose()

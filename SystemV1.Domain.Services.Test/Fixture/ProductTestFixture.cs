@@ -19,10 +19,19 @@ namespace SystemV1.Domain.Test.Fixture
         public dynamic GenerateProductExpected()
         {
             var faker = new Faker("pt_BR");
+            var productItemFixture = new ProductItemTestFixture();
             return new
             {
                 Id = Guid.NewGuid(),
-                Name = faker.Commerce.ProductName()
+                Name = faker.Commerce.ProductName(),
+
+                ProductItems = new List<dynamic>
+                {
+                    productItemFixture.GenerateProductExpected(),
+                    productItemFixture.GenerateProductExpected(),
+                    productItemFixture.GenerateProductExpected(),
+                    productItemFixture.GenerateProductExpected()
+                }
             };
         }
         public List<Product> GenerateProduct(int quantity, bool registerActive = true)
@@ -34,6 +43,7 @@ namespace SystemV1.Domain.Test.Fixture
                 .FinishWith((f, p) =>
                 {
                     if(!registerActive) p.DisableRegister();
+                    p.AddProductItems(productItemFixture.GenerateProductItem(5));
                 });
 
             return product.Generate(quantity);

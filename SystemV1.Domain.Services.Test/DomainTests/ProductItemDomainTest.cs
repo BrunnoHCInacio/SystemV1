@@ -39,6 +39,8 @@ namespace SystemV1.Domain.Test.DomainTests
             Assert.Equal(productItemExpected.ImageZip, productItem.ImageZip);
         }
 
+        //TODO: Criar testes para validar a view model.
+
         [Fact(DisplayName = "Validate valid product item ")]
         [Trait("Categoria", "Cadastro - Product Item")]
         public void ProductItem_NewProduct_ShouldBeValid()
@@ -52,6 +54,8 @@ namespace SystemV1.Domain.Test.DomainTests
             //Assert
             Assert.True(result.IsValid);
         }
+
+        //TODO: Criar testes para validar objeto desabilitado.
 
         [Fact(DisplayName = "Validate invalid product item ")]
         [Trait("Categoria", "Cadastro - Product Item")]

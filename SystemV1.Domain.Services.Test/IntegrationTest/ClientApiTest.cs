@@ -29,7 +29,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Add new client with success"), Priority(1)]
-        [Trait("Categoria", "Integração - Pais")]
+        [Trait("Categoria", "Integração - País")]
         public async Task Client_AddNewClient_ShouldHasSuccess()
         {
             //Arrange
@@ -44,7 +44,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Get all clients with success"), Priority(2)]
-        [Trait("Categoria", "Integração - Pais")]
+        [Trait("Categoria", "Integração - País")]
         public async Task Client_GetAllClients_ShouldReturnsWithSuccess()
         {
             //Arrange
@@ -53,7 +53,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Get client by id with success"), Priority(3)]
-        [Trait("Categoria", "Integração - Pais")]
+        [Trait("Categoria", "Integração - País")]
         public async Task Client_GetById_ShouldHasSuccess()
         {
             //Arrange
@@ -62,7 +62,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Update client with success"), Priority(4)]
-        [Trait("Categoria", "Integração - Pais")]
+        [Trait("Categoria", "Integração - País")]
         public async Task Client_UpdateClient_ShouldHasSuccess()
         {
             //Arrange
@@ -71,7 +71,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Remove client with success"), Priority(5)]
-        [Trait("Categoria", "Integração - Pais")]
+        [Trait("Categoria", "Integração - País")]
         public async Task Client_RemoveClient_ShouldHasSuccess()
         {
             //Arrange

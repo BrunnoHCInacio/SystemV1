@@ -46,11 +46,11 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<string>("District")
                         .HasColumnType("text");
 
-                    b.Property<int>("IdUserChange")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserChange")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("IdUserRegister")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserRegister")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -98,11 +98,11 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<string>("Document")
                         .HasColumnType("text");
 
-                    b.Property<int>("IdUserChange")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserChange")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("IdUserRegister")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserRegister")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -142,11 +142,11 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<int>("IdUserChange")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserChange")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("IdUserRegister")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserRegister")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -181,11 +181,11 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<DateTime>("DateRegister")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("IdUserChange")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserChange")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("IdUserRegister")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserRegister")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -210,11 +210,11 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<DateTime>("DateRegister")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("IdUserChange")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserChange")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("IdUserRegister")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserRegister")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -244,11 +244,11 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<DateTime>("DateRegister")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("IdUserChange")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserChange")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("IdUserRegister")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserRegister")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ImageZip")
                         .HasColumnType("text");
@@ -293,11 +293,11 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<string>("Document")
                         .HasColumnType("text");
 
-                    b.Property<int>("IdUserChange")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserChange")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("IdUserRegister")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserRegister")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -325,11 +325,11 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<DateTime>("DateRegister")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("IdUserChange")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserChange")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("IdUserRegister")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("IdUserRegister")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
