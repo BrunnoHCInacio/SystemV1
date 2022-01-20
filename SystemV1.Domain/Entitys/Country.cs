@@ -19,8 +19,8 @@ namespace SystemV1.Domain.Entitys
                        string name,
                        DateTime dateRegister,
                        DateTime dateChange,
-                       int idUserRegister,
-                       int idUserChange,
+                       Guid idUserRegister,
+                       Guid idUserChange,
                        bool isActive)
         {
             States = new List<State>();

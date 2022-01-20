@@ -28,20 +28,22 @@ namespace SystemV1.Domain.Entitys
 
         public void SetProductItemSold()
         {
+            SetProductItemUnAvailable();
             IsSold = true;
         }
 
-        public void SetProductItemSell()
+        public void SetProductForSale()
         {
+            SetProductItemAvailable();
             IsSold = false;
         }
 
-        public void SetProductItemAvailable()
+        private void SetProductItemAvailable()
         {
             IsAvailable = true;
         }
 
-        public void SetProductItemUnAvailable()
+        private void SetProductItemUnAvailable()
         {
             IsAvailable = false;
         }

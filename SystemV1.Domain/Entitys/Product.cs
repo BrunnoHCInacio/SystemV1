@@ -28,9 +28,12 @@ namespace SystemV1.Domain.Entitys
 
         public void AddProductItems(List<ProductItem> productItems)
         {
-            //if(productItems.Select(pi=>pi.Validate))
-
             ProductItems.AddRange(productItems);
+        }
+
+        public void AddProductItem(ProductItem product)
+        {
+            ProductItems.Add(product);
         }
 
         public ValidationResult ValidateProduct()

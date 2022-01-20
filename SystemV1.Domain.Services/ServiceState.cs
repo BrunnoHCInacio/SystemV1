@@ -52,7 +52,15 @@ namespace SystemV1.Domain.Services
 
         public async Task<IEnumerable<State>> GetAllAsync(int page, int pageSize)
         {
-            return await _repositoryState.GetAllStatesAsync(page, pageSize);
+            try 
+            {
+                return await _repositoryState.GetAllStatesAsync(page, pageSize);
+            } 
+            catch(Exception) 
+            {
+                Notify("Falha ao consultar todos os estados.");
+            }
+            return new List<State>();
         }
 
         public async Task<State> GetByIdAsync(Guid id)
@@ -61,10 +69,9 @@ namespace SystemV1.Domain.Services
             {
                 return await _repositoryState.GetStateByIdAsync(id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                var t = ex;
-                Notify("Falha ao consultar o estado por id");
+                Notify("Falha ao consultar o estado por id.");
             }
             return null;
         }
@@ -75,9 +82,8 @@ namespace SystemV1.Domain.Services
             {
                 return await _repositoryState.GetStateCountryByIdAsync(id);
             }
-            catch (Exception ex)
-            {
-                var t = ex;
+            catch (Exception)
+            {                
                 Notify("Falha ao consultar o estado por id");
             }
             return null;
@@ -90,7 +96,15 @@ namespace SystemV1.Domain.Services
                 Notify("Informe o nome a consultar");
                 return null;
             }
-            return await _repositoryState.GetByNameAsync(name);
+            try
+            {
+                return await _repositoryState.GetByNameAsync(name);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter o state por nome.");
+            }
+            return null;
         }
 
         public void Remove(State state)
@@ -106,9 +120,8 @@ namespace SystemV1.Domain.Services
                 Remove(state);
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                var t = ex;
                 Notify("Falha ao remover estado.");
             }
         }
@@ -125,8 +138,15 @@ namespace SystemV1.Domain.Services
                 return;
             }
 
-            Update(state);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Update(state);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao alterar o estado.");
+            }
         }
     }
 }
