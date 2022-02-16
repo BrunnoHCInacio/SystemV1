@@ -20,7 +20,7 @@ namespace SystemV1.Domain.Test.DomainTests
         }
 
         [Fact(DisplayName = "Validate as correct set properties on the product item ")]
-        [Trait("Categoria", "Cadastro - Product Item")]
+        [Trait("Categoria", "Produto - Cadastro")]
         public void ProductItem_NewProduct_ShouldSetCorrectProperties()
         {
             //Arrange
@@ -42,7 +42,7 @@ namespace SystemV1.Domain.Test.DomainTests
         //TODO: Criar testes para validar a view model.
 
         [Fact(DisplayName = "Validate valid product item ")]
-        [Trait("Categoria", "Cadastro - Product Item")]
+        [Trait("Categoria", "Produto - Cadastro")]
         public void ProductItem_NewProduct_ShouldBeValid()
         {
             //Arrange
@@ -58,7 +58,7 @@ namespace SystemV1.Domain.Test.DomainTests
         //TODO: Criar testes para validar objeto desabilitado.
 
         [Fact(DisplayName = "Validate invalid product item ")]
-        [Trait("Categoria", "Cadastro - Product Item")]
+        [Trait("Categoria", "Produto - Cadastro")]
         public void ProductItem_NewProductItem_ShouldBeInvalid()
         {
             //Arrange

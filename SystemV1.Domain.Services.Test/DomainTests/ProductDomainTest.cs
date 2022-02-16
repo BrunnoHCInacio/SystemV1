@@ -22,7 +22,7 @@ namespace SystemV1.Domain.Test.DomainTests
         #region Test validate expected data
 
         [Fact(DisplayName = "Validate set as correct properties for product")]
-        [Trait("Categoria", "Cadastro - Produto")]
+        [Trait("Categoria", "Produto - Cadastro")]
         public void Product_NewProduct_ShouldSetCorrectProperties()
         {
             //Arrange
@@ -37,7 +37,7 @@ namespace SystemV1.Domain.Test.DomainTests
         }
 
         [Fact(DisplayName = "Validate set as correct properties for product item")]
-        [Trait("Categoria","Cadastro - ProdutoItem")]
+        [Trait("Categoria","Produto - Cadastro")]
         public void Product_NewProductWithProductItem_ShouldSetCorrectProperties()
         {
             //Arrange
@@ -84,7 +84,7 @@ namespace SystemV1.Domain.Test.DomainTests
         
 
         [Fact(DisplayName = "Validate valid product")]
-        [Trait("Categoria", "Cadastro - Produto")]
+        [Trait("Categoria", "Produto - Cadastro")]
         public void Product_NewProduct_ShouldBeValid()
         {
             //Arrange
@@ -99,7 +99,7 @@ namespace SystemV1.Domain.Test.DomainTests
 
         //TODO: Criar teste para validar as propriedades de produto e produto com item(s).
         [Fact(DisplayName = "Validate valid product with produtc items")]
-        [Trait("Categoria", "Cadastro - Produto")]
+        [Trait("Categoria", "Produto - Cadastro")]
         public void Product_NewProductWithProductItems_ShouldBeValid()
         {
             //Arrange
@@ -119,7 +119,7 @@ namespace SystemV1.Domain.Test.DomainTests
         }
 
         [Fact(DisplayName = "Validate invalid product")]
-        [Trait("Categoria", "Cadastro - Produto")]
+        [Trait("Categoria", "Produto - Cadastro")]
         public void Product_NewProduct_ShouldBeInvalid()
         {
             //Arrange
@@ -137,7 +137,7 @@ namespace SystemV1.Domain.Test.DomainTests
 
         //TODO: Criar teste de validação para produto desabilitado.
         [Fact(DisplayName = "Validate valid product")]
-        [Trait("Categoria", "Cadastro - Produto")]
+        [Trait("Categoria", "Produto - Cadastro")]
         public void Product_NewProductDisabled_ShouldFailed()
         {
             //Arrange

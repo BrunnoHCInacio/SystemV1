@@ -470,6 +470,62 @@ namespace SystemV1.Domain.Test.ServiceTests
             mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
             mocker.GetMock<INotifier>().Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
         }
+
+        [Fact(DisplayName ="Get product item by name with success")]
+        [Trait("Categoria","Produto - Serviço")]
+        public async Task GetProductItemByName_GetProductItemByValidName_ShoudReturnWithSuccess()
+        {
+            //Arrange
+            var mocker = new AutoMocker();
+            mocker.GetMock<IRepositoryProductItem>()
+                  .Setup(r => r.GetByNameAsync(It.IsAny<string>()))
+                  .Returns(Task.FromResult((IEnumerable<ProductItem>)_productItemTestFixture.GenerateProductItem(5)));
+            var serviceProduct = mocker.CreateInstance<ServiceProduct>();
+
+            //Act
+            var productItem = await serviceProduct.GetProductItemByNameAsync("Addasdf");
+
+            //Assert
+            productItem.Should().NotBeNull();
+            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetByNameAsync(It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact(DisplayName ="Get product item by name with invalid name")]
+        [Trait("Categoria", "Produto - Serviço")]
+        public async Task GetProductItemByName_GetProductItemByInvalidName_ShoudNotReturn()
+        {
+            //Arrange
+            var mocker = new AutoMocker();
+            var serviceProduct = mocker.CreateInstance<ServiceProduct>();
+
+            //Act
+            var productItem = await serviceProduct.GetProductItemByNameAsync("");
+
+            //Assert
+            productItem.Should().BeNull();
+            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetByNameAsync(It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact(DisplayName ="Get product item by name with exception")]
+        [Trait("Categoria", "Produto - Serviço")]
+        public async Task GetProductItemByName_GetProductItemByValidName_ShoudNotReturnAndthrowException()
+        {
+            //Arrange
+            var mocker = new AutoMocker();
+            mocker.GetMock<IRepositoryProductItem>()
+                  .Setup(r => r.GetByNameAsync(It.IsAny<string>()))
+                  .Throws(new Exception());
+            var serviceProduct = mocker.CreateInstance<ServiceProduct>();
+
+            //Act
+            var productItem = await serviceProduct.GetProductItemByNameAsync("Addasdf");
+
+            //Assert
+            productItem.Should().BeNull();
+            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetByNameAsync(It.IsAny<string>()), Times.Once);
+            mocker.GetMock<INotifier>().Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
+            
+        }
         #endregion
 
         #region Function Remove
@@ -510,6 +566,50 @@ namespace SystemV1.Domain.Test.ServiceTests
             mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
             Assert.Throws<Exception>(() => serviceProduct.Remove(product));
             
+        }
+
+        [Fact(DisplayName ="Remove product item with sucess")]
+        [Trait("Categoria", "Produto - Serviço")]
+        public async Task RemoveProductItem_RemoveProductItem_ShouldRemoveWithSuccess() 
+        {
+            //Arrange
+            var productItem = _productItemTestFixture.GenerateValidProduct();
+            var mocker = new AutoMocker();
+            var serviceProduct = mocker.CreateInstance<ServiceProduct>();
+
+            //Act
+            await serviceProduct.RemoveProductItemAsyncUow(productItem);
+
+            //Assert
+            mocker.GetMock<IRepositoryProductItem>()
+                  .Verify(r => r.Update(It.IsAny<ProductItem>()), Times.Once);
+            mocker.GetMock<IUnitOfWork>()
+                  .Verify(r => r.CommitAsync(), Times.Once);
+        }
+
+        [Fact(DisplayName ="Remove product item with exception on repository product item")]
+        [Trait("Categoria", "Produto - Serviço")]
+        public async Task RemoveProductItem_RemoveProductItemWithExceptionOnRepositoryProductItem_ShouldNotRemoveAndThrowException()
+        {
+            //Arrange
+            var productItem = _productItemTestFixture.GenerateValidProduct();
+            var mocker = new AutoMocker();
+            mocker.GetMock<IRepositoryProductItem>()
+                  .Setup(r => r.Update(It.IsAny<ProductItem>()))
+                  .Throws(new Exception());
+            var serviceProduct = mocker.CreateInstance<ServiceProduct>();
+
+            //Act
+            await serviceProduct.RemoveProductItemAsyncUow(productItem);
+
+            //Assert
+            mocker.GetMock<IRepositoryProductItem>()
+                  .Verify(r => r.Update(It.IsAny<ProductItem>()), Times.Once);
+            mocker.GetMock<IUnitOfWork>()
+                  .Verify(r => r.CommitAsync(), Times.Never);
+            mocker.GetMock<INotifier>()
+                  .Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
+            Assert.Throws<Exception>(() => serviceProduct.RemoveProductItem(productItem));
         }
         #endregion
     }

@@ -185,8 +185,16 @@ namespace SystemV1.Domain.Services
                 Notify("Informe o nome a consultar");
                 return null;
             }
+            try
+            {
+                return await _repositoryProductItem.GetByNameAsync(name);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter o item do produto por nome");
+            }
 
-            return await _repositoryProductItem.GetByNameAsync(name);
+            return null;
         }
 
         public void RemoveProductItem(ProductItem productItem)
@@ -197,8 +205,15 @@ namespace SystemV1.Domain.Services
 
         public async Task RemoveProductItemAsyncUow(ProductItem productItem)
         {
-            RemoveProductItem(productItem);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                RemoveProductItem(productItem);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao remover o item do produto");
+            }
         }
 
         public void UpdateProductItem(ProductItem productItem)
