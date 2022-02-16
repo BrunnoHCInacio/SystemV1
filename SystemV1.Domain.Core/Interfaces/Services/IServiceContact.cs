@@ -11,5 +11,7 @@ namespace SystemV1.Domain.Core.Interfaces.Services
         void Remove(Contact contact);
 
         Task RemoveAsyncUow(Contact contact);
+
+        void RemoveAllByClientId(Guid clientId);
     }
 }

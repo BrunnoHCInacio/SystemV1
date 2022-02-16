@@ -22,7 +22,7 @@ namespace SystemV1.Domain.Test
 
         #region Test validate for each property from entity
         [Fact(DisplayName = "Validate set as correct properties")]
-        [Trait("Categoria", "Cadastro - País")]
+        [Trait("Categoria", "País - Cadastro")]
         public void Country_NewCountryWithState_ShouldSetCorrectProperties()
         {
             //Arrange
@@ -66,7 +66,7 @@ namespace SystemV1.Domain.Test
 
         #region Test validation for data
         [Fact(DisplayName = "Validate country valid")]
-        [Trait("Categoria", "Cadastro - País")]
+        [Trait("Categoria", "País - Cadastro")]
         public void Country_ValidateNewCountry_ShouldBeValid()
         {
             //Arrange
@@ -80,7 +80,7 @@ namespace SystemV1.Domain.Test
         }
 
         [Fact(DisplayName = "Validate country invalid")]
-        [Trait("Categoria", "Cadastro - País")]
+        [Trait("Categoria", "País - Cadastro")]
         public void Country_ValidateNewCountry_ShouldBeInvalid()
         {
             //Arrange
@@ -98,7 +98,7 @@ namespace SystemV1.Domain.Test
         }
 
         [Fact(DisplayName = "Validate country invalid")]
-        [Trait("Categoria", "Cadastro - País")]
+        [Trait("Categoria", "País - Cadastro")]
         public void Country_ValidateNewCountryDisabled_ShouldFailed()
         {
             //Arrange

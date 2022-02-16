@@ -59,10 +59,10 @@ namespace SystemV1.Domain.Test.DomainTests
 
         [Fact(DisplayName = "Validate invalid product item ")]
         [Trait("Categoria", "Cadastro - Product Item")]
-        public void ProductItem_NewProduct_ShouldBeInvalid()
+        public void ProductItem_NewProductItem_ShouldBeInvalid()
         {
             //Arrange
-            var productItem = _productItemTestFixture.GenerateInvalidProduct();
+            var productItem = _productItemTestFixture.GenerateInvalidProductItem();
 
             //Act
             var result = productItem.ValidateProductItem();

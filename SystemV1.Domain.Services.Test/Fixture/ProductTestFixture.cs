@@ -34,44 +34,39 @@ namespace SystemV1.Domain.Test.Fixture
                 }
             };
         }
-        public List<Product> GenerateProduct(int quantity, bool registerActive = true)
+        public List<Product> GenerateProduct(int quantity, 
+                                             bool withProductItems = true, 
+                                             bool withValidProductItems = true,
+                                             bool registerActive = true)
         {
             var productItemFixture = new ProductItemTestFixture();
             var product = new Faker<Product>()
                 .CustomInstantiator(f =>
-                                    new Product(Guid.NewGuid(), f.Commerce.ProductName()))
+                                    new Product(Guid.NewGuid(), 
+                                    f.Commerce.ProductName()))
                 .FinishWith((f, p) =>
                 {
                     if(!registerActive) p.DisableRegister();
-                    p.AddProductItems(productItemFixture.GenerateProductItem(5));
-                });
 
-            return product.Generate(quantity);
-        }
-
-        public List<Product> GenerateProductWithItems(int quantity, bool registerActive = true)
-        {
-            var productItemFixture = new ProductItemTestFixture();
-            var product = new Faker<Product>()
-                .CustomInstantiator(f =>
-                                    new Product(Guid.NewGuid(), f.Commerce.ProductName()))
-                .FinishWith((f, p) =>
-                {
-                    if (!registerActive)
+                    if (withProductItems)
                     {
-                        p.DisableRegister();
-                        p.AddProductItems(productItemFixture.GenerateProductItem(3, registerActive));
+                        if (withValidProductItems)
+                        {
+                            p.AddProductItems(productItemFixture.GenerateProductItem(5));
+                        }
+                        else
+                        {
+                            p.AddProductItems(productItemFixture.GenerateInvalidProductItem(5));
+                        }
                     }
-
-                    p.AddProductItems(productItemFixture.GenerateProductItem(3));
                 });
 
             return product.Generate(quantity);
         }
 
-        public Product GenerateValidProduct()
+        public Product GenerateValidProduct(bool withProdutcItems = true, bool withValidItens = true)
         {
-            return GenerateProduct(1).FirstOrDefault();
+            return GenerateProduct(1, withProdutcItems, withValidItens).FirstOrDefault();
         }
 
         public Product GenerateInvalidProduct()
@@ -81,7 +76,7 @@ namespace SystemV1.Domain.Test.Fixture
 
         public Product GenerateValidProductDisabled()
         {
-            return GenerateProduct(1, false).FirstOrDefault();
+            return GenerateProduct(1, true, true, false).FirstOrDefault();
         }
 
         public void Dispose()

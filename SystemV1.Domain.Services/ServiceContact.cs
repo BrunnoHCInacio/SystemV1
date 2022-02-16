@@ -35,29 +35,65 @@ namespace SystemV1.Domain.Services
                 return;
             }
 
-            Add(contact);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Add(contact);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao adicionar o contato.");
+            }
         }
 
         public async Task<IEnumerable<Contact>> GetAllAsync(int page, int pageSize)
         {
-            return await _repositoryContact.GetAllAsync(page, pageSize);
+            try
+            {
+                return await _repositoryContact.GetAllAsync(page, pageSize);
+            }
+            catch(Exception)
+            {
+                Notify("Falha ao obter todos os contatos.");
+            }
+            return null;
         }
 
         public async Task<Contact> GetByIdAsync(Guid id)
         {
-            return await _repositoryContact.GetByIdAsync(id);
+            try
+            {
+                return await _repositoryContact.GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter o contato por id.");
+            }
+            return null;
         }
 
         public void Remove(Contact contact)
         {
-            contact.IsActive = false;
+            contact.DisableRegister();
+            Update(contact);
+        }
+
+        public void RemoveAllByClientId(Guid clientId)
+        {
+            _repositoryContact.RemoveAllByClientId(clientId);
         }
 
         public async Task RemoveAsyncUow(Contact contact)
         {
-            Update(contact);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Remove(contact);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao remover o contato.");
+            }
         }
 
         public void Update(Contact contact)
@@ -72,8 +108,15 @@ namespace SystemV1.Domain.Services
                 return;
             }
 
-            Update(contact);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Update(contact);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao modificar o contato.");
+            }
         }
     }
 }

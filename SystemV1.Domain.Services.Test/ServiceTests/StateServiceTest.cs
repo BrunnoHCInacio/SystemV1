@@ -35,8 +35,8 @@ namespace SystemV1.Domain.Test.ServiceTests
         #region Função de adicionar
 
         [Fact(DisplayName = "Add state with success")]
-        [Trait("Categoria", "Serviço - Estado")]
-        public async Task State_AddNewState_ShouldHaveSuccess()
+        [Trait("Categoria", "Estado - Serviço")]
+        public async Task StateService_AddNewStateService_ShouldHaveSuccess()
         {
             //Arrange
             var state = _stateTestFixture.GenerateValidState();
@@ -53,8 +53,8 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add state with fail")]
-        [Trait("Categoria", "Serviço - Estado")]
-        public async Task State_AddNewState_ShouldntHaveSuccess()
+        [Trait("Categoria", "Estado - Serviço")]
+        public async Task StateService_AddNewStateService_ShouldntHaveSuccess()
         {
             //Arrange
             var state = _stateTestFixture.GenerateInvalidState();
@@ -71,8 +71,8 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName ="Add state with exception fail")]
-        [Trait("Categoria", "Serviço - Estado")]
-        public void State_NewStateWithException_SHouldFalied()
+        [Trait("Categoria", "Estado - Serviço")]
+        public void StateService_NewStateWithException_SHouldFalied()
         {
             //Arrange 
             var state = _stateTestFixture.GenerateValidState();
@@ -92,7 +92,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName = "Add state with success")]
         [Trait("Categoria", "Estado - Aplicação")]
-        public async Task StateApplication_AddNewState_ShouldHasSuccess()
+        public async Task StateApplication_AddNewStateService_ShouldHasSuccess()
         {
             //Arrange
             var stateViewModel = _stateTestFixture.GenerateValidStateViewModel();
@@ -113,7 +113,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         #region Função de modificar
         [Fact(DisplayName ="Update state with success")]
         [Trait("Categoria", "Estado - Serviço")]
-        public async Task State_UpdateState_ShouldHasSuccess()
+        public async Task StateService_UpdateStateService_ShouldHasSuccess()
         {
             //Arrange
             var state = _stateTestFixture.GenerateValidState();
@@ -133,7 +133,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Update state with fail")]
         [Trait("Categoria", "Estado - Serviço")]
-        public async Task State_UdateState_ShouldFaied() 
+        public async Task StateService_UdateStateService_ShouldFaied() 
         {
             //Arrange
             var state = _stateTestFixture.GenerateInvalidState();
@@ -151,7 +151,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         
         [Fact(DisplayName ="Update state with exception fail")]
         [Trait("Categoria", "Estado - Serviço")]
-        public async Task State_UpdateWithException_ShouldFailed()
+        public async Task StateService_UpdateWithException_ShouldFailed()
         {
             //Arrange
             var state = _stateTestFixture.GenerateValidState();
@@ -168,11 +168,28 @@ namespace SystemV1.Domain.Test.ServiceTests
             mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
             Assert.Throws<Exception>(() => stateService.Update(It.IsAny<State>()));
         }
+
+        [Fact(DisplayName ="Update state with success")]
+        [Trait("Categoria", "Estado - Aplicação")]
+        public async Task StateApplication_UpdateState_ShouldHasSuccess()
+        {
+            //Arrange
+            var mocker = new AutoMocker();
+            var stateApplication = mocker.CreateInstance<ApplicationServiceState>();
+            var state = _stateTestFixture.GenerateValidStateViewModel();
+
+            //Act
+            await stateApplication.AddAsync(state);
+
+            //Assert
+            mocker.GetMock<IServiceState>().Verify(s => s.AddAsyncUow(It.IsAny<State>()), Times.Once);
+            mocker.GetMock<IMapperState>().Verify(m => m.ViewModelToEntity(state), Times.Once);
+        }
         #endregion
 
         #region Função obter
         [Fact(DisplayName ="Get all the states")]
-        [Trait("Categoria", "Serviço - Estado")]
+        [Trait("Categoria", "Estado - Serviço")]
         public async Task StateService_GetAll_ShouldHasSuccess()
         {
             //Arrange
@@ -211,7 +228,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName ="Get state by id")]
-        [Trait("Categoria","Serviço - Estado")]
+        [Trait("Categoria","Estado - Serviço")]
         public async Task StateService_GetById_ShoudHasSuccess()
         {
             //Arrange
@@ -230,7 +247,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName ="Get state by id with exception")]
-        [Trait("Categoria", "Serviço - Estado")]
+        [Trait("Categoria", "Estado - Serviço")]
         public async Task StateService_GetByIdWithException_ShouldFailed()
         {
             //Arrange
@@ -249,7 +266,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName ="Get state with country by id")]
-        [Trait("Categoria", "Serviço - Estado")]
+        [Trait("Categoria", "Estado - Serviço")]
         public async Task StateService_GetStateCountry_ShouldHasSuccess()
         {
             //Arrange
@@ -268,7 +285,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName ="Get state with country by id with exception")]
-        [Trait("Categoria", "Serviço - Estado")]
+        [Trait("Categoria", "Estado - Serviço")]
         public async Task StateService_GetStateCountryWithException_ShouldFailed()
         {
             //Arrange
@@ -287,7 +304,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
         
         [Fact(DisplayName ="Get state by name")]
-        [Trait("Categoria","Serviço - Estado")]
+        [Trait("Categoria","Estado - Serviço")]
         public async Task StateService_GetStateByName_ShouldHasSuccess()
         {
             //Arrange
@@ -305,7 +322,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName ="Get state by empty name")]
-        [Trait("Categoria", "Serviço - Estado")]
+        [Trait("Categoria", "Estado - Serviço")]
         public async Task StateService_GetStateByEmptyName_ShouldFailed()
         {
             //Arrange
@@ -321,7 +338,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Get state by name with exception")]
-        [Trait("Categoria", "Serviço - Estado")]
+        [Trait("Categoria", "Estado - Serviço")]
         public async Task StateService_GetStateByNameWithException_ShouldFailed()
         {
             //Arrange
@@ -344,7 +361,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         #region Função Remover
 
         [Fact(DisplayName ="Remove state with success")]
-        [Trait("Categoria", "Serviço - Estado")]
+        [Trait("Categoria", "Estado - Serviço")]
         public async Task StateService_Remove_ShouldHasSuccess()
         {
             //Arrange
@@ -356,13 +373,13 @@ namespace SystemV1.Domain.Test.ServiceTests
             await stateService.RemoveAsyncUow(state);
 
             //Assert
-            mocker.GetMock<IServiceState>().Verify(s => s.Remove(It.IsAny<State>()), Times.Once);
+            mocker.GetMock<IRepositoryState>().Verify(s => s.Update(It.IsAny<State>()), Times.Once);
             mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Once);
             
         }
 
         [Fact(DisplayName ="Remove state with exception")]
-        [Trait("Categoria", "Serviço - Estado")]
+        [Trait("Categoria", "Estado - Serviço")]
         public async Task StateService_RemoveWithException_ShouldFailed()
         {
             //Arrange
@@ -383,6 +400,23 @@ namespace SystemV1.Domain.Test.ServiceTests
                           Times.Once);
             Assert.Throws<Exception>(() => stateService.Remove(state));
 
+        }
+
+        [Fact(DisplayName ="Remove state with success")]
+        [Trait("Categoria", "Estado - Aplicação")]
+        public async Task StateApplication_Remove_ShouldHasSuccess()
+        {
+            //Arrange
+            var mocker = new AutoMocker();
+            var stateApplication = mocker.CreateInstance<ApplicationServiceState>();
+            var stateViewModel = _stateTestFixture.GenerateValidStateViewModel();
+
+            //Act 
+            await stateApplication.UpdateAsync(stateViewModel);
+
+            //Assert
+            mocker.GetMock<IServiceState>().Verify(s => s.UpdateAsyncUow(It.IsAny<State>()), Times.Once);
+            mocker.GetMock<IMapperState>().Verify(m => m.ViewModelToEntity(stateViewModel), Times.Once);
         }
         #endregion
     }

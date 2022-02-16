@@ -61,19 +61,42 @@ namespace SystemV1.Domain.Services
             {
                 return;
             }
-
-            Add(client);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Add(client);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao adicionar o cliente.");
+            }
         }
 
         public async Task<IEnumerable<Client>> GetAllAsync(int page, int pageSize)
         {
-            return await _repositoryClient.GetAllAsync(page, pageSize);
+            try
+            {
+                return await _repositoryClient.GetAllAsync(page, pageSize);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter todos os clientes.");
+            }
+            return null;
         }
 
         public async Task<Client> GetByIdAsync(Guid id)
         {
-            return await _repositoryClient.GetByIdAsync(id);
+            try
+            {
+                return await _repositoryClient.GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter o cliente por nome.");
+            }
+
+            return null;
         }
 
         public async Task<IEnumerable<Client>> GetByNameAsync(string name)
@@ -84,37 +107,84 @@ namespace SystemV1.Domain.Services
                 return null;
             }
 
-            return await _repositoryClient.GetByNameAsync(name);
+            try
+            {
+                return await _repositoryClient.GetByNameAsync(name);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter o cliente por nome.");
+            }
+            return null;
         }
 
         public void Remove(Client client)
         {
             client.IsActive = false;
+            if (client.Addresses.Any())
+            {
+                _serviceAddress.RemoveAllByClientId(client.Id);
+            }
+            if (client.Contacts.Any())
+            {
+                _serviceContact.RemoveAllByClientId(client.Id);
+            }
             _repositoryClient.Update(client);
         }
 
         public async Task RemoveAsyncUow(Client client)
         {
-            Remove(client);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Remove(client);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao remover cliente.");
+            }
         }
 
         public void Update(Client client)
         {
+            if (client.Addresses.Any())
+            {
+                _serviceAddress.RemoveAllByClientId(client.Id);
+                foreach (var address in client.Addresses)
+                {
+                    _serviceAddress.Add(address);
+                }
+            }
+
+            if (client.Contacts.Any())
+            {
+                _serviceContact.RemoveAllByClientId(client.Id);
+                foreach (var contact in client.Contacts)
+                {
+                    _serviceContact.Add(contact);
+                }
+            }
             _repositoryClient.Update(client);
         }
 
         public async Task UpdateAsyncUow(Client client)
         {
             if (!RunValidation(client.ValidateClient())
-                && client.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
-                && client.Contacts.Any(c => !RunValidation(c.ValidateContact())))
+                || client.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
+                || client.Contacts.Any(c => !RunValidation(c.ValidateContact())))
             {
                 return;
             }
 
-            Update(client);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Update(client);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao alterar o cliente.");
+            }
         }
     }
 }

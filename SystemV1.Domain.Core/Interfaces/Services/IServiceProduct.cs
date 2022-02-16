@@ -10,10 +10,9 @@ namespace SystemV1.Domain.Core.Interfaces.Services
     {
         void Remove(Product product);
 
-        void RemoveUow(Product product);
+        Task RemoveAsyncUow(Product product);
 
         Task<IEnumerable<Product>> GetByNameAsync(string name);
-        Task UpdateProductAsyncUow(ProductItem productItem);
         Task<IEnumerable<ProductItem>> GetProductItemByNameAsync(string name);
         Task<ProductItem> GetProductItemByIdAsync(Guid id);
         Task<IEnumerable<ProductItem>> GetAllProductItemAsync(int page, int pageSize);

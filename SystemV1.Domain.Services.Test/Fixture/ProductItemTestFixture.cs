@@ -35,9 +35,14 @@ namespace SystemV1.Domain.Test.Fixture
             return GenerateProductItem(1).FirstOrDefault();
         }
 
-        public ProductItem GenerateInvalidProduct()
+        public List<ProductItem> GenerateInvalidProductItem(int quantity)
         {
-            return new ProductItem(new Guid(), null, 0.0M);
+            return new Faker<ProductItem>().CustomInstantiator(f=> new ProductItem(new Guid(), null, 0.0M)).Generate(quantity);
+        }
+
+        public ProductItem GenerateInvalidProductItem()
+        {
+            return GenerateInvalidProductItem(1).FirstOrDefault();
         }
 
         public ProductItem GenerateValidProductDisabled()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
@@ -28,28 +29,59 @@ namespace SystemV1.Domain.Services
 
         public void Add(Product product)
         {
+            if (product.ProductItems.Any())
+            {
+                foreach (var productItem in product.ProductItems)
+                {
+                    AddProductItem(productItem);
+                }
+            }
             _repositoryProduct.Add(product);
         }
 
         public async Task AddAsyncUow(Product product)
         {
-            if (!RunValidation(product.ValidateProduct()))
+            if (!RunValidation(product.ValidateProduct())
+                || product.ProductItems.Any(pi => !RunValidation(pi.ValidateProductItem())))
             {
                 return;
             }
 
-            Add(product);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Add(product);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao adicionar produto.");
+            }
         }
 
         public async Task<IEnumerable<Product>> GetAllAsync(int page, int pageSize)
         {
-            return await _repositoryProduct.GetAllAsync(page, pageSize);
+            try
+            {
+                return await _repositoryProduct.GetAllAsync(page, pageSize);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter os produtos.");
+            }
+            return null;
         }
 
         public async Task<Product> GetByIdAsync(Guid id)
         {
-            return await _repositoryProduct.GetByIdAsync(id);
+            try
+            {
+                return await _repositoryProduct.GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter o produto por id.");
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Product>> GetByNameAsync(string name)
@@ -60,19 +92,34 @@ namespace SystemV1.Domain.Services
                 return null;
             }
 
-            return await _repositoryProduct.GetByNameAsync(name);
+            try
+            {
+                return await _repositoryProduct.GetByNameAsync(name);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter os produtos por nome.");
+            }
+            return null;
         }
 
         public void Remove(Product product)
         {
-            product.IsActive = false;
+            product.DisableRegister();
             Update(product);
         }
 
-        public void RemoveUow(Product product)
+        public async Task RemoveAsyncUow(Product product)
         {
-            Remove(product);
-            _unitOfWork.CommitAsync();
+            try
+            {
+                Remove(product);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao remover o produto");
+            }
         }
 
         public void Update(Product product)
@@ -82,12 +129,20 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Product product)
         {
-            if (!RunValidation(product.ValidateProduct()))
+            if (!RunValidation(product.ValidateProduct())
+                || product.ProductItems.Any(pi => !RunValidation( pi.ValidateProductItem())))
             {
                 return;
             }
-            Update(product);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Update(product);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao alterar o produto");
+            }
         }
 
 
@@ -99,12 +154,28 @@ namespace SystemV1.Domain.Services
 
         public async Task<IEnumerable<ProductItem>> GetAllProductItemAsync(int page, int pageSize)
         {
-            return await _repositoryProductItem.GetAllAsync(page, pageSize);
+            try
+            {
+                return await _repositoryProductItem.GetAllAsync(page, pageSize);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter todos os items de produto.");
+            }
+            return null;
         }
 
         public async Task<ProductItem> GetProductItemByIdAsync(Guid id)
         {
-            return await _repositoryProductItem.GetByIdAsync(id);
+            try
+            {
+                return await _repositoryProductItem.GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter o item de produto por id.");
+            }
+            return null;
         }
 
         public async Task<IEnumerable<ProductItem>> GetProductItemByNameAsync(string name)
@@ -120,7 +191,7 @@ namespace SystemV1.Domain.Services
 
         public void RemoveProductItem(ProductItem productItem)
         {
-            productItem.IsActive = false;
+            productItem.DisableRegister();
             UpdateProductItem(productItem);
         }
 
@@ -133,17 +204,6 @@ namespace SystemV1.Domain.Services
         public void UpdateProductItem(ProductItem productItem)
         {
             _repositoryProductItem.Update(productItem);
-        }
-
-        public async Task UpdateProductAsyncUow(ProductItem productItem)
-        {
-            if (!RunValidation(new ProductItemValidation(), productItem))
-            {
-                return;
-            }
-
-            UpdateProductItem(productItem);
-            await _unitOfWork.CommitAsync();
         }
     }
 }

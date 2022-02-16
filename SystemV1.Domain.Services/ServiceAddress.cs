@@ -35,18 +35,41 @@ namespace SystemV1.Domain.Services
                 return;
             }
 
-            Add(address);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Add(address);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao adicionar o endereço.");
+            }
         }
 
-        public Task<IEnumerable<Address>> GetAllAsync(int page, int pageSize)
+        public async Task<IEnumerable<Address>> GetAllAsync(int page, int pageSize)
         {
-            return _repositoryAddress.GetAllAsync(page, pageSize);
+            try
+            {
+                return await _repositoryAddress.GetAllAsync(page, pageSize);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter todos os endereços.");
+            }
+            return null;
         }
 
-        public Task<Address> GetByIdAsync(Guid id)
+        public async Task<Address> GetByIdAsync(Guid id)
         {
-            return _repositoryAddress.GetByIdAsync(id);
+            try
+            {
+                return await _repositoryAddress.GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter o endereço por id.");
+            }
+            return null;
         }
 
         public void Remove(Address address)
@@ -55,10 +78,22 @@ namespace SystemV1.Domain.Services
             Update(address);
         }
 
-        public async Task RemoveUow(Address address)
+        public void RemoveAllByClientId(Guid clientId)
         {
-            Remove(address);
-            await _unitOfWork.CommitAsync();
+            _repositoryAddress.RemoveAllByClientId(clientId);
+        }
+
+        public async Task RemoveAsyncUow(Address address)
+        {
+            try
+            {
+                Remove(address);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao remover o endereço.");
+            }
         }
 
         public void Update(Address address)
@@ -68,13 +103,20 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Address address)
         {
-            if (!RunValidation(new AddressValidation(), address))
+            if (!RunValidation(address.ValidateAddress()))
             {
                 return;
             }
 
-            Update(address);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Update(address);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao alterar o endereço");
+            }
         }
     }
 }

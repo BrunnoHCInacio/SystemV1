@@ -10,6 +10,8 @@ namespace SystemV1.Domain.Core.Interfaces.Services
     {
         void Remove(Address peopleAddress);
 
-        Task RemoveUow(Address peopleAddress);
+        Task RemoveAsyncUow(Address peopleAddress);
+
+        void RemoveAllByClientId(Guid clientId);
     }
 }

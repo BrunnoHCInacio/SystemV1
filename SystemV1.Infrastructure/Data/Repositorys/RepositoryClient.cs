@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
@@ -19,11 +20,11 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         {
             var sql = $@"
                         SELECT
-                            id,
-                            name,
-                            document
-                        FROM client
-                        WHERE name LIKE '%{name}% and isactive'
+                            {"\""}Id{"\""},
+                            {"\""}Name{"\""},
+                            {"\""}Document{"\""}
+                        FROM {"\""}client{"\""}
+                        WHERE name LIKE '%{name}%' and {"\""}IsActive{"\""}
                         ";
             return await _sqlContext.Connection.QueryAsync<Client>(sql);
         }

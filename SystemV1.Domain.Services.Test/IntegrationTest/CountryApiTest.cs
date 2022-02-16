@@ -34,7 +34,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Add new country with success"), Priority(1)]
-        [Trait("Categoria", "Integração - País")]
+        [Trait("Categoria", "País - Integração")]
         public async Task Country_AddNewCountry_ShouldHaveSuccess()
         {
             //Arrange
@@ -49,7 +49,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Add new Country with fail"), Priority(2)]
-        [Trait("Categoria", "Integração - País")]
+        [Trait("Categoria", "País - Integração")]
         public async Task Country_AddNewCountry_ShouldHadFailEndReturnNotifications()
         {
             //Arrange
@@ -67,7 +67,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Get all countries with success"), Priority(3)]
-        [Trait("Categoria", "Integração - País")]
+        [Trait("Categoria", "País - Integração")]
         public async Task Country_GetAllCountries_ShouldReturnWithSuccess()
         {
             //Arrange & act
@@ -84,7 +84,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Get country by id with success"), Priority(4)]
-        [Trait("Categoria", "Integração - País")]
+        [Trait("Categoria", "País - Integração")]
         public async Task Country_GetCountryById_ShouldReturnWithSuccess()
         {
             //Arrange & act
@@ -96,7 +96,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Update country with success"), Priority(5)]
-        [Trait("Categoria", "Integração - País")]
+        [Trait("Categoria", "País - Integração")]
         public async Task Country_UpdateCountry_ShouldUpdatedWithSuccess()
         {
             //Arrange
@@ -128,7 +128,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Update country with fail"), Priority(6)]
-        [Trait("Categoria", "Integração - País")]
+        [Trait("Categoria", "País - Integração")]
         public async Task Country_UpdateCountry_ShouldUpdatedWithFailEndReturnNotifications()
         {
             //Arrange
@@ -149,7 +149,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Remove country with success"), Priority(7)]
-        [Trait("Categoria", "Integração - País")]
+        [Trait("Categoria", "País - Integração")]
         public async Task Country_RemoveCountry_ShouldHadSuccess()
         {
             //Arrange

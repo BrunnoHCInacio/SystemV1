@@ -47,14 +47,28 @@ namespace SystemV1.Domain.Services
                     return;
                 }
 
-                foreach (var state in country.States)
+                try
                 {
-                    _repositoryState.Add(state);
+                    foreach (var state in country.States)
+                    {
+                        _repositoryState.Add(state);
+                    }
+                }
+                catch (Exception)
+                {
+                    Notify("Falha ao adicionar o estado.");
+                    return;
                 }
             }
-
-            Add(country);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Add(country);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao adicionar o país");
+            }
         }
 
         public async Task<IEnumerable<Country>> GetAllAsync(int page, int pageSize)
@@ -92,8 +106,15 @@ namespace SystemV1.Domain.Services
                 Notify("Informe o nome a consultar");
                 return null;
             }
-
-            return await _repositoryCountry.GetByNameAsync(name);
+            try
+            {
+                return await _repositoryCountry.GetByNameAsync(name);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter os países por nome.");
+            }
+            return null;
         }
 
         public void Remove(Country country)
@@ -104,8 +125,15 @@ namespace SystemV1.Domain.Services
 
         public async Task RemoveAsyncUow(Country country)
         {
-            Remove(country);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Remove(country);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao remover o país");
+            }
         }
 
         public void Update(Country country)
@@ -126,10 +154,29 @@ namespace SystemV1.Domain.Services
                 {
                     return;
                 }
+                try
+                {
+                    foreach (var state in country.States)
+                    {
+                        _repositoryState.Update(state);
+                    }
+                }
+                catch (Exception)
+                {
+                    Notify("Falha ao alterar o estado.");
+                    return;
+                }
             }
 
-            Update(country);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Update(country);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao alterar o país.");
+            }
         }
     }
 }
