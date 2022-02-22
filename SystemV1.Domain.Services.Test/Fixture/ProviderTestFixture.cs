@@ -80,7 +80,8 @@ namespace SystemV1.Domain.Test.Fixture
             return new
             {
                 Id = Guid.NewGuid(),
-                Name = faker.Person.FullName
+                Name = faker.Person.FullName,
+                Document = faker.Person.Cpf()
             };
         }
 
