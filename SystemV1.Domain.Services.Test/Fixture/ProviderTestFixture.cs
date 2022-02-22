@@ -16,7 +16,11 @@ namespace SystemV1.Domain.Test.Fixture
 
     public class ProviderTestFixture : IDisposable
     {
-        public List<Provider> GenerateProvider(int quantity)
+        public List<Provider> GenerateProvider(int quantity,
+                                               bool withContact = true,
+                                               bool useValidContact = true,
+                                               bool withAddress = true,
+                                               bool useValidAddress = true)
         {
             var addressFixture = new AddressTestFixture();
             var contactFixtute = new ContactTestFixture();
@@ -24,17 +28,45 @@ namespace SystemV1.Domain.Test.Fixture
                             .CustomInstantiator(f => new Provider(Guid.NewGuid(), f.Person.FullName, f.Company.Cnpj()))
                             .FinishWith((f, p) =>
                             {
-                                p.AddAddresses(addressFixture.GenerateAddress(2));
-                                p.AddContacts(contactFixtute.GenerateContact(Enums.EnumTypeContact.TypeContactCellPhone, 2));
-                                p.AddContact(contactFixtute.GenerateValidContactTypeEmail());
+                                if (withAddress)
+                                {
+                                    if (useValidAddress)
+                                    {
+                                        p.AddAddresses(addressFixture.GenerateAddress(2));
+                                    }
+                                    else
+                                    {
+                                        p.AddAddress(addressFixture.GenerateInvalidAddress());
+                                        p.AddAddress(addressFixture.GenerateInvalidAddress());
+                                        p.AddAddress(addressFixture.GenerateInvalidAddress());
+                                    }
+                                }
+
+                                if (withContact)
+                                {
+                                    if (useValidContact)
+                                    {
+                                        p.AddContacts(contactFixtute.GenerateContact(Enums.EnumTypeContact.TypeContactCellPhone, 2));
+                                        p.AddContact(contactFixtute.GenerateValidContactTypeEmail());
+                                    }
+                                    else
+                                    {
+                                        p.AddContact(contactFixtute.GenerateInvalidContactTypeCellPhone());
+                                        p.AddContact(contactFixtute.GenerateInvalidContactTypeEmail());
+                                        p.AddContact(contactFixtute.GenerateInvalidContactTypePhone());
+                                    }
+                                }
                             });
 
             return provider.Generate(quantity);
         }
 
-        public Provider GenerateValidProvider()
+        public Provider GenerateValidProvider(bool withContact = true,
+                                              bool useValidContact = true,
+                                              bool withAddress = true,
+                                              bool useValidAddress =  true)
         {
-            return GenerateProvider(1).FirstOrDefault();
+            return GenerateProvider(1, withContact, useValidContact, withAddress, useValidAddress).FirstOrDefault();
         }
 
         public Provider GenerateInvalidProvider()

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using FluentValidation.Results;
+using System;
 using System.Collections.Generic;
+using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Entitys
 {
@@ -35,6 +37,11 @@ namespace SystemV1.Domain.Entitys
         public void AddContact(Contact contact)
         {
             Contacts.Add(contact);
+        }
+
+        public ValidationResult ValidateProvider()
+        {
+            return new ProviderValidation().Validate(this);
         }
     }
 }

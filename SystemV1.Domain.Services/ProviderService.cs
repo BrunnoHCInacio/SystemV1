@@ -52,25 +52,49 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Provider provider)
         {
-            if (!RunValidation(new ProviderValidation(), provider)
-                && provider.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
-                && provider.Contacts.Any(c => !RunValidation(c.ValidateContact())))
+            if (!RunValidation(provider.ValidateProvider())
+                || provider.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
+                || provider.Contacts.Any(c => !RunValidation(c.ValidateContact())))
             {
                 return;
             }
 
-            Add(provider);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Add(provider);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao adicionar o fornecedor.");
+            }
         }
 
         public async Task<IEnumerable<Provider>> GetAllAsync(int page, int pageSize)
         {
-            return await _repositoryProvider.GetAllAsync(page, pageSize);
+            try
+            {
+                return await _repositoryProvider.GetAllAsync(page, pageSize);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter todos fornecedores.");
+            }
+
+            return null;
         }
 
         public async Task<Provider> GetByIdAsync(Guid id)
         {
-            return await _repositoryProvider.GetByIdAsync(id);
+            try
+            {
+                return await _repositoryProvider.GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter o fornecedor por id.");
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Provider>> GetByNameAsync(string name)
@@ -81,7 +105,15 @@ namespace SystemV1.Domain.Services
                 return null;
             }
 
-            return await _repositoryProvider.GetByNameAsync(name);
+            try
+            {
+                return await _repositoryProvider.GetByNameAsync(name);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter os fornecedores por nome.");
+            }
+            return null;
         }
 
         public void Remove(Provider provider)
@@ -103,9 +135,9 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Provider provider)
         {
-            if (!RunValidation(new ProviderValidation(), provider)
-                && provider.Addresses.Any(a => !RunValidation(new AddressValidation(), a))
-                && provider.Contacts.Any(c => !RunValidation(c.ValidateContact())))
+            if (!RunValidation(provider.ValidateProvider())
+                || provider.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
+                || provider.Contacts.Any(c => !RunValidation(c.ValidateContact())))
             {
                 return;
             }
