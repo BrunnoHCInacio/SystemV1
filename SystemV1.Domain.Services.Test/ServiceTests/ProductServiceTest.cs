@@ -263,7 +263,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProduct>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllProductsAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(Task.FromResult((IEnumerable<Product>)_productTestFixture.GenerateProduct(10)));
             var serviceProduct = mocker.CreateInstance<ServiceProduct>();
 
@@ -271,7 +271,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             var products = await serviceProduct.GetAllAsync(1, 1);
 
             //Assert
-            mocker.GetMock<IRepositoryProduct>().Verify(r => r.GetAllAsync(1, 1), Times.Once);
+            mocker.GetMock<IRepositoryProduct>().Verify(r => r.GetAllProductsAsync(1, 1), Times.Once);
             products.Should().NotBeNull();
             products.Should().HaveCount(10);
         }
@@ -283,7 +283,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProduct>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllProductsAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Throws(new Exception());
             var serviceProduct = mocker.CreateInstance<ServiceProduct>();
 
@@ -291,7 +291,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             var products = await serviceProduct.GetAllAsync(1, 1);
 
             //Assert
-            mocker.GetMock<IRepositoryProduct>().Verify(r => r.GetAllAsync(1, 1), Times.Once);
+            mocker.GetMock<IRepositoryProduct>().Verify(r => r.GetAllProductsAsync(1, 1), Times.Once);
             mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
             products.Should().BeNull();
             
@@ -304,7 +304,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProduct>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetProductByIdAsync(It.IsAny<Guid>()))
                   .Returns(Task.FromResult(_productTestFixture.GenerateValidProduct()));
             var serviceProduct = mocker.CreateInstance<ServiceProduct>();
 
@@ -312,7 +312,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             var product = await serviceProduct.GetByIdAsync(Guid.NewGuid());
 
             //Assert
-            mocker.GetMock<IRepositoryProduct>().Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IRepositoryProduct>().Verify(r => r.GetProductByIdAsync(It.IsAny<Guid>()), Times.Once);
             product.Should().NotBeNull();
         }
 
@@ -323,7 +323,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProduct>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetProductByIdAsync(It.IsAny<Guid>()))
                   .Throws(new Exception());
             var serviceProduct = mocker.CreateInstance<ServiceProduct>();
 
@@ -331,7 +331,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             var product = await serviceProduct.GetByIdAsync(Guid.NewGuid());
 
             //Assert
-            mocker.GetMock<IRepositoryProduct>().Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IRepositoryProduct>().Verify(r => r.GetProductByIdAsync(It.IsAny<Guid>()), Times.Once);
             mocker.GetMock<INotifier>().Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
             product.Should().BeNull();
         }
@@ -400,7 +400,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProductItem>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllProductItemsAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(Task.FromResult((IEnumerable <ProductItem>) _productItemTestFixture.GenerateProductItem(10)));
             var serviceProduct = mocker.CreateInstance<ServiceProduct>();
 
@@ -409,7 +409,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert 
             product.Should().NotBeNull();
-            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetAllAsync(1, 1), Times.Once);
+            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetAllProductItemsAsync(1, 1), Times.Once);
         }
 
         [Fact(DisplayName ="Get all product items with exception")]
@@ -419,7 +419,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProductItem>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllProductItemsAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Throws(new Exception());
             var serviceProduct = mocker.CreateInstance<ServiceProduct>();
 
@@ -428,7 +428,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert
             productItems.Should().BeNull();
-            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetAllAsync(1, 1), Times.Once);
+            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetAllProductItemsAsync(1, 1), Times.Once);
             mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
         }
 
@@ -439,7 +439,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProductItem>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetProductItemByIdAsync(It.IsAny<Guid>()))
                   .Returns(Task.FromResult(_productItemTestFixture.GenerateValidProduct()));
             var serviceProduct = mocker.CreateInstance<ServiceProduct>();
 
@@ -448,7 +448,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert
             productItem.Should().NotBeNull();
-            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetProductItemByIdAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact(DisplayName ="Get product item by id with exception")]
@@ -458,7 +458,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProductItem>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetProductItemByIdAsync(It.IsAny<Guid>()))
                   .Throws(new Exception());
             var serviceProduct = mocker.CreateInstance<ServiceProduct>();
 
@@ -467,7 +467,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert
             productItem.Should().BeNull();
-            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IRepositoryProductItem>().Verify(r => r.GetProductItemByIdAsync(It.IsAny<Guid>()), Times.Once);
             mocker.GetMock<INotifier>().Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
         }
 

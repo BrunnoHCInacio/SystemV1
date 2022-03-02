@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
 using SystemV1.Domain.Entitys;
-using SystemV1.Domain.Services.Validations;
 
 namespace SystemV1.Domain.Services
 {
@@ -50,7 +48,7 @@ namespace SystemV1.Domain.Services
         {
             try
             {
-                return await _repositoryAddress.GetAllAsync(page, pageSize);
+                return await _repositoryAddress.GetAllAddressesAsync(page, pageSize);
             }
             catch (Exception)
             {
@@ -63,7 +61,7 @@ namespace SystemV1.Domain.Services
         {
             try
             {
-                return await _repositoryAddress.GetByIdAsync(id);
+                return await _repositoryAddress.GetAddressByIdAsync(id);
             }
             catch (Exception)
             {

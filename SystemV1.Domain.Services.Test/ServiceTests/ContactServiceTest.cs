@@ -363,7 +363,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryContact>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllContactsAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(Task.FromResult((IEnumerable<Contact>)_contactTestFixture.GenerateContact(EnumTypeContact.TypeContactPhone, 5)));
             var serviceContact = mocker.CreateInstance<ServiceContact>();
 
@@ -373,7 +373,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             contacts.Should().NotBeEmpty();
             Assert.Equal(5, contacts.Count());
-            mocker.GetMock<IRepositoryContact>().Verify(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            mocker.GetMock<IRepositoryContact>().Verify(r => r.GetAllContactsAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
         }
 
         [Fact(DisplayName = "Get contact by id with success")]
@@ -383,7 +383,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryContact>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetContactByIdAsync(It.IsAny<Guid>()))
                   .Returns(Task.FromResult(_contactTestFixture.GenerateValidContactTypeCellPhone()));
             var serviceContact = mocker.CreateInstance<ServiceContact>();
 
@@ -392,7 +392,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert
             contact.Should().NotBeNull();
-            mocker.GetMock<IRepositoryContact>().Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IRepositoryContact>().Verify(r => r.GetContactByIdAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact(DisplayName = "Get all contacts with exception")]
@@ -402,7 +402,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryContact>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllContactsAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Throws(new Exception());
             var serviceContact = mocker.CreateInstance<ServiceContact>();
 
@@ -411,7 +411,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert
             contact.Should().BeNull();
-            mocker.GetMock<IRepositoryContact>().Verify(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            mocker.GetMock<IRepositoryContact>().Verify(r => r.GetAllContactsAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
             mocker.GetMock<INotifier>().Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
         }
 
@@ -422,7 +422,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryContact>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetContactByIdAsync(It.IsAny<Guid>()))
                   .Throws(new Exception());
             var serviceContact = mocker.CreateInstance<ServiceContact>();
 
@@ -432,7 +432,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             contact.Should().BeNull();
             mocker.GetMock<IRepositoryContact>()
-                  .Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+                  .Verify(r => r.GetContactByIdAsync(It.IsAny<Guid>()), Times.Once);
             mocker.GetMock<INotifier>()
                   .Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
         }

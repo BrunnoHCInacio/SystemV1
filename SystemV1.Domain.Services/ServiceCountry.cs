@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
 using SystemV1.Domain.Entitys;
-using SystemV1.Domain.Services.Validations;
-using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Services
 {
@@ -173,7 +170,7 @@ namespace SystemV1.Domain.Services
                 Update(country);
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Notify("Falha ao alterar o país.");
             }

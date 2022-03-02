@@ -395,7 +395,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryClient>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllClientsAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(Task.FromResult((IEnumerable<Client>)_clientTestFixture.GenerateClient(5)));
             var serviceClient = mocker.CreateInstance<ServiceClient>();
 
@@ -406,7 +406,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             clients.Should().NotBeEmpty();
             Assert.Equal(5, clients.Count());
             mocker.GetMock<IRepositoryClient>()
-                  .Verify(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+                  .Verify(r => r.GetAllClientsAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
         }
 
         [Fact(DisplayName = "Get all clients with exception")]
@@ -416,7 +416,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryClient>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllClientsAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Throws(new Exception());
             var serviceClient = mocker.CreateInstance<ServiceClient>();
 
@@ -426,7 +426,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             clients.Should().BeNull();
             mocker.GetMock<IRepositoryClient>()
-                  .Verify(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+                  .Verify(r => r.GetAllClientsAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
             mocker.GetMock<INotifier>()
                   .Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
         }
@@ -438,7 +438,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryClient>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetClientByIdAsync(It.IsAny<Guid>()))
                   .Returns(Task.FromResult(_clientTestFixture.GenerateValidClient()));
             var serviceClient = mocker.CreateInstance<ServiceClient>();
 
@@ -448,7 +448,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             client.Should().NotBeNull();
             mocker.GetMock<IRepositoryClient>()
-                  .Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+                  .Verify(r => r.GetClientByIdAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact(DisplayName = "Get client by id with exception")]
@@ -458,7 +458,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryClient>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetClientByIdAsync(It.IsAny<Guid>()))
                   .Throws(new Exception());
             var serviceClient = mocker.CreateInstance<ServiceClient>();
 
@@ -468,7 +468,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             client.Should().BeNull();
             mocker.GetMock<IRepositoryClient>()
-                  .Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+                  .Verify(r => r.GetClientByIdAsync(It.IsAny<Guid>()), Times.Once);
             mocker.GetMock<INotifier>()
                   .Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
         }

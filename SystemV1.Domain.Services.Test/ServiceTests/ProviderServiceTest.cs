@@ -132,7 +132,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProvider>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllProvidersAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(Task.FromResult((IEnumerable<Provider>)_providerTestFixture.GenerateProvider(10)));
             var serviceProvider = mocker.CreateInstance<ProviderService>();
 
@@ -141,7 +141,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert
             providers.Should().NotBeNullOrEmpty();
-            mocker.GetMock<IRepositoryProvider>().Verify(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            mocker.GetMock<IRepositoryProvider>().Verify(r => r.GetAllProvidersAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
             providers.Should().HaveCount(10);
         }
 
@@ -152,7 +152,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProvider>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllProvidersAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Throws(new Exception());
             var serviceProviders = mocker.CreateInstance<ProviderService>();
 
@@ -161,7 +161,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert
             Assert.Null(providers);
-            mocker.GetMock<IRepositoryProvider>().Verify(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            mocker.GetMock<IRepositoryProvider>().Verify(r => r.GetAllProvidersAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
             mocker.GetMock<INotifier>().Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
         }
 
@@ -172,7 +172,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProvider>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetProviderByIdAsync(It.IsAny<Guid>()))
                   .Returns(Task.FromResult(_providerTestFixture.GenerateValidProvider()));
             var serviceProvider = mocker.CreateInstance<ProviderService>();
 
@@ -181,7 +181,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert
             provider.Should().NotBeNull();
-            mocker.GetMock<IRepositoryProvider>().Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IRepositoryProvider>().Verify(r => r.GetProviderByIdAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact(DisplayName = "Get provider by id with exception")]
@@ -191,7 +191,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryProvider>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetProviderByIdAsync(It.IsAny<Guid>()))
                   .Throws(new Exception());
             var serviceProviders = mocker.CreateInstance<ProviderService>();
 
@@ -200,7 +200,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
             //Assert
             Assert.Null(provider);
-            mocker.GetMock<IRepositoryProvider>().Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IRepositoryProvider>().Verify(r => r.GetProviderByIdAsync(It.IsAny<Guid>()), Times.Once);
             mocker.GetMock<INotifier>().Verify(r => r.Handle(It.IsAny<Notification>()), Times.Once);
         }
 

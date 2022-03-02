@@ -6,7 +6,6 @@ using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
 using SystemV1.Domain.Entitys;
-using SystemV1.Domain.Services.Validations;
 
 namespace SystemV1.Domain.Services
 {
@@ -74,7 +73,7 @@ namespace SystemV1.Domain.Services
         {
             try
             {
-                return await _repositoryProvider.GetAllAsync(page, pageSize);
+                return await _repositoryProvider.GetAllProvidersAsync(page, pageSize);
             }
             catch (Exception)
             {
@@ -88,7 +87,7 @@ namespace SystemV1.Domain.Services
         {
             try
             {
-                return await _repositoryProvider.GetByIdAsync(id);
+                return await _repositoryProvider.GetProviderByIdAsync(id);
             }
             catch (Exception)
             {
@@ -124,8 +123,15 @@ namespace SystemV1.Domain.Services
 
         public async Task RemoveAsyncUow(Provider provider)
         {
-            Remove(provider);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                Remove(provider);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao remover o fornecedor.");
+            }
         }
 
         public void Update(Provider provider)

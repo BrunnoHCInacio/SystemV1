@@ -155,7 +155,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Arrange
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryAddress>()
-                  .Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .Setup(r => r.GetAllAddressesAsync(It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(Task.FromResult((IEnumerable<Address>)_addressTestFixture.GenerateAddress(10)));
             var serviceAddress = mocker.CreateInstance<ServiceAddress>();
             
@@ -163,7 +163,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             var addresses = await serviceAddress.GetAllAsync(1,1);
 
             //Assert
-            mocker.GetMock<IRepositoryAddress>().Verify(n => n.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            mocker.GetMock<IRepositoryAddress>().Verify(n => n.GetAllAddressesAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
             addresses.Should().NotBeEmpty();
 
         }
@@ -176,7 +176,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             var address = _addressTestFixture.GenerateValidAddress();
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryAddress>()
-                  .Setup(u => u.GetAllAsync(It.IsAny<int>(),It.IsAny<int>()))
+                  .Setup(u => u.GetAllAddressesAsync(It.IsAny<int>(),It.IsAny<int>()))
                   .Throws(new Exception());
 
             var serviceAddress = mocker.CreateInstance<ServiceAddress>();
@@ -185,7 +185,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             var addresses = await serviceAddress.GetAllAsync(1,1);
 
             //Assert
-            mocker.GetMock<IRepositoryAddress>().Verify(n => n.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            mocker.GetMock<IRepositoryAddress>().Verify(n => n.GetAllAddressesAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
             mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
             Assert.Null(addresses);
         }
@@ -198,14 +198,14 @@ namespace SystemV1.Domain.Test.ServiceTests
             var mocker = new AutoMocker();
             var serviceAddress = mocker.CreateInstance<ServiceAddress>();
             mocker.GetMock<IRepositoryAddress>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetAddressByIdAsync(It.IsAny<Guid>()))
                   .Returns(Task.FromResult(_addressTestFixture.GenerateValidAddress()));
 
             //Act
             var address = await serviceAddress.GetByIdAsync(Guid.NewGuid());
 
             //Assert
-            mocker.GetMock<IRepositoryAddress>().Verify(n => n.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IRepositoryAddress>().Verify(n => n.GetAddressByIdAsync(It.IsAny<Guid>()), Times.Once);
             address.Should().NotBeNull();
         }
 
@@ -217,14 +217,14 @@ namespace SystemV1.Domain.Test.ServiceTests
             var mocker = new AutoMocker();
             var serviceAddress = mocker.CreateInstance<ServiceAddress>();
             mocker.GetMock<IRepositoryAddress>()
-                  .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                  .Setup(r => r.GetAddressByIdAsync(It.IsAny<Guid>()))
                   .Throws(new Exception());
 
             //Act
             var address = await serviceAddress.GetByIdAsync(Guid.NewGuid());
 
             //Assert
-            mocker.GetMock<IRepositoryAddress>().Verify(n => n.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IRepositoryAddress>().Verify(n => n.GetAddressByIdAsync(It.IsAny<Guid>()), Times.Once);
             
             address.Should().BeNull();
         }

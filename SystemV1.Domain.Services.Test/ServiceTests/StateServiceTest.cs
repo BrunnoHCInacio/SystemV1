@@ -1,5 +1,4 @@
 using FluentAssertions;
-using FluentValidation.Results;
 using Moq;
 using Moq.AutoMock;
 using System;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 using SystemV1.Application;
 using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
-using SystemV1.Domain.Core.Constants;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
@@ -17,7 +15,6 @@ using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services;
 using SystemV1.Domain.Services.Notifications;
 using SystemV1.Domain.Services.Test.Fixture;
-using SystemV1.Domain.Services.Validations;
 using Xunit;
 
 namespace SystemV1.Domain.Test.ServiceTests

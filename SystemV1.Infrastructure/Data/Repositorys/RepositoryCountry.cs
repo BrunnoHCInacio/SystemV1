@@ -1,6 +1,8 @@
 ﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
@@ -17,6 +19,8 @@ namespace SystemV1.Infrastructure.Data.Repositorys
             _sqlContext = sqlContext;
         }
 
+
+
         public async Task<IEnumerable<Country>> GetByNameAsync(string name)
         {
             var sql = $@"
@@ -30,30 +34,13 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         public async Task<IEnumerable<Country>> GetAllCountriesAsync(int page, int pageSize)
         {
             var skip = (page - 1) * pageSize;
-            var sql = @$"SELECT {"\""}Id{"\""},
-                                {"\""}Name{"\""}
-                         FROM {"\""}Country{"\""}
-                         WHERE {"\""}IsActive{"\""}
-                         ORDER BY {"\""}Id{"\""}
-                         LIMIT {pageSize}
-                         OFFSET {skip}";
 
-            return await _sqlContext.Connection.QueryAsync<Country>(sql);
+            return await _sqlContext.Country.Where(c => c.IsActive).Skip(skip).Take(pageSize).ToListAsync();
         }
 
         public async Task<Country> GetCountryByIdAsync(Guid id)
         {
-            var sql = $@"SELECT {"\""}Id{"\""},
-                                {"\""}Name{"\""},
-                                {"\""}DateRegister{"\""},
-                                {"\""}DateChange{"\""},
-                                {"\""}IdUserRegister{"\""},
-                                {"\""}IdUserChange{"\""},
-                                {"\""}IsActive{"\""}
-                         FROM {"\""}Country{"\""}
-                         WHERE {"\""}Id{"\""} = '{id}'
-                            and {"\""}IsActive{"\""}";
-            return await _sqlContext.Connection.QuerySingleOrDefaultAsync<Country>(sql);
+            return await _sqlContext.Country.SingleAsync(c => c.IsActive && c.Id == id);
         }
     }
 }

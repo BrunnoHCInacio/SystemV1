@@ -39,7 +39,7 @@ namespace API2
         {
             var connection = Configuration["SqlConnection:SqlConnectionString"];
 
-            services.AddDbContext<SqlContext>(options => options.UseNpgsql(connection));
+            services.AddDbContext<SqlContext>(options => options.UseInMemoryDatabase(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.Configure<ApiBehaviorOptions>(options =>
             {

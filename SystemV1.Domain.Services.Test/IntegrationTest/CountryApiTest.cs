@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -23,7 +24,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
     {
         private readonly IntegrationTestFixture<StartupApiTests> _integrationTestFixture;
         private string _requestAdd => "api/country/Add";
-        private string _requestGetAll => "api/Country/GetAll?page=1&pageSize=10";
+        
         private string _requestGetById => "api/Country/GetById/";
         private string _requestUpdate => "api/country/Update/";
         private string _requestDelete => "api/country/Delete/";
@@ -33,22 +34,21 @@ namespace SystemV1.Domain.Test.IntegrationTest
             _integrationTestFixture = integrationTestFixture;
         }
 
-        [Fact(DisplayName = "Add new country with success"), Priority(1)]
+        [Fact(DisplayName = "Add new country with success")]
         [Trait("Categoria", "País - Integração")]
         public async Task Country_AddNewCountry_ShouldHaveSuccess()
         {
-            //Arrange
-            var countryFixture = new CountryTestFixture();
-            var countryViewModel = countryFixture.GenerateValidContryViewModel();
-
-            //Act
-            var postResponse = await _integrationTestFixture.Client.PostAsJsonAsync(_requestAdd, countryViewModel);
-
-            //Assert
-            postResponse.EnsureSuccessStatusCode();
+            //Arrange, act and assert
+            await AddNewCountriesAsync(1);
         }
 
-        [Fact(DisplayName = "Add new Country with fail"), Priority(2)]
+        public async Task Add_AddCountryWithStates_ShouldAddCountryAndAddStates()
+        {
+            //Arrange
+
+        }
+
+        [Fact(DisplayName = "Add new Country with fail")]
         [Trait("Categoria", "País - Integração")]
         public async Task Country_AddNewCountry_ShouldHadFailEndReturnNotifications()
         {
@@ -66,73 +66,100 @@ namespace SystemV1.Domain.Test.IntegrationTest
             Assert.Contains(ConstantMessages.CountryNameRequired_PT, obj.Errors);
         }
 
-        [Fact(DisplayName = "Get all countries with success"), Priority(3)]
+        [Fact(DisplayName = "Get all countries with success")]
         [Trait("Categoria", "País - Integração")]
-        public async Task Country_GetAllCountries_ShouldReturnWithSuccess()
+        public async Task GetAllCountries_Add10NewCountriesAndGetAll_ShouldAddAndReturnAllActiveCountriesWithSuccess()
         {
             //Arrange & act
-            var response = await _integrationTestFixture.Client.GetAsync(_requestGetAll);
+            await AddNewCountriesAsync(10);
+
+            var response = await _integrationTestFixture.Client.GetAsync(GetRequestToGetAll(1,10));
             string jsonCountries = await response.Content.ReadAsStringAsync();
 
             var countriesViewModel = JsonConvert.DeserializeObject<CountriesDeserialize>(jsonCountries);
-            int index = new Random().Next(1, countriesViewModel.Data.Count);
-
-            var countryViewModel = countriesViewModel.Data.ElementAt(index);
-            _integrationTestFixture.CountryId = countryViewModel.Id.GetValueOrDefault();
+        
             //Assert
+            Assert.Equal(10, countriesViewModel.Data.Count);
             Assert.NotEmpty(jsonCountries);
         }
 
-        [Fact(DisplayName = "Get country by id with success"), Priority(4)]
+        [Theory(DisplayName ="Get all countries with pagination")]
+        [Trait("Categoria", "País - Integração")]
+        [InlineData(50,10)]
+        [InlineData(100,10)]
+        [InlineData(1000,5)]
+        public async Task GetAllCountries_AddNewCountriesAndGetAllWithPagination_ShouldAddAllTheCountriesAndGetItWithPagination(int qtyCuntries,int qtyItemsPage)
+        {
+            //Arrage
+            await AddNewCountriesAsync(qtyCuntries);
+            int qtyPages = qtyCuntries / qtyItemsPage;
+            var countriesRegistred = new List<CountryViewModel>();
+
+            for (int i = 1; i <= qtyPages; i++)
+            {
+                //Act
+                var countriesViewModel = await GetAllCountriesAsync(i,qtyItemsPage);
+
+                //Assert
+                Assert.Equal(qtyItemsPage,countriesViewModel.Data.Count);
+                countriesViewModel.Data.ForEach(c=> Assert.DoesNotContain(c,countriesRegistred));
+
+                countriesRegistred.AddRange(countriesViewModel.Data);
+            }
+        }
+
+        [Fact(DisplayName = "Get country by id with success")]
         [Trait("Categoria", "País - Integração")]
         public async Task Country_GetCountryById_ShouldReturnWithSuccess()
         {
-            //Arrange & act
-            var response = await _integrationTestFixture.Client.GetAsync($"{_requestGetById}{_integrationTestFixture.CountryId}");
-            var jsonCountry = await response.Content.ReadAsStringAsync();
+            //Arrange
+            await AddNewCountriesAsync(1);
+            var countriesViewModel = await GetAllCountriesAsync(1, 1);
+            var country = countriesViewModel.Data.FirstOrDefault();
+
+            //Act
+            var countryViewModel = await GetCountryByIdAsync(country.Id.GetValueOrDefault());
 
             //Assert
-            response.EnsureSuccessStatusCode();
+            Assert.NotNull(countryViewModel.Data);
+            Assert.Equal(country.Id, countryViewModel.Data.Id);
+            Assert.Equal(country.Name, countryViewModel.Data.Name);   
         }
 
-        [Fact(DisplayName = "Update country with success"), Priority(5)]
+        [Fact(DisplayName = "Update country with success")]
         [Trait("Categoria", "País - Integração")]
-        public async Task Country_UpdateCountry_ShouldUpdatedWithSuccess()
+        public async Task Update_UpdateCountry_ShouldUpdatedWithSuccess()
         {
             //Arrange
-            var response = await _integrationTestFixture
-                                    .Client
-                                    .GetAsync($"{_requestGetById}{_integrationTestFixture.CountryId}");
+            await AddNewCountriesAsync(1);
+            var countries = await GetAllCountriesAsync(1, 1);
+            var country = countries.Data.FirstOrDefault();
 
-            var jsonCountry = await response.Content.ReadAsStringAsync();
-            var countryViewModel = JsonConvert.DeserializeObject<CountryDeserialize>(jsonCountry)?.Data;
-            response.EnsureSuccessStatusCode();
-
-            countryViewModel.Name = "Nome Alterado";
+          
+            country.Name += " Nome Alterado";
 
             //Act
             var responseUpdate = await _integrationTestFixture
                                             .Client
-                                            .PutAsJsonAsync($"{_requestUpdate}{countryViewModel.Id}", countryViewModel);
+                                            .PutAsJsonAsync($"{_requestUpdate}{country.Id}", country);
 
             //Assert
-            responseUpdate.EnsureSuccessStatusCode();
-            var responseUpdated = await _integrationTestFixture
-                                                .Client
-                                                .GetAsync($"{_requestGetById}{countryViewModel.Id}");
-            var jsonCountryUpdated = await responseUpdated.Content.ReadAsStringAsync();
-            var countryUpdatedViewModel = JsonConvert.DeserializeObject<CountryDeserialize>(jsonCountryUpdated)?.Data;
+            var countryUpdated = await GetCountryByIdAsync(country.Id.GetValueOrDefault());
 
-            Assert.Equal(countryViewModel.Id.GetValueOrDefault(), countryUpdatedViewModel.Id.GetValueOrDefault());
-            Assert.Equal(countryViewModel.Name, countryUpdatedViewModel.Name);
+            Assert.Equal(country.Id.GetValueOrDefault(), countryUpdated.Data.Id.GetValueOrDefault());
+            Assert.Equal(country.Name, countryUpdated.Data.Name);
         }
 
         [Fact(DisplayName = "Update country with fail"), Priority(6)]
         [Trait("Categoria", "País - Integração")]
         public async Task Country_UpdateCountry_ShouldUpdatedWithFailEndReturnNotifications()
         {
+            await AddNewCountriesAsync(1);
+            var countries = await GetAllCountriesAsync(1, 1);
+            var country = countries.Data.FirstOrDefault();
+
             //Arrange
-            var countryViewModel = new CountryViewModel { Id = _integrationTestFixture.CountryId, Name = "a" };
+            var countryViewModel = new CountryViewModel { Id = country.Id, Name = "a" };
 
             //Act
             var responseUpdate = await _integrationTestFixture
@@ -153,13 +180,68 @@ namespace SystemV1.Domain.Test.IntegrationTest
         public async Task Country_RemoveCountry_ShouldHadSuccess()
         {
             //Arrange
-            var response = await _integrationTestFixture.Client.GetAsync($"{_requestGetById}{_integrationTestFixture.CountryId}");
-            var jsonCountry = await response.Content.ReadAsStringAsync();
-            var countryViewModel = JsonConvert.DeserializeObject<CountryDeserialize>(jsonCountry)?.Data;
+            await AddNewCountriesAsync(1);
+            var countries = await GetAllCountriesAsync(1, 1);
+            var country = countries.Data.FirstOrDefault();
+            
+            //Act
+            var responseDelete = await _integrationTestFixture.Client.DeleteAsync($"{_requestDelete}{country.Id}");
+            
+            //Assert
+            responseDelete.EnsureSuccessStatusCode();
+        }
+
+        [Fact(DisplayName ="Remove invalid country with fail")]
+        [Trait("Categoria", "País - Integração")]
+        public async Task Remove_RemoveInvalidCountry_ShouldNotRemoveAndNotifyErrors()
+        {
+            //Arrange
+            var countryFixture = new CountryTestFixture();
+            var country = countryFixture.GenerateValidContryViewModel();
 
             //Act
-            var responseDelete = await _integrationTestFixture.Client.DeleteAsync($"{_requestDelete}{countryViewModel.Id}");
-            responseDelete.EnsureSuccessStatusCode();
+            var responseDelete = await _integrationTestFixture.Client.DeleteAsync($"{_requestDelete}{country.Id}");
+
+            //Assert
+            Assert.Equal(HttpStatusCode.NotFound, responseDelete.StatusCode);
+        }
+
+        private async Task AddNewCountriesAsync(int qtd)
+        {
+            //Arrange
+            var countryFixture = new CountryTestFixture();
+
+            for (int i = 0; i < qtd; i++)
+            {
+                var countryViewModel = countryFixture.GenerateValidContryViewModel();
+
+                //Act
+                var postResponse = await _integrationTestFixture.Client.PostAsJsonAsync(_requestAdd, countryViewModel);
+
+                //Assert
+                postResponse.EnsureSuccessStatusCode();
+            }
+        }
+
+        private async Task<CountriesDeserialize> GetAllCountriesAsync(int page, int pageSize)
+        {
+            var response = await _integrationTestFixture.Client.GetAsync(GetRequestToGetAll(page, pageSize));
+            response.EnsureSuccessStatusCode();
+            string jsonCountries = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CountriesDeserialize>(jsonCountries);
+        }
+
+        private async Task<CountryDeserialize> GetCountryByIdAsync(Guid id)
+        {
+            var response = await _integrationTestFixture.Client.GetAsync($"{_requestGetById}{id}");
+            response.EnsureSuccessStatusCode();
+            var jsonCountry = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CountryDeserialize>(jsonCountry);
+        }
+
+        private string GetRequestToGetAll(int page, int pageSize)
+        {
+            return $"api/Country/GetAll?page={page}&pageSize={pageSize}";
         }
     }
 

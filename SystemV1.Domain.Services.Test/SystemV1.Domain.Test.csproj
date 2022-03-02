@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="InfrastructureTest\**" />
+    <EmbeddedResource Remove="InfrastructureTest\**" />
+    <None Remove="InfrastructureTest\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Bogus" Version="33.0.2" />
     <PackageReference Include="ExpectedObjects" Version="3.5.3" />
     <PackageReference Include="FluentAssertions" Version="6.3.0" />
@@ -34,9 +40,5 @@
     <ProjectReference Include="..\SystemV1.Domain.Core\SystemV1.Domain.Core.csproj" />
     <ProjectReference Include="..\SystemV1.Domain.Services\SystemV1.Domain.Services.csproj" />
     <ProjectReference Include="..\SystemV1.Domain\SystemV1.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="InfrastructureTest\" />
   </ItemGroup>
 </Project>

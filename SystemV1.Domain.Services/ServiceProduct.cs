@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
 using SystemV1.Domain.Entitys;
-using SystemV1.Domain.Services.Validations;
 
 namespace SystemV1.Domain.Services
 {
@@ -62,7 +60,7 @@ namespace SystemV1.Domain.Services
         {
             try
             {
-                return await _repositoryProduct.GetAllAsync(page, pageSize);
+                return await _repositoryProduct.GetAllProductsAsync(page, pageSize);
             }
             catch (Exception)
             {
@@ -75,7 +73,7 @@ namespace SystemV1.Domain.Services
         {
             try
             {
-                return await _repositoryProduct.GetByIdAsync(id);
+                return await _repositoryProduct.GetProductByIdAsync(id);
             }
             catch (Exception)
             {
@@ -155,7 +153,7 @@ namespace SystemV1.Domain.Services
         {
             try
             {
-                return await _repositoryProductItem.GetAllAsync(page, pageSize);
+                return await _repositoryProductItem.GetAllProductItemsAsync(page, pageSize);
             }
             catch (Exception)
             {
@@ -168,7 +166,7 @@ namespace SystemV1.Domain.Services
         {
             try
             {
-                return await _repositoryProductItem.GetByIdAsync(id);
+                return await _repositoryProductItem.GetProductItemByIdAsync(id);
             }
             catch (Exception)
             {

@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Test.Fixture;
+using SystemV1.Domain.Validations;
 using Xunit;
 
 namespace SystemV1.Domain.Test.DomainTests
@@ -93,6 +92,24 @@ namespace SystemV1.Domain.Test.DomainTests
             //Assert
             result.IsValid.Should().BeTrue();
             result.Errors.Should().BeEmpty();
+        }
+
+        [Fact(DisplayName ="Verify validation for invalid domain")]
+        [Trait("Categoria","Fornecedor - Cadastro")]
+        public void ProviderDomain_InvalidDomain_ShouldBeInvalidAndReturnMessages()
+        {
+            //Arrange
+            var providerExpected = _providerTestFixture.GenerateInvalidProvider();
+
+            //Act
+            var provider = new Provider(providerExpected.Id,
+                                       providerExpected.Name,
+                                       providerExpected.Document);
+            var result = provider.ValidateProvider();
+
+            //Assert
+            result.IsValid.Should().BeFalse();
+            Assert.Contains(ProviderValidation.NameRequired, result.Errors.Select(e => e.ErrorMessage));
         }
     }
 }
