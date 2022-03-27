@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Entitys
@@ -16,14 +17,23 @@ namespace SystemV1.Domain.Entitys
         }
 
         public Country(Guid id,
+                       string name,    
+                       List<State> states)
+        {
+            Id = id;
+            Name = name;
+            States = states;
+        }
+
+        public Country(Guid id,
                        string name,
                        DateTime dateRegister,
                        DateTime dateChange,
                        Guid idUserRegister,
                        Guid idUserChange,
-                       bool isActive)
+                       bool isActive,
+                       List<State> states)
         {
-            States = new List<State>();
             Id = id;
             Name = name;
             DateRegister = dateRegister;
@@ -31,6 +41,7 @@ namespace SystemV1.Domain.Entitys
             IdUserRegister = idUserRegister;
             IdUserChange = idUserChange;
             IsActive = isActive;
+            States = states;
         }
 
         public string Name { get; private set; }

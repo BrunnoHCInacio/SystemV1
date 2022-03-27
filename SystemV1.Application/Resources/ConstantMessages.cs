@@ -35,5 +35,7 @@ namespace SystemV1.Application.Resources
 
         public const string StateNameRequired_Pt = "O nome do estado é obrigatório.";
         public const string StateNameLenght_Pt = "O nome do estado deve conter entre 2 e 100 catacteres.";
+
+        public static string pageAndPageSizeRequired => "É necessário informar a página e a quantidade de itens por página";
     }
 }

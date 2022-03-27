@@ -89,7 +89,7 @@ namespace SystemV1.Domain.Services.Test.Fixture
 
         public StateViewModel GenerateInvalidStateViewModel()
         {
-            return new StateViewModel { Name = "" };
+            return new StateViewModel();
         }
 
         public void Dispose()

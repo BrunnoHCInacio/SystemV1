@@ -41,6 +41,7 @@ namespace SystemV1.Domain.Test.Fixture
         }
 
         #endregion
+
         #region Generate invalid data
         public Country GenerateInvalidCountry()
         {
@@ -69,6 +70,7 @@ namespace SystemV1.Domain.Test.Fixture
             return country;
         }
         #endregion
+
         #region Generate expected data
         public dynamic GenerateCountryExpected()
         {
@@ -86,17 +88,37 @@ namespace SystemV1.Domain.Test.Fixture
             return stateFixture.GenerateStateValidExpected();
         }
         #endregion
+
         #region Generation valid disable data
         public Country GenerateValidCountryDisabled()
         {
             return GenerateCountry(1, false).FirstOrDefault();
         }
         #endregion
-        public List<CountryViewModel> GenerateCountryViewModel(int quantity)
-        {
-            var country = new Faker<CountryViewModel>("pt_BR").RuleFor(c => c.Name, f => f.Address.Country());
 
-            return country.Generate(quantity);
+        public List<CountryViewModel> GenerateCountryViewModel(int qty,
+                                                               bool withState = false,
+                                                               bool invalidState = false,
+                                                               int qtyOfState = 0)
+        {
+            var stateFixture = new StateTestFixture();
+            var country = new Faker<CountryViewModel>("pt_BR").RuleFor(c => c.Name, f => f.Address.Country())
+                                                              .FinishWith((f,c) => 
+                                                              {
+                                                                  if (withState)
+                                                                  {
+                                                                      if (!invalidState)
+                                                                      {
+                                                                          c.States = stateFixture.GenerateStatesViewModel(qtyOfState);
+                                                                      }
+                                                                      else
+                                                                      {
+                                                                          c.States = new List<StateViewModel> { stateFixture.GenerateInvalidStateViewModel() };
+                                                                      }
+                                                                  }
+                                                              });
+
+            return country.Generate(qty);
         }
 
         public CountryViewModel GenerateValidContryViewModel()

@@ -13,5 +13,7 @@ namespace SystemV1.Application.Interfaces.Mapper
         State ViewModelToEntity(StateViewModel stateViewModel);
 
         IEnumerable<StateViewModel> ListEntityToViewModel(IEnumerable<State> state);
+
+        List<State> ListViewModelToEntity(IEnumerable<StateViewModel> statesViewModel);
     }
 }

@@ -18,29 +18,45 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         {
             _sqlContext = sqlContext;
         }
-
-
-
+        
         public async Task<IEnumerable<Country>> GetByNameAsync(string name)
         {
-            var sql = $@"
-                        SELECT id, name
-                        FROM country
-                        WHERE name LIKE '%{name}%'
-                            AND isactive";
-            return await _sqlContext.Connection.QueryAsync<Country>(sql);
+            return await _sqlContext.Country.Where(c => c.Name.ToUpper().Contains(name.ToUpper())).ToListAsync();
         }
 
         public async Task<IEnumerable<Country>> GetAllCountriesAsync(int page, int pageSize)
         {
             var skip = (page - 1) * pageSize;
 
-            return await _sqlContext.Country.Where(c => c.IsActive).Skip(skip).Take(pageSize).ToListAsync();
+            var result = (from country in _sqlContext.Country
+                          where country.IsActive
+                          select new Country(country.Id,
+                                             country.Name,
+                                             country.DateRegister,
+                                             country.DateChange.GetValueOrDefault(),
+                                             country.IdUserRegister,
+                                             country.IdUserChange,
+                                             country.IsActive,
+                                             _sqlContext.State.Where(s => s.CountryId == country.Id && s.IsActive).ToList()));
+
+            var test = await result.Skip(skip).Take(pageSize).ToListAsync();
+            return test;
         }
 
         public async Task<Country> GetCountryByIdAsync(Guid id)
         {
-            return await _sqlContext.Country.SingleAsync(c => c.IsActive && c.Id == id);
+            var query = (from country in _sqlContext.Country
+                         where country.Id == id
+                         && country.IsActive
+                         select new Country(country.Id,
+                                            country.Name,
+                                            country.DateRegister,
+                                            country.DateChange.GetValueOrDefault(),
+                                            country.IdUserRegister,
+                                            country.IdUserChange,
+                                            country.IsActive,
+                                            _sqlContext.State.Where(s => s.CountryId == country.Id && s.IsActive).ToList()));
+            return await query.FirstOrDefaultAsync();
         }
     }
 }

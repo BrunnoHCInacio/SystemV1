@@ -38,14 +38,12 @@ namespace SystemV1.Domain.Test.IntegrationTest
         public async Task State_AddNewState_ShoulHaveSuccess()
         {
             //Arrange
-            var response = await _integrationTestFixture.Client.GetAsync(requestGetAllCountries);
-            var jsonContries = await response.Content.ReadAsStringAsync();
-            var countriesViewModel = JsonConvert.DeserializeObject<CountriesDeserialize>(jsonContries)?.Data;
-            var countryViewModel = TestTools.GetEntityByRandom<CountryViewModel>(countriesViewModel);
+            var countryApi = new CountryApiTest(_integrationTestFixture);
+            await countryApi.AddNewCountriesAsync(1, false);
 
+            var countryViewModel = await GetAllCountriesAsync();
             var stateFixture = new StateTestFixture();
             var state = stateFixture.GenerateValidStateViewModel();
-
             state.CountryId = countryViewModel.Id.GetValueOrDefault();
 
             //Act
@@ -53,6 +51,14 @@ namespace SystemV1.Domain.Test.IntegrationTest
 
             //Assert
             postResponse.EnsureSuccessStatusCode();
+        }
+
+        private async Task<CountryViewModel> GetAllCountriesAsync()
+        {
+            var response = await _integrationTestFixture.Client.GetAsync(requestGetAllCountries);
+            var jsonContries = await response.Content.ReadAsStringAsync();
+            var countriesViewModel = JsonConvert.DeserializeObject<CountriesDeserialize>(jsonContries);
+            return countriesViewModel.Data.FirstOrDefault();
         }
 
         [Fact(DisplayName = "Get all states with success"), Priority(2)]
@@ -80,7 +86,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
 
             //Assert
             response.EnsureSuccessStatusCode();
-            var state = JsonConvert.DeserializeObject<StateDeserialize>(jsonState).State;
+            var state = JsonConvert.DeserializeObject<StateDeserialize>(jsonState).Data;
             Assert.NotNull(state);
         }
 
@@ -94,7 +100,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
 
             //Assert
             response.EnsureSuccessStatusCode();
-            var state = JsonConvert.DeserializeObject<StateDeserialize>(jsonState).State;
+            var state = JsonConvert.DeserializeObject<StateDeserialize>(jsonState).Data;
             Assert.NotNull(state);
         }
 
@@ -105,7 +111,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             //Arrange
             var responseState = await _integrationTestFixture.Client.GetAsync($"{requestGetStateCountryById}{_integrationTestFixture.StateId}");
             var jsonResponseState = await responseState.Content.ReadAsStringAsync();
-            var stateViewModel = JsonConvert.DeserializeObject<StateDeserialize>(jsonResponseState).State;
+            var stateViewModel = JsonConvert.DeserializeObject<StateDeserialize>(jsonResponseState).Data;
             stateViewModel.Name = "Estado alterado";
 
             //Act
@@ -118,7 +124,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
 
             var responseGetStateUpdated = await _integrationTestFixture.Client.GetAsync($"{requestGetById}{stateViewModel.Id}");
             var jsonResponseGetStateUpdated = await responseGetStateUpdated.Content.ReadAsStringAsync();
-            var stateViewModelUpdated = JsonConvert.DeserializeObject<StateDeserialize>(jsonResponseGetStateUpdated)?.State;
+            var stateViewModelUpdated = JsonConvert.DeserializeObject<StateDeserialize>(jsonResponseGetStateUpdated)?.Data;
 
             Assert.Equal(stateViewModel.Id, stateViewModelUpdated.Id);
             Assert.Equal(stateViewModel.Name, stateViewModelUpdated.Name);
@@ -131,7 +137,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             //Arrange
             var responseState = await _integrationTestFixture.Client.GetAsync($"{requestGetById}{_integrationTestFixture.StateId}");
             var jsonResponseState = await responseState.Content.ReadAsStringAsync();
-            var stateViewModel = JsonConvert.DeserializeObject<StateDeserialize>(jsonResponseState).State;
+            var stateViewModel = JsonConvert.DeserializeObject<StateDeserialize>(jsonResponseState).Data;
 
             //Act
             var responseDelete = await _integrationTestFixture.Client.DeleteAsync($"{requestDelete}{stateViewModel.Id}");
@@ -150,15 +156,4 @@ namespace SystemV1.Domain.Test.IntegrationTest
         public List<StateViewModel> States = new List<StateViewModel>();
     }
 
-    public class StateDeserialize
-    {
-        [JsonProperty("success")]
-        public bool Success { get; set; }
-
-        [JsonProperty("errors")]
-        public List<string> Errors { get; set; }
-
-        [JsonProperty("data")]
-        public StateViewModel State { get; set; }
-    }
 }

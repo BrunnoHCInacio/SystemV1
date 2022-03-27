@@ -39,5 +39,10 @@ namespace SystemV1.Application.Mappers
 
             return state;
         }
+
+        public List<State> ListViewModelToEntity(IEnumerable<StateViewModel> statesViewModel)
+        {
+            return statesViewModel.Select(s => ViewModelToEntity(s)).ToList();
+        }
     }
 }

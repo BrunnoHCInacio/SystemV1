@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemV1.Application.Interfaces;
+using SystemV1.Application.Resources;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Core.Interfaces.Services;
 
@@ -24,9 +25,9 @@ namespace SystemV1.API2.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<CountryViewModel>>> GetAll(int page, int pageSize)
         {
-            if (page == 0 && pageSize == 0)
+            if (page == 0 || pageSize == 0)
             {
-                Notify("É necessário informar a página e a quantidade de itens por página");
+                Notify(ConstantMessages.pageAndPageSizeRequired);
                 OkResult();
             }
 
@@ -69,13 +70,6 @@ namespace SystemV1.API2.Controllers
                 return OkResult(ModelState);
             }
 
-            var country = await _applicationServiceCountry.GetByIdAsync(id);
-
-            if (country.Id != id)
-            {
-                Notify("O Id informado é diferente do Id de país.");
-                return OkResult();
-            }
             await _applicationServiceCountry.UpdateAsync(countryViewModel);
             return OkResult();
         }

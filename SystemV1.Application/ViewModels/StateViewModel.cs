@@ -11,7 +11,7 @@ namespace SystemV1.Application.ViewModels
         [Key]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = ConstantMessages.StateRequired_PT)]
+        [Required(ErrorMessage = ConstantMessages.StateNameRequired_Pt)]
         [StringLength(100, ErrorMessage = ConstantMessages.StateNameLenght_Pt, MinimumLength = 2)]
         public string Name { get; set; }
 

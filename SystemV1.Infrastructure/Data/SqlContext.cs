@@ -28,9 +28,7 @@ namespace SystemV1.Infrastructure.Data
                     _connection = new NpgsqlConnection(Database.GetDbConnection().ConnectionString);
                     _connection.Open();
                 }
-                else
-                {
-                }
+               
                 return _connection;
             }
         }

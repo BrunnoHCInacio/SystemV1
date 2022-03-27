@@ -32,34 +32,13 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Country country)
         {
-            if (!RunValidation(country.ValidadeCountry()))
-            {
-                return;
-            }
-
-            if (country.States.Any())
-            {
-                if (country.States.Any(s => !RunValidation(s.ValidateState())))
-                {
-                    return;
-                }
-
-                try
-                {
-                    foreach (var state in country.States)
-                    {
-                        _repositoryState.Add(state);
-                    }
-                }
-                catch (Exception)
-                {
-                    Notify("Falha ao adicionar o estado.");
-                    return;
-                }
-            }
+            if (!CountryIsValid(country)) return;
+            
             try
             {
                 Add(country);
+                AddStates(country.States);
+
                 await _unitOfWork.CommitAsync();
             }
             catch (Exception)
@@ -116,6 +95,11 @@ namespace SystemV1.Domain.Services
 
         public void Remove(Country country)
         {
+            country.States.ForEach(state => 
+            {
+                state.DisableRegister();
+            });
+
             country.DisableRegister();
             Update(country);
         }
@@ -173,6 +157,40 @@ namespace SystemV1.Domain.Services
             catch (Exception ex)
             {
                 Notify("Falha ao alterar o país.");
+            }
+        }
+
+        private bool CountryIsValid(Country country)
+        {
+            if (!RunValidation(country.ValidadeCountry()))
+            {
+                return false;
+            }
+
+            if (country.States.Any())
+            {
+                if (country.States.Any(s => !RunValidation(s.ValidateState())))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void AddStates(List<State> states)
+        {
+            try
+            {
+                foreach (var state in states)
+                {
+                    _repositoryState.Add(state);
+                }
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao adicionar o estado.");
+                throw;
             }
         }
     }

@@ -102,7 +102,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
             mocker.GetMock<IServiceCountry>().Verify(c => c.Add(country), Times.Never);
-            mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
+            mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Exactly(2));
         }
         
         [Fact(DisplayName = "Add country with fail")]
