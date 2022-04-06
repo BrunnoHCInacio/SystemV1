@@ -23,8 +23,8 @@ namespace SystemV1.Application.ViewModels
 
         public string CountryName { get; set; }
 
-        [Required(ErrorMessage = ConstantMessages.DistrictRequired_PT)]
-        [StringLength(50, ErrorMessage = ConstantMessages.DistrictLength_PT, MinimumLength = 2)]
+        [Required(ErrorMessage = ConstantMessages.CityNameRequired_PT)]
+        [StringLength(50, ErrorMessage = ConstantMessages.CityNameLength_PT, MinimumLength = 2)]
         public string District { get; set; }
 
         [Required(ErrorMessage = ConstantMessages.StateRequired_PT)]

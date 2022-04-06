@@ -13,7 +13,7 @@ namespace SystemV1.Domain.Entitys
         {
             Id = id;
             Name = name;
-            Document = document;
+            Document = SetDocumentMask(document);
             Addresses = new List<Address>();
             Contacts = new List<Contact>();
         }
@@ -44,6 +44,26 @@ namespace SystemV1.Domain.Entitys
         public ValidationResult ValidateClient()
         {
             return new ClientValidation().Validate(this);
+        }
+
+        private string SetDocumentMask(string documentNumber)
+        {
+            if (!documentNumber.Contains(".")
+               && !documentNumber.Contains("-")
+               && documentNumber.Length == 11)
+            {
+                return Convert.ToUInt64(documentNumber).ToString(@"000\.000\.000\-00");
+            }
+
+            if (!documentNumber.Contains(".")
+               && !documentNumber.Contains("-")
+               && !documentNumber.Contains("/")
+               && documentNumber.Length == 14)
+            {
+                return Convert.ToUInt64(documentNumber).ToString(@"00\.000\.000\/0000\-00"); 
+            }
+
+            return documentNumber;
         }
     }
 }

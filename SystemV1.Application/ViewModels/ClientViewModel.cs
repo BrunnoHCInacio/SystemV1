@@ -16,7 +16,7 @@ namespace SystemV1.Application.ViewModels
         public string Name { get; set; }
 
         [Required(ErrorMessage = ConstantMessages.ClientDocumentRequired_PT)]
-        [StringLength(11, ErrorMessage = ConstantMessages.ClientDocumentLength_PT, MinimumLength = 11)]
+        [StringLength(18, ErrorMessage = ConstantMessages.ClientDocumentLength_PT, MinimumLength = 11)]
         public string Document { get; set; }
 
         public IEnumerable<AddressViewModel> Addresses { get; set; }

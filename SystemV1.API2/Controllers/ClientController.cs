@@ -22,22 +22,22 @@ namespace SystemV1.API2.Controllers
         public async Task<ActionResult> GetAllAsync(int page, int pageSize)
         {
             var clients = await _applicationServiceClient.GetAllAsync(page, pageSize);
-            // return OkResult(clients);
-            return OkResult();
+            return OkResult(clients);
+            
         }
 
         [HttpGet("GetById/{id:guid}")]
         public async Task<ActionResult> GetByIdAsync(Guid id)
         {
             var client = await _applicationServiceClient.GetByIdAsync(id);
-            return Ok(client);
+            return OkResult(client);
         }
 
         [HttpGet("GetByName")]
         public async Task<ActionResult> GetByNameAsync(string name)
         {
             var clients = await _applicationServiceClient.GetByNameAsync(name);
-            return Ok(clients);
+            return OkResult(clients);
         }
 
         [HttpPost("Add")]
@@ -45,12 +45,12 @@ namespace SystemV1.API2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Ok();
+                return OkResult(ModelState);
             }
 
             await _applicationServiceClient.AddAsync(clientViewModel);
 
-            return Ok();
+            return OkResult();
         }
 
         [HttpPut("Update/{id:guid}")]
@@ -69,14 +69,14 @@ namespace SystemV1.API2.Controllers
             }
 
             await _applicationServiceClient.UpdateAsync(clientViewModel);
-            return Ok();
+            return OkResult();
         }
 
         [HttpDelete("Delete/{id:guid}")]
         public async Task<ActionResult> RemoveAsync(Guid id)
         {
             await _applicationServiceClient.RemoveAsync(id);
-            return Ok();
+            return OkResult();
         }
     }
 }

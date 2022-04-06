@@ -65,7 +65,7 @@ namespace SystemV1.API2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return OkResult();
+                return OkResult(ModelState);
             }
 
             if (id != stateViewModel.Id)

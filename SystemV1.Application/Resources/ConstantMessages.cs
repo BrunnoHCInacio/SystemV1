@@ -16,8 +16,8 @@ namespace SystemV1.Application.Resources
         public const string StreetLength100_PT = @"O logradouro deve conter entre 0 e 100 caracteres.";
         public const string ZipCodeRequiredt_PT = @"O CEP é obrigatório";
         public const string ZipCodeLength_PT = @"O CEP deve conter 7 caracteres";
-        public const string DistrictRequired_PT = @"A cidade é obrigatória";
-        public const string DistrictLength_PT = @"A cidade deve conter entre 2 e 50 caracteres.";
+        public const string CityNameRequired_PT = @"A cidade é obrigatória";
+        public const string CityNameLength_PT = @"A cidade deve conter entre 2 e 50 caracteres.";
 
         public const string CountryNameRequired_PT = @"O nome do país é obrigatório.";
         public const string CountryNameLengh_PT = @"O nome do país deve conter entre 2 e 100 caracteres.";

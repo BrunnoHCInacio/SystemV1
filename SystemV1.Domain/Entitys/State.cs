@@ -15,11 +15,20 @@ namespace SystemV1.Domain.Entitys
 
         public State(Guid id,
                      string name,
+                     Country country)
+        {
+            Id = id;
+            Name = name;
+            Country = country;
+        }
+
+        public State(Guid id,
+                     string name,
                      DateTime dateRegister,
                      DateTime dateChange,
                      Guid idUserRegister,
                      Guid idUserChange,
-                     Guid countryId,
+                     Country country,
                      bool isActive)
         {
             Id = id;
@@ -28,7 +37,7 @@ namespace SystemV1.Domain.Entitys
             DateChange = dateChange;
             IdUserRegister = idUserRegister;
             IdUserChange = idUserChange;
-            CountryId = countryId;
+            Country = country;
             IsActive = isActive;
         }
 
