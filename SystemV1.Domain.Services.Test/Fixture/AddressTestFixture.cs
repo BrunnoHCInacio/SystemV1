@@ -83,7 +83,7 @@ namespace SystemV1.Domain.Test.Fixture
             return new Address(new Guid(), null, null, null, null, null, null);
         }
 
-        public List<AddressViewModel> GenerateValidAddressViewModel(int quantity)
+        public List<AddressViewModel> GenerateValidAddressViewModel(int quantity, StateViewModel stateViewModel)
         {
             var address = GenerateAddress(quantity);
 
@@ -97,11 +97,11 @@ namespace SystemV1.Domain.Test.Fixture
                 Complement = a.Complement,
                 ZipCode = a.ZipCode,
                 City = a.City,
-                IdCountry = a.State?.Country?.Id ?? null,
-                CountryName = a.State?.Country?.Name ?? "",
+                IdCountry = stateViewModel.CountryId,
+                CountryName = stateViewModel.CountryName,
                 District = a.District,
-                IdState = a.State?.Id ?? null,
-                StateName = a.State.Name ?? ""
+                IdState = stateViewModel.Id,
+                StateName = stateViewModel.Name
             }));
 
             return addressesViewModel;

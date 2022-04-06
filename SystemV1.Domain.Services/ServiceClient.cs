@@ -162,6 +162,7 @@ namespace SystemV1.Domain.Services
                     _serviceContact.Add(contact);
                 }
             }
+
             _repositoryClient.Update(client);
         }
 

@@ -7,7 +7,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
 {
     public class TestTools
     {
-        public static TEntity GetEntityByRandom<TEntity>(List<TEntity> entities)
+        public static TEntity GetRandomEntityInList<TEntity>(List<TEntity> entities)
         {
             if (entities.Count ==1) return entities.FirstOrDefault();
 

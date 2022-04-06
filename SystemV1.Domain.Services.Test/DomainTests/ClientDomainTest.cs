@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using SystemV1.Domain.Core.Constants;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Enums;
@@ -148,6 +149,41 @@ namespace SystemV1.Domain.Test.DomainTests
 
             Assert.Contains(ClientValidation.NameRequired, result.Errors.Select(e => e.ErrorMessage));
             Assert.Contains(ClientValidation.DocumentRequired, result.Errors.Select(e => e.ErrorMessage));
+        }
+
+        [Theory(DisplayName = "Test for mask document client")]
+        [Trait("Categoria", "Cadastro - Cliente")]
+        [InlineData("62437538089", true)]
+        [InlineData("493.215.800-93", true)]
+        [InlineData("49.792.228/0001-50", false)]
+        [InlineData("15316749000110", false)]
+        public void Client_SetDocument_ShouldFormateDocument(string document, bool isCPF)
+        {
+            //Arrange and act
+            var client = new Client(Guid.NewGuid(), "", document);
+            var documentWithoutMask = Regex.Replace(document, @"[^0-9]", string.Empty);
+            //Assert
+            if (isCPF) 
+            {
+                Assert.NotEmpty(client.Document);
+                Assert.True(client.Document.Contains(".") && client.Document.Contains("-"));
+                Assert.Equal(Convert.ToUInt64(documentWithoutMask).ToString(@"000\.000\.000\-00"), client.Document);
+                
+            }
+            else
+            {
+                Assert.NotEmpty(client.Document);
+                Assert.True(client.Document.Contains(".") 
+                            && client.Document.Contains("-")
+                            && client.Document.Contains("/"));
+                
+                Assert.Equal(Convert.ToUInt64(documentWithoutMask).ToString(@"00\.000\.000\/0000\-00"), client.Document); 
+            }
+
+            foreach (var letter in document)
+            {
+                Assert.True(client.Document.Contains(letter));
+            }
         }
     }
 }
