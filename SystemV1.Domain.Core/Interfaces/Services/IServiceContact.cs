@@ -8,10 +8,6 @@ namespace SystemV1.Domain.Core.Interfaces.Services
 {
     public interface IServiceContact : IService<Contact>
     {
-        void Remove(Contact contact);
-
-        Task RemoveAsyncUow(Contact contact);
-
         void RemoveAllByClientId(Guid clientId);
     }
 }

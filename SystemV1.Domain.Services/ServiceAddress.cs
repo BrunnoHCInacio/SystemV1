@@ -28,7 +28,7 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Address address)
         {
-            if (!RunValidation(address.ValidateAddress()))
+            if (!IsValidEntity(address.ValidateAddress()))
             {
                 return;
             }
@@ -101,7 +101,7 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Address address)
         {
-            if (!RunValidation(address.ValidateAddress()))
+            if (!IsValidEntity(address.ValidateAddress()))
             {
                 return;
             }

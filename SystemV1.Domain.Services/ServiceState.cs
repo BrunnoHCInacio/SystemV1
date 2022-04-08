@@ -31,7 +31,7 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(State state)
         {
-            if (!RunValidation(state.ValidateState()))
+            if (!IsValidEntity(state.ValidateState()))
             {
                 return;
             }
@@ -131,7 +131,7 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(State state)
         {
-            if (!RunValidation(state.ValidateState()))
+            if (!IsValidEntity(state.ValidateState()))
             {
                 return;
             }

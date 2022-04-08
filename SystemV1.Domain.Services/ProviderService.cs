@@ -51,9 +51,9 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Provider provider)
         {
-            if (!RunValidation(provider.ValidateProvider())
-                || provider.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
-                || provider.Contacts.Any(c => !RunValidation(c.ValidateContact())))
+            if (!IsValidEntity(provider.ValidateProvider())
+                || provider.Addresses.Any(a => !IsValidEntity(a.ValidateAddress()))
+                || provider.Contacts.Any(c => !IsValidEntity(c.ValidateContact())))
             {
                 return;
             }
@@ -141,9 +141,9 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Provider provider)
         {
-            if (!RunValidation(provider.ValidateProvider())
-                || provider.Addresses.Any(a => !RunValidation(a.ValidateAddress()))
-                || provider.Contacts.Any(c => !RunValidation(c.ValidateContact())))
+            if (!IsValidEntity(provider.ValidateProvider())
+                || provider.Addresses.Any(a => !IsValidEntity(a.ValidateAddress()))
+                || provider.Contacts.Any(c => !IsValidEntity(c.ValidateContact())))
             {
                 return;
             }

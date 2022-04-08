@@ -1,14 +1,26 @@
 ﻿using Bogus;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services.Test.Fixture;
+using Xunit;
 
 namespace SystemV1.Domain.Test.Fixture
 {
+    [CollectionDefinition(nameof(CityCollection))]
+    public class CityCollection : ICollectionFixture<CityTestFixture>
+    {
+    }
     public class CityTestFixture : IDisposable
     {
+        public List<City> Generate(int qty)
+        {
+            var faker = new Faker<City>("pt_BR");
+            var stateFixture = new StateTestFixture();
+            return faker.CustomInstantiator(f => new City(Guid.NewGuid(), f.Address.City(), stateFixture.GenerateValidState())).Generate(qty);
+        }
+
         public dynamic GenerateExpectedCity()
         {
             var faker = new Faker("pt_BR");
@@ -23,9 +35,7 @@ namespace SystemV1.Domain.Test.Fixture
 
         public City GenerateValidCity()
         {
-            var faker = new Faker("pt_BR");
-            var stateFixture = new StateTestFixture();
-            return new City(Guid.NewGuid(), faker.Address.City(), stateFixture.GenerateValidState());
+            return Generate(1).FirstOrDefault();
         }
 
         public City GenerateInvalidCity()
@@ -35,7 +45,6 @@ namespace SystemV1.Domain.Test.Fixture
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
     }
 }

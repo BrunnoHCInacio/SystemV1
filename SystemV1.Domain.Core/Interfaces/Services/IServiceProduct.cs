@@ -8,10 +8,6 @@ namespace SystemV1.Domain.Core.Interfaces.Services
 {
     public interface IServiceProduct : IService<Product>
     {
-        void Remove(Product product);
-
-        Task RemoveAsyncUow(Product product);
-
         Task<IEnumerable<Product>> GetByNameAsync(string name);
         Task<IEnumerable<ProductItem>> GetProductItemByNameAsync(string name);
         Task<ProductItem> GetProductItemByIdAsync(Guid id);

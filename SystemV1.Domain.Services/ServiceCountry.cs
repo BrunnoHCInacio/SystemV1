@@ -124,14 +124,14 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Country country)
         {
-            if (!RunValidation(country.ValidadeCountry()))
+            if (!IsValidEntity(country.ValidadeCountry()))
             {
                 return;
             }
 
             if (country.States.Any())
             {
-                if (country.States.Any(s => !RunValidation(s.ValidateState())))
+                if (country.States.Any(s => !IsValidEntity(s.ValidateState())))
                 {
                     return;
                 }
@@ -162,14 +162,14 @@ namespace SystemV1.Domain.Services
 
         private bool CountryIsValid(Country country)
         {
-            if (!RunValidation(country.ValidadeCountry()))
+            if (!IsValidEntity(country.ValidadeCountry()))
             {
                 return false;
             }
 
             if (country.States.Any())
             {
-                if (country.States.Any(s => !RunValidation(s.ValidateState())))
+                if (country.States.Any(s => !IsValidEntity(s.ValidateState())))
                 {
                     return false;
                 }

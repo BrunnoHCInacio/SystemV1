@@ -8,10 +8,18 @@ namespace SystemV1.Domain.Validations
 {
     public class CityValidation : AbstractValidator<City>
     {
-        public string NameRequired => "O nome da cidade deve ser informado.";
+        public static string NameRequired => "O nome da cidade deve ser informado.";
+        public static string StateRequired => "O estado deve ser informado.";
         public CityValidation()
         {
-            RuleFor(c => c.Name).NotEmpty().WithMessage(NameRequired);
+            RuleFor(c => c.Name)
+                .NotEmpty()
+                .WithMessage(NameRequired);
+
+            RuleFor(c => c.State)
+                .NotNull()
+                .WithMessage(StateRequired);
+
         }
     }
 }

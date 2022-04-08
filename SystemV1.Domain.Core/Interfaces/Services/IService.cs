@@ -17,6 +17,10 @@ namespace SystemV1.Domain.Core.Interfaces.Services
 
         Task UpdateAsyncUow(TEntity entity);
 
+        void Remove(TEntity entity);
+
+        Task RemoveAsyncUow(TEntity entity);
+
         Task<IEnumerable<TEntity>> GetAllAsync(int page, int pageSize);
 
         Task<TEntity> GetByIdAsync(Guid id);

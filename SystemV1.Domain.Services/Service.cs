@@ -21,7 +21,7 @@ namespace SystemV1.Domain.Services
             _notifier = notifier;
         }
 
-        public bool RunValidation(ValidationResult entity)
+        public bool IsValidEntity(ValidationResult entity)
         {
             if (entity.IsValid) return true;
 

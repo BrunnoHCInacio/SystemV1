@@ -39,8 +39,8 @@ namespace SystemV1.Domain.Services
 
         public async Task AddAsyncUow(Product product)
         {
-            if (!RunValidation(product.ValidateProduct())
-                || product.ProductItems.Any(pi => !RunValidation(pi.ValidateProductItem())))
+            if (!IsValidEntity(product.ValidateProduct())
+                || product.ProductItems.Any(pi => !IsValidEntity(pi.ValidateProductItem())))
             {
                 return;
             }
@@ -127,8 +127,8 @@ namespace SystemV1.Domain.Services
 
         public async Task UpdateAsyncUow(Product product)
         {
-            if (!RunValidation(product.ValidateProduct())
-                || product.ProductItems.Any(pi => !RunValidation( pi.ValidateProductItem())))
+            if (!IsValidEntity(product.ValidateProduct())
+                || product.ProductItems.Any(pi => !IsValidEntity( pi.ValidateProductItem())))
             {
                 return;
             }

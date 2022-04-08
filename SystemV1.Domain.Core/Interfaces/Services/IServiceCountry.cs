@@ -8,9 +8,5 @@ namespace SystemV1.Domain.Core.Interfaces.Services
     public interface IServiceCountry : IService<Country>
     {
         Task<IEnumerable<Country>> GetByNameAsync(string name);
-
-        void Remove(Country country);
-
-        Task RemoveAsyncUow(Country country);
     }
 }

@@ -6,8 +6,8 @@ using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Domain.Core.Interfaces.Services
 {
-    public interface IServiceAddress : IService<Address>
+    public interface IServiceCity : IService<City>
     {
-        void RemoveAllByClientId(Guid clientId);
+        Task<IEnumerable<City>> GetByNameAsync(string name);
     }
 }
