@@ -304,7 +304,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
 
         #region Private methods
 
-        public async Task AddNewCountriesAsync(int qty, 
+        internal async Task AddNewCountriesAsync(int qty, 
                                                 bool withState = false,
                                                 int qtyOfState = 0)
         {

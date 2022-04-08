@@ -19,10 +19,7 @@ namespace SystemV1.Application.Mappers
                 Complement = address.Complement,
                 Number = address.Number,
                 ZipCode = address.ZipCode,
-                IdCountry = address.Country?.Id ?? null,
-                CountryName = address.Country?.Name ?? "",
-                IdState = address.State?.Id ?? null,
-                StateName = address.State?.Name ?? ""
+                
             };
         }
 
@@ -39,9 +36,8 @@ namespace SystemV1.Application.Mappers
                                       addressViewModel.Number,
                                       addressViewModel.Complement,
                                       addressViewModel.District,
-                                      addressViewModel.City);
-            address.SetState(new State(addressViewModel.IdState.GetValueOrDefault(), ""));
-
+                                      null);
+            
             if (addressViewModel.IdCLient.HasValue)
             {
                 address.SetClient(new Client(addressViewModel.IdCLient.GetValueOrDefault(), null, null));

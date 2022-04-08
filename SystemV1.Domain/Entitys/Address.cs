@@ -12,7 +12,7 @@ namespace SystemV1.Domain.Entitys
                        string number,
                        string complement,
                        string district,
-                       string city)
+                       City city)
         {
             Id = id;
             ZipCode = zipCode;
@@ -34,9 +34,8 @@ namespace SystemV1.Domain.Entitys
         public string Number { get; private set; }
         public string Complement { get; private set; }
         public string District { get; private set; }
-        public string City { get; private set; }
-        public State State { get; private set; }
-        public Country Country { get; private set; }
+        public City City { get; private set; }
+        
 
         public ValidationResult ValidateAddress()
         {
@@ -51,11 +50,6 @@ namespace SystemV1.Domain.Entitys
         public void SetClient(Client client)
         {
             Client = client;
-        }
-
-        public void SetState(State state)
-        {
-            State = state;
         }
     }
 }

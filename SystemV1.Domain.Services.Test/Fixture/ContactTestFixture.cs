@@ -162,7 +162,8 @@ namespace SystemV1.Domain.Test.Fixture
                 Ddi = c.Ddi,
                 CellPhoneNumber = c.CellPhoneNumber,
                 Email = c.Email,
-                PhoneNumber = c.PhoneNumber
+                PhoneNumber = c.PhoneNumber,
+                TypeContact = c.TypeContact
             }));
             return contactsViewModel;
         }

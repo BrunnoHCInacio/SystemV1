@@ -42,7 +42,6 @@ namespace SystemV1.Domain.Test
                                       addressExpected.District,
                                       addressExpected.City);
             state.SetCountry(country);
-            address.SetState(state);
             
             //Assert
             Assert.Equal(address.Id, addressExpected.Id);
@@ -52,12 +51,6 @@ namespace SystemV1.Domain.Test
             Assert.Equal(address.Complement, addressExpected.Complement);
             Assert.Equal(address.District, addressExpected.District);
             Assert.Equal(address.City, addressExpected.City);
-
-            Assert.Equal(address.State.Id, stateExpected.Id);
-            Assert.Equal(address.State.Name, stateExpected.Name);
-
-            Assert.Equal(address.State.Country.Id, stateExpected.Country.Id);
-            Assert.Equal(address.State.Country.Name, stateExpected.Country.Name);
         }
 
         [Fact(DisplayName = "Validate valid address")]

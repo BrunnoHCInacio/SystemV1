@@ -36,11 +36,6 @@ namespace SystemV1.Domain.Test.DomainTests
                             clientExpected.Address.District,
                             clientExpected.Address.City);
 
-            var state = new State(clientExpected.Address.State.Id,
-                                  clientExpected.Address.State.Name);
-
-            addressClient.SetState(state);
-
             var contactClient = new List<Contact>
             {
                 new Contact(clientExpected.ContactPhone.Id,
@@ -89,8 +84,6 @@ namespace SystemV1.Domain.Test.DomainTests
                 Assert.Equal(clientExpected.Address.Number, address.Number);
                 Assert.Equal(clientExpected.Address.Complement, address.Complement);
                 Assert.Equal(clientExpected.Address.District, address.District);
-                Assert.Equal(clientExpected.Address.State.Id, address.State.Id);
-                Assert.Equal(clientExpected.Address.State.Name, address.State.Name);
                 Assert.Equal(clientExpected.Address.City, address.City);
             }
 

@@ -145,6 +145,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             {
                 //Act
                 var postResponse = await _integrationTestFixture.Client.PostAsJsonAsync(_requestAdd, client);
+                var jsonResponse = await postResponse.Content.ReadAsStringAsync();
 
                 //Assert
                 if (isSuccessCase)

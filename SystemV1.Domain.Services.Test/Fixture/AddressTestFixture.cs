@@ -58,11 +58,9 @@ namespace SystemV1.Domain.Test.Fixture
                                                                 f.Random.Number(1, 99999).ToString(),
                                                                 f.Address.SecondaryAddress(),
                                                                 f.Address.Direction(),
-                                                                f.Address.City()))
+                                                                null))
                             .FinishWith((f,a) => 
                                         {
-                                            a.SetState(new StateTestFixture().GenerateValidState());
-
                                             if (!registerEnable) a.DisableRegister();
                                         });
             return address.Generate(quantity).ToList();
@@ -96,7 +94,7 @@ namespace SystemV1.Domain.Test.Fixture
                 Number = a.Number,
                 Complement = a.Complement,
                 ZipCode = a.ZipCode,
-                City = a.City,
+                // 
                 IdCountry = stateViewModel.CountryId,
                 CountryName = stateViewModel.CountryName,
                 District = a.District,
@@ -118,13 +116,9 @@ namespace SystemV1.Domain.Test.Fixture
                     Number = invalidAddress.Number,
                     Complement = invalidAddress.Complement,
                     ZipCode = invalidAddress.ZipCode,
-                    City = invalidAddress.City,
-                    IdCountry = invalidAddress.Country?.Id ?? null,
-                    CountryName = invalidAddress.Country?.Name ?? "",
                     District = invalidAddress.District,
-                    IdState = invalidAddress.State?.Id ?? null,
-                    StateName = invalidAddress.State?.Name ?? ""
-                } };
+                } 
+            };
         }
     }
 }
