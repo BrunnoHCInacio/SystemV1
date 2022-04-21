@@ -48,6 +48,11 @@ namespace SystemV1.Domain.Entitys
 
         private string SetDocumentMask(string documentNumber)
         {
+            if(documentNumber == null)
+            {
+                return string.Empty;
+            }
+
             if (!documentNumber.Contains(".")
                && !documentNumber.Contains("-")
                && documentNumber.Length == 11)

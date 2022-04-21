@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SystemV1.Domain.Test.IntegrationTest
 {
@@ -14,6 +17,12 @@ namespace SystemV1.Domain.Test.IntegrationTest
             var index = new Random().Next(1, entities.Count);
             var stateViewModel = entities.ElementAt(index);
             return stateViewModel;
+        }
+
+        public static async Task<TObject> DeserializeResponseAsync<TObject>(HttpResponseMessage response)
+        {
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<TObject>(jsonResponse);
         }
     }
 }

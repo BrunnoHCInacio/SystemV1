@@ -35,17 +35,18 @@ namespace SystemV1.Application.Mappers
                                       addressViewModel.Street,
                                       addressViewModel.Number,
                                       addressViewModel.Complement,
-                                      addressViewModel.District,
-                                      null);
-            
+                                      addressViewModel.District);
+
+            address.SetCity(addressViewModel.CityId);
+
             if (addressViewModel.IdCLient.HasValue)
             {
-                address.SetClient(new Client(addressViewModel.IdCLient.GetValueOrDefault(), null, null));
+                address.SetClient(addressViewModel.IdCLient.GetValueOrDefault());
             }
 
             if (addressViewModel.IdProvider.HasValue)
             {
-                address.SetProvider(new Provider(addressViewModel.IdProvider.GetValueOrDefault(), null, null));
+                address.SetProvider(addressViewModel.IdProvider.GetValueOrDefault());
             }
 
             return address;

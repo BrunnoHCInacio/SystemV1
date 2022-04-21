@@ -44,19 +44,48 @@ namespace SystemV1.Domain.Services
             }
         }
 
-        public Task<IEnumerable<City>> GetAllAsync(int page, int pageSize)
+        public async Task<IEnumerable<City>> GetAllAsync(int page, int pageSize)
         {
-            return await _repositoryCity.GetAllCitiesAsync(page, pageSize);
+            try
+            {
+                return await _repositoryCity.GetAllCitiesAsync(page, pageSize);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter as cidades.");
+            }
+            return null;
         }
 
-        public Task<City> GetByIdAsync(Guid id)
+        public async Task<City> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try 
+            { 
+                return await _repositoryCity.GetByIdAsync(id);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter a cidade.");
+            }
+            return null;
         }
 
-        public Task<IEnumerable<City>> GetByNameAsync(string name)
+        public async Task<IEnumerable<City>> GetByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            if(string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            {
+                Notify("Informe o nome a consultar.");
+                return null;
+            }
+            try
+            {
+                return await _repositoryCity.GetByNameAsync(name);
+            }
+            catch (Exception)
+            {
+                Notify("Falha ao obter a cidade.");
+            }
+            return null;
         }
 
         public void Remove(City city)

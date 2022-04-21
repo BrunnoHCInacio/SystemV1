@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services.Test.Fixture;
 using Xunit;
@@ -14,7 +15,7 @@ namespace SystemV1.Domain.Test.Fixture
     }
     public class CityTestFixture : IDisposable
     {
-        public List<City> Generate(int qty)
+        public List<City> GenerateCity(int qty)
         {
             var faker = new Faker<City>("pt_BR");
             var stateFixture = new StateTestFixture();
@@ -29,18 +30,40 @@ namespace SystemV1.Domain.Test.Fixture
             {
                 Id = Guid.NewGuid(),
                 Name = faker.Address.City(),
-                State = stateFixture.GenerateStateValidExpected()
+                State = stateFixture.GenerateStateValidExpected(),
             };
         }
 
         public City GenerateValidCity()
         {
-            return Generate(1).FirstOrDefault();
+            return GenerateCity(1).FirstOrDefault();
         }
 
         public City GenerateInvalidCity()
         {
             return new City(Guid.Empty, "", null);
+        }
+
+        public List<CityViewModel> GenerateValidCityViewModel(int qty, Guid stateId)
+        {
+            return GenerateCityViewModel(qty, stateId);
+        }
+
+        public CityViewModel GenerateInvalidCityViewModel()
+        {
+            return new CityViewModel();
+        }
+
+        public List<CityViewModel> GenerateCityViewModel(int qty, Guid stateId)
+        {
+            var faker = new Faker<CityViewModel>("pt_BR");
+            return faker.CustomInstantiator(f =>
+            new CityViewModel
+            {
+                Id = Guid.NewGuid(),
+                Name = f.Address.City(),
+                StateId = stateId
+            }).Generate(qty);
         }
 
         public void Dispose()

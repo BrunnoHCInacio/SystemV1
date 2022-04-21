@@ -18,22 +18,15 @@ namespace SystemV1.Application.ViewModels
         public string Number { get; set; }
         public string Complement { get; set; }
 
-        [Required(ErrorMessage = ConstantMessages.CountryNameRequired_PT)]
-        public Guid? IdCountry { get; set; }
-
-        public string CountryName { get; set; }
-
-        [Required(ErrorMessage = ConstantMessages.CityNameRequired_PT)]
-        [StringLength(50, ErrorMessage = ConstantMessages.CityNameLength_PT, MinimumLength = 2)]
+        [Required(ErrorMessage = ConstantMessages.DistrictRequired_PT)]
+        [StringLength(100, ErrorMessage = ConstantMessages.DistrictLength_PT, MinimumLength = 2)]
         public string District { get; set; }
 
-        [Required(ErrorMessage = ConstantMessages.StateRequired_PT)]
-        public Guid? IdState { get; set; }
-
-        public string StateName { get; set; }
-
         public string ZipCode { get; set; }
-        public string City { get; set; }
+
+        [Required(ErrorMessage = ConstantMessages.CityRequired_PT)]
+        public Guid CityId { get; set; }
+        public string CityName { get; set; }
 
         public Guid? IdCLient { get; set; }
         public Guid? IdProvider { get; set; }

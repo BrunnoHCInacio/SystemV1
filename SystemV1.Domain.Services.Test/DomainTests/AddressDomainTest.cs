@@ -25,23 +25,16 @@ namespace SystemV1.Domain.Test
         public void Address_VerifyDomain_ValidatePropertiesDomain()
         {
             //Act & Arrange
-            var stateExpected = _addressTestFixture.GenerateStateWithCountryValidExpected();
             var addressExpected = _addressTestFixture.GenerateAddressExpected();
 
-            var country = new Country(stateExpected.Country.Id,
-                                      stateExpected.Country.Name);
-
-            var state = new State(stateExpected.Id,
-                                  stateExpected.Name);
             //state.Country = country;
             var address = new Address(addressExpected.Id,
                                       addressExpected.ZipCode,
                                       addressExpected.Street,
                                       addressExpected.Number,
                                       addressExpected.Complement,
-                                      addressExpected.District,
-                                      addressExpected.City);
-            state.SetCountry(country);
+                                      addressExpected.District);
+            address.SetCity(addressExpected.CityId);
             
             //Assert
             Assert.Equal(address.Id, addressExpected.Id);
@@ -50,7 +43,7 @@ namespace SystemV1.Domain.Test
             Assert.Equal(address.Number, addressExpected.Number);
             Assert.Equal(address.Complement, addressExpected.Complement);
             Assert.Equal(address.District, addressExpected.District);
-            Assert.Equal(address.City, addressExpected.City);
+            Assert.Equal(address.CityId, addressExpected.CityId);
         }
 
         [Fact(DisplayName = "Validate valid address")]

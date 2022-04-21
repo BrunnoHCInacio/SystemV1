@@ -30,6 +30,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<RepositoryProvider>().As<IRepositoryProvider>();
             builder.RegisterType<RepositoryState>().As<IRepositoryState>();
             builder.RegisterType<RepositoryCountry>().As<IRepositoryCountry>();
+            builder.RegisterType<RepositoryCity>().As<IRepositoryCity>();
 
             #endregion Repositorys
 
@@ -42,6 +43,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<ServiceProduct>().As<IServiceProduct>();
             builder.RegisterType<ServiceState>().As<IServiceState>();
             builder.RegisterType<ServiceCountry>().As<IServiceCountry>();
+            builder.RegisterType<ServiceCity>().As<IServiceCity>();
 
             #endregion Services
 
@@ -55,6 +57,8 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<MapperProductItem>().As<IMapperProductItem>();
             builder.RegisterType<MapperProvider>().As<IMapperProvider>();
             builder.RegisterType<MapperState>().As<IMapperState>();
+            builder.RegisterType<MapperCity>().As<IMapperCity>();
+
 
             #endregion Mappers
 
@@ -65,6 +69,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<ApplicationServiceState>().As<IApplicationServiceState>();
             builder.RegisterType<ApplicationServiceNotifier>().As<IApplicationServiceNotifier>();
             builder.RegisterType<ApplicationServiceCountry>().As<IApplicationServiceCountry>();
+            builder.RegisterType<ApplicationServiceCity>().As<IApplicationServiceCity>();
 
             #endregion Application
 

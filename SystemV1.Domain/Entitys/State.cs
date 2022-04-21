@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using System;
+using System.Collections.Generic;
 using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Entitys
@@ -9,6 +10,7 @@ namespace SystemV1.Domain.Entitys
         public State(Guid id,
                      string name)
         {
+            Cities = new List<City>();
             Id = id;
             Name = name;
         }
@@ -17,6 +19,7 @@ namespace SystemV1.Domain.Entitys
                      string name,
                      Country country)
         {
+            Cities = new List<City>();
             Id = id;
             Name = name;
             Country = country;
@@ -31,6 +34,7 @@ namespace SystemV1.Domain.Entitys
                      Country country,
                      bool isActive)
         {
+            Cities = new List<City>();
             Id = id;
             Name = name;
             DateRegister = dateRegister;
@@ -44,6 +48,8 @@ namespace SystemV1.Domain.Entitys
         public string Name { get; private set; }
         public Guid CountryId { get; private set; }
         public Country Country { get; private set; }
+
+        public List<City> Cities { get; private set; }
 
         public void SetCountry(Guid countryId)
         {

@@ -32,7 +32,8 @@ namespace SystemV1.Domain.Test.Fixture
                 Complement = faker.Address.SecondaryAddress(),
                 District = faker.Address.Direction(),
                 State = stateFixture.GenerateStateWithCountryValidExpected(),
-                City = faker.Address.City()
+                CityId = Guid.NewGuid(),
+                CityName = faker.Address.City()
             };
         }
 
@@ -57,8 +58,7 @@ namespace SystemV1.Domain.Test.Fixture
                                                                 f.Address.StreetName(),
                                                                 f.Random.Number(1, 99999).ToString(),
                                                                 f.Address.SecondaryAddress(),
-                                                                f.Address.Direction(),
-                                                                null))
+                                                                f.Address.Direction()))
                             .FinishWith((f,a) => 
                                         {
                                             if (!registerEnable) a.DisableRegister();
@@ -81,7 +81,7 @@ namespace SystemV1.Domain.Test.Fixture
             return new Address(new Guid(), null, null, null, null, null, null);
         }
 
-        public List<AddressViewModel> GenerateValidAddressViewModel(int quantity, StateViewModel stateViewModel)
+        public List<AddressViewModel> GenerateValidAddressViewModel(int quantity, CityViewModel cityViewModel)
         {
             var address = GenerateAddress(quantity);
 
@@ -94,12 +94,9 @@ namespace SystemV1.Domain.Test.Fixture
                 Number = a.Number,
                 Complement = a.Complement,
                 ZipCode = a.ZipCode,
-                // 
-                IdCountry = stateViewModel.CountryId,
-                CountryName = stateViewModel.CountryName,
                 District = a.District,
-                IdState = stateViewModel.Id,
-                StateName = stateViewModel.Name
+                CityId = cityViewModel.Id,
+                CityName = cityViewModel.Name
             }));
 
             return addressesViewModel;

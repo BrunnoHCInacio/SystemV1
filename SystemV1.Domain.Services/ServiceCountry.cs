@@ -41,7 +41,7 @@ namespace SystemV1.Domain.Services
 
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Notify("Falha ao adicionar o país");
             }

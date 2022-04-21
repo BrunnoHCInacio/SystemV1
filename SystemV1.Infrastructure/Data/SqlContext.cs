@@ -41,6 +41,7 @@ namespace SystemV1.Infrastructure.Data
         public DbSet<State> State { get; set; }
         public DbSet<Country> Country { get; set; }
         public DbSet<Provider> Providers { get; set; }
+        public DbSet<City> Cities { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {

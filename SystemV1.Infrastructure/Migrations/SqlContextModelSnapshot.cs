@@ -16,7 +16,7 @@ namespace SystemV1.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.7")
+                .HasAnnotation("ProductVersion", "5.0.14")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Address", b =>
@@ -25,17 +25,14 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("City")
-                        .HasColumnType("text");
+                    b.Property<Guid?>("CityId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Complement")
                         .HasColumnType("text");
-
-                    b.Property<Guid?>("CountryId")
-                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DateChange")
                         .HasColumnType("timestamp without time zone");
@@ -61,9 +58,6 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("ProviderId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("StateId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Street")
                         .HasColumnType("text");
 
@@ -72,15 +66,47 @@ namespace SystemV1.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("CityId");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("ProviderId");
 
+                    b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("SystemV1.Domain.Entitys.City", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DateChange")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateRegister")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("IdUserChange")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdUserRegister")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("StateId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Client", b =>
@@ -307,7 +333,7 @@ namespace SystemV1.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Provider");
+                    b.ToTable("Providers");
                 });
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.State", b =>
@@ -346,15 +372,15 @@ namespace SystemV1.Infrastructure.Migrations
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Address", b =>
                 {
+                    b.HasOne("SystemV1.Domain.Entitys.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId");
+
                     b.HasOne("SystemV1.Domain.Entitys.Client", "Client")
                         .WithMany("Addresses")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("SystemV1.Domain.Entitys.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId");
 
                     b.HasOne("SystemV1.Domain.Entitys.Provider", "Provider")
                         .WithMany("Addresses")
@@ -362,15 +388,20 @@ namespace SystemV1.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SystemV1.Domain.Entitys.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateId");
+                    b.Navigation("City");
 
                     b.Navigation("Client");
 
-                    b.Navigation("Country");
-
                     b.Navigation("Provider");
+                });
+
+            modelBuilder.Entity("SystemV1.Domain.Entitys.City", b =>
+                {
+                    b.HasOne("SystemV1.Domain.Entitys.State", "State")
+                        .WithMany("Cities")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("State");
                 });
@@ -447,6 +478,11 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("Contacts");
+                });
+
+            modelBuilder.Entity("SystemV1.Domain.Entitys.State", b =>
+                {
+                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }

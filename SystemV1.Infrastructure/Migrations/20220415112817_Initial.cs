@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SystemV1.Infrastructure.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,7 +43,7 @@ namespace SystemV1.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Provider",
+                name: "Providers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -57,7 +57,7 @@ namespace SystemV1.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Provider", x => x.Id);
+                    table.PrimaryKey("PK_Providers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,9 +113,9 @@ namespace SystemV1.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Contact_Provider_ProviderId",
+                        name: "FK_Contact_Providers_ProviderId",
                         column: x => x.ProviderId,
-                        principalTable: "Provider",
+                        principalTable: "Providers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -137,28 +137,20 @@ namespace SystemV1.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Product_Provider_ProviderId",
+                        name: "FK_Product_Providers_ProviderId",
                         column: x => x.ProviderId,
-                        principalTable: "Provider",
+                        principalTable: "Providers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Address",
+                name: "Cities",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProviderId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ZipCode = table.Column<string>(type: "text", nullable: true),
-                    Street = table.Column<string>(type: "text", nullable: true),
-                    Number = table.Column<string>(type: "text", nullable: true),
-                    Complement = table.Column<string>(type: "text", nullable: true),
-                    District = table.Column<string>(type: "text", nullable: true),
-                    City = table.Column<string>(type: "text", nullable: true),
-                    StateId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CountryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    StateId = table.Column<Guid>(type: "uuid", nullable: false),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
@@ -167,31 +159,13 @@ namespace SystemV1.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Address", x => x.Id);
+                    table.PrimaryKey("PK_Cities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Address_Client_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Client",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Address_Country_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Country",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Address_Provider_ProviderId",
-                        column: x => x.ProviderId,
-                        principalTable: "Provider",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Address_State_StateId",
+                        name: "FK_Cities_State_StateId",
                         column: x => x.StateId,
                         principalTable: "State",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -222,15 +196,57 @@ namespace SystemV1.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Address",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProviderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ZipCode = table.Column<string>(type: "text", nullable: true),
+                    Street = table.Column<string>(type: "text", nullable: true),
+                    Number = table.Column<string>(type: "text", nullable: true),
+                    Complement = table.Column<string>(type: "text", nullable: true),
+                    District = table.Column<string>(type: "text", nullable: true),
+                    CityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
+                    IdUserChange = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Address", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Address_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Address_Client_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Address_Providers_ProviderId",
+                        column: x => x.ProviderId,
+                        principalTable: "Providers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Address_CityId",
+                table: "Address",
+                column: "CityId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Address_ClientId",
                 table: "Address",
                 column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Address_CountryId",
-                table: "Address",
-                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Address_ProviderId",
@@ -238,8 +254,8 @@ namespace SystemV1.Infrastructure.Migrations
                 column: "ProviderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Address_StateId",
-                table: "Address",
+                name: "IX_Cities_StateId",
+                table: "Cities",
                 column: "StateId");
 
             migrationBuilder.CreateIndex(
@@ -280,7 +296,7 @@ namespace SystemV1.Infrastructure.Migrations
                 name: "ProductItem");
 
             migrationBuilder.DropTable(
-                name: "State");
+                name: "Cities");
 
             migrationBuilder.DropTable(
                 name: "Client");
@@ -289,10 +305,13 @@ namespace SystemV1.Infrastructure.Migrations
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "Country");
+                name: "State");
 
             migrationBuilder.DropTable(
-                name: "Provider");
+                name: "Providers");
+
+            migrationBuilder.DropTable(
+                name: "Country");
         }
     }
 }

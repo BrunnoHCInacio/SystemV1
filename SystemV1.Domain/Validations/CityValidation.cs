@@ -16,8 +16,8 @@ namespace SystemV1.Domain.Validations
                 .NotEmpty()
                 .WithMessage(NameRequired);
 
-            RuleFor(c => c.State)
-                .NotNull()
+            RuleFor(c => c.StateId)
+                .Must(c => c != Guid.Empty)
                 .WithMessage(StateRequired);
 
         }

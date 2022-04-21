@@ -92,7 +92,7 @@ namespace SystemV1.Domain.Test.Fixture
         }
 
         public List<ClientViewModel> GenerateClientViewModel(int qtyClients,
-                                                             StateViewModel stateViewModel,
+                                                             CityViewModel cityViewModel,
                                                              int qtyAddress = 0,
                                                              int qtyContacts = 0,
                                                              bool isValidAddress = true,
@@ -107,7 +107,7 @@ namespace SystemV1.Domain.Test.Fixture
                                 {
                                     c.Name = f.Name.FullName();
                                     c.Document = f.Person.Cpf();
-                                    GenerateAddress(qtyAddress, isValidAddress, c, addressFixture, stateViewModel);
+                                    GenerateAddress(qtyAddress, isValidAddress, c, addressFixture, cityViewModel);
                                     GenerateContact(qtyContacts, isValidContact, c, contactsFixture);
                                 });
             return client.Generate(qtyClients);
@@ -152,13 +152,13 @@ namespace SystemV1.Domain.Test.Fixture
                                             bool isValidAddress, 
                                             ClientViewModel clientViewModel, 
                                             AddressTestFixture addressFixture,
-                                            StateViewModel stateViewModel)
+                                            CityViewModel cityViewModel)
         {
             if (qtyAddress > 0)
             {
                 if (isValidAddress)
                 {
-                    clientViewModel.Addresses = addressFixture.GenerateValidAddressViewModel(qtyAddress, stateViewModel);
+                    clientViewModel.Addresses = addressFixture.GenerateValidAddressViewModel(qtyAddress, cityViewModel);
                 }
                 else
                 {

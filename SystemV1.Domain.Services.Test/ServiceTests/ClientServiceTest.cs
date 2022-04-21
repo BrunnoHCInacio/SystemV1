@@ -126,8 +126,8 @@ namespace SystemV1.Domain.Test.ServiceTests
             await serviceclient.AddAsyncUow(client);
 
             //Assert
-            mocker.GetMock<IServiceAddress>().Verify(r => r.Add(It.IsAny<Address>()), Times.Exactly(client.Addresses.Count));
-            mocker.GetMock<IServiceContact>().Verify(r => r.Add(It.IsAny<Contact>()), Times.Exactly(client.Contacts.Count));
+            mocker.GetMock<IServiceAddress>().Verify(r => r.Add(It.IsAny<Address>()), Times.Never);
+            mocker.GetMock<IServiceContact>().Verify(r => r.Add(It.IsAny<Contact>()), Times.Never);
             mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
             mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
             Assert.Throws<Exception>(() => serviceclient.Add(client));

@@ -33,8 +33,8 @@ namespace SystemV1.Domain.Test.DomainTests
                             clientExpected.Address.Street,
                             clientExpected.Address.Number,
                             clientExpected.Address.Complement,
-                            clientExpected.Address.District,
-                            clientExpected.Address.City);
+                            clientExpected.Address.District);
+            addressClient.SetCity(clientExpected.Address.CityId);
 
             var contactClient = new List<Contact>
             {
@@ -84,7 +84,7 @@ namespace SystemV1.Domain.Test.DomainTests
                 Assert.Equal(clientExpected.Address.Number, address.Number);
                 Assert.Equal(clientExpected.Address.Complement, address.Complement);
                 Assert.Equal(clientExpected.Address.District, address.District);
-                Assert.Equal(clientExpected.Address.City, address.City);
+                Assert.Equal(clientExpected.Address.CityId, address.CityId);
             }
 
             foreach (var contact in client.Contacts)

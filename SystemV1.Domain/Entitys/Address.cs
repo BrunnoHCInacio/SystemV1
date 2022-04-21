@@ -7,6 +7,20 @@ namespace SystemV1.Domain.Entitys
     public class Address : Entity
     {
         public Address(Guid id,
+                      string zipCode,
+                      string street,
+                      string number,
+                      string complement,
+                      string district)
+        {
+            Id = id;
+            ZipCode = zipCode;
+            Street = street;
+            Number = number;
+            Complement = complement;
+            District = district;
+        }
+        public Address(Guid id,
                        string zipCode,
                        string street,
                        string number,
@@ -24,10 +38,9 @@ namespace SystemV1.Domain.Entitys
         }
 
         public Client Client { get; private set; }
-
-        public Guid ClientId { get; set; }
+        public Guid ClientId { get; private set; }
         public Provider Provider { get; private set; }
-        public Guid ProviderId { get; set; }
+        public Guid ProviderId { get; private set; }
 
         public string ZipCode { get; private set; }
         public string Street { get; private set; }
@@ -35,6 +48,7 @@ namespace SystemV1.Domain.Entitys
         public string Complement { get; private set; }
         public string District { get; private set; }
         public City City { get; private set; }
+        public Guid CityId { get; private set; }
         
 
         public ValidationResult ValidateAddress()
@@ -42,14 +56,19 @@ namespace SystemV1.Domain.Entitys
             return new AddressValidation().Validate(this);
         }
 
-        public void SetProvider(Provider provider)
+        public void SetProvider(Guid providerId)
         {
-            Provider = provider;
+            ProviderId = providerId;
         }
 
-        public void SetClient(Client client)
+        public void SetClient(Guid clientId)
         {
-            Client = client;
+            ClientId = ClientId;
+        }
+
+        public void SetCity(Guid cityId)
+        {
+            CityId = cityId;
         }
     }
 }

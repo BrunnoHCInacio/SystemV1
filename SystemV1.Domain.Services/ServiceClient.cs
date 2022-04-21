@@ -32,10 +32,13 @@ namespace SystemV1.Domain.Services
 
         public void Add(Client client)
         {
+            _repositoryClient.Add(client);
+
             if (client.Addresses.Any())
             {
                 foreach (var address in client.Addresses)
                 {
+                    address.SetClient(client.Id);
                     _serviceAddress.Add(address);
                 }
             }
@@ -44,11 +47,10 @@ namespace SystemV1.Domain.Services
             {
                 foreach (var contact in client.Contacts)
                 {
+                    contact.ClientId = client.Id;
                     _serviceContact.Add(contact);
                 }
             }
-
-            _repositoryClient.Add(client);
         }
 
         public async Task AddAsyncUow(Client client)

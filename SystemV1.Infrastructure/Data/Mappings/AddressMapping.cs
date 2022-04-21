@@ -16,7 +16,7 @@ namespace SystemV1.Infrastructure.Data.Mappings
             builder.Property(a => a.Number).HasColumnType("varchar(1024)");
             builder.Property(a => a.Complement).HasColumnType("varchar(1024)");
             builder.Property(a => a.District).IsRequired().HasColumnType("varchar(1024)");
-            
+            builder.HasOne(a => a.City);
             builder.Property(a => a.IsActive);
             builder.ToTable("Addresses");
         }

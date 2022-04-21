@@ -53,8 +53,8 @@ namespace SystemV1.Domain.Test.DomainTests
                                       addressExpected.Street,
                                       addressExpected.Number,
                                       addressExpected.Complement,
-                                      addressExpected.District,
-                                      addressExpected.City);
+                                      addressExpected.District);
+            address.SetCity(addressExpected.CityId);
             provider.AddAddress(address);
 
             //Assert
@@ -71,7 +71,7 @@ namespace SystemV1.Domain.Test.DomainTests
                 itemAddress.Number.Should().Be(addressExpected.Number);
                 itemAddress.Complement.Should().Be(addressExpected.Complement);
                 itemAddress.District.Should().Be(addressExpected.District);
-                itemAddress.City.Should().Be(addressExpected.City);
+                itemAddress.CityId.Should().Be(addressExpected.CityId);
 
             }
         }

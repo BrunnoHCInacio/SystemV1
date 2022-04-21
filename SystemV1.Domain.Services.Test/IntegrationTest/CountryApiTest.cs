@@ -64,7 +64,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             //act
             var postResponse = await _integrationTestFixture.Client.PostAsJsonAsync(_requestAdd, countryViewModel);
             var jsonResponse = await postResponse.Content.ReadAsStringAsync();
-            var obj = JsonConvert.DeserializeObject<CountryDeserialize>(jsonResponse);
+            var obj = JsonConvert.DeserializeObject<Deserialize<CountryViewModel>>(jsonResponse);
 
             //Assert
             Assert.False(obj.Success);
@@ -82,7 +82,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             //Act
             var postResponse = await _integrationTestFixture.Client.PostAsJsonAsync(_requestAdd, countryViewModel);
             var jsonResponse = await postResponse.Content.ReadAsStringAsync();
-            var obj = JsonConvert.DeserializeObject<CountryDeserialize>(jsonResponse);
+            var obj = JsonConvert.DeserializeObject<Deserialize<CountryViewModel>>(jsonResponse);
 
             //Assert
             Assert.False(obj.Success);
@@ -156,7 +156,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             //Arrange and act
             var response = await _integrationTestFixture.Client.GetAsync(GetRequestToGetAll(0, 0));
             var jsonResponse = await response.Content.ReadAsStringAsync();
-            var obj = JsonConvert.DeserializeObject<CountryDeserialize>(jsonResponse);
+            var obj = JsonConvert.DeserializeObject<DeserializeList<CountryViewModel>>(jsonResponse);
 
             //Assert
             Assert.True(obj.Errors.Any());
@@ -185,7 +185,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             string name = countries.Data[index].Name;
             var response = await _integrationTestFixture.Client.GetAsync(_requestGetByName + name);
             var jsonResponse = await response.Content.ReadAsStringAsync();
-            var obj = DeserializeJson<CountriesDeserialize>(jsonResponse);
+            var obj = DeserializeJson<DeserializeList<CountryViewModel>>(jsonResponse);
 
             //Assert
             Assert.True(obj.Data.Any());
@@ -322,23 +322,23 @@ namespace SystemV1.Domain.Test.IntegrationTest
             }
         }
 
-        private async Task<CountriesDeserialize> GetAllCountriesAsync(int page, int pageSize)
+        private async Task<DeserializeList<CountryViewModel>> GetAllCountriesAsync(int page, int pageSize)
         {
             var response = await _integrationTestFixture.Client.GetAsync(GetRequestToGetAll(page, pageSize));
             response.EnsureSuccessStatusCode();
             string jsonCountries = await response.Content.ReadAsStringAsync();
-            return DeserializeJson<CountriesDeserialize>(jsonCountries);
+            return DeserializeJson<DeserializeList<CountryViewModel>>(jsonCountries);
         }
 
         private async Task<CountryViewModel> GetCountryByIdAsync(Guid id)
         {
-             var country = await GetByIdAsync<CountryDeserialize>(id);
+             var country = await GetByIdAsync<Deserialize<CountryViewModel>>(id);
             return country?.Data;
         }
 
         private async Task<StateViewModel> GetStateByIdAsync(Guid id)
         {
-            var state = await GetByIdAsync<StateDeserialize>(id);
+            var state = await GetByIdAsync<Deserialize<StateViewModel>>(id);
             return state?.Data;
         }
 
@@ -360,7 +360,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             return JsonConvert.DeserializeObject<TObject>(jsonCountries);
         }
 
-        private async Task<CountryDeserialize> UpdateCountryAsync(CountryViewModel countryViewModel, 
+        private async Task<Deserialize<CountryViewModel>> UpdateCountryAsync(CountryViewModel countryViewModel, 
                                                                   bool verifyStateCode = false)
         {
             var responseUpdate = await _integrationTestFixture
@@ -373,7 +373,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             }
 
             var jsonCountryUpdated = await responseUpdate.Content.ReadAsStringAsync();
-            return DeserializeJson<CountryDeserialize>(jsonCountryUpdated);
+            return DeserializeJson<Deserialize<CountryViewModel>>(jsonCountryUpdated);
         }
 
         private static void CompareObjectCountry(CountryViewModel country, 
@@ -389,14 +389,4 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
         #endregion
     }
-
-    public class CountriesDeserialize
-    {
-        [JsonProperty("success")]
-        public bool Success { get; set; }
-
-        [JsonProperty("data")]
-        public List<CountryViewModel> Data = new List<CountryViewModel>();
-    }
-   
 }
