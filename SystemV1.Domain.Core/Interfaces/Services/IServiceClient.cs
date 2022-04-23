@@ -9,5 +9,7 @@ namespace SystemV1.Domain.Core.Interfaces.Services
     public interface IServiceClient : IService<Client>
     {
         Task<IEnumerable<Client>> GetByNameAsync(string name);
+
+        Task<bool> ExistClient(Guid id);
     }
 }

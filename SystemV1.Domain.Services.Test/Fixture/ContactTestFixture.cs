@@ -201,6 +201,32 @@ namespace SystemV1.Domain.Test.Fixture
             }
             return invalidContacts;
         }
+        public List<ContactViewModel> GenerateContact(int qtyContacts,
+                                                     bool isValidContact,
+                                                     ContactTestFixture contactsFixture)
+        {
+            if (qtyContacts > 0)
+            {
+                if (isValidContact)
+                {
+                    List<ContactViewModel> contacts = contactsFixture.GenerateValidContactViewModel(EnumTypeContact.TypeContactCellPhone, qtyContacts);
+                    contacts.AddRange(contactsFixture.GenerateValidContactViewModel(EnumTypeContact.TypeContactEmail, qtyContacts));
+                    return contacts;
+                }
+                else
+                {
+                    List<ContactViewModel> contacts = new List<ContactViewModel>();
+
+                    contacts.AddRange(contactsFixture.GenerateInvalidContactViewModel(EnumTypeContact.TypeContactCellPhone, qtyContacts));
+                    contacts.AddRange(contactsFixture.GenerateInvalidContactViewModel(EnumTypeContact.TypeContactPhone, qtyContacts));
+                    contacts.AddRange(contactsFixture.GenerateInvalidContactViewModel(EnumTypeContact.TypeContactEmail, qtyContacts));
+                    return contacts;
+                }
+
+            }
+            return null;
+
+        }
 
         #region Disabled valid data
 

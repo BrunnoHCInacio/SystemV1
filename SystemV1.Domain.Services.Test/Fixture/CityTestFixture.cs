@@ -41,7 +41,7 @@ namespace SystemV1.Domain.Test.Fixture
 
         public City GenerateInvalidCity()
         {
-            return new City(Guid.Empty, "", null);
+            return new City(Guid.Empty, "");
         }
 
         public List<CityViewModel> GenerateValidCityViewModel(int qty, Guid stateId)

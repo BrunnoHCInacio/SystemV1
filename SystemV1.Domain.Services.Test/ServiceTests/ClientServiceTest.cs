@@ -179,7 +179,7 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
         #endregion
 
-        #region Função Modificar
+        #region Function Update
 
         [Fact(DisplayName = "Update client with addresses and contacts with success")]
         [Trait("Categoria", "Cliente - Serviço")]
@@ -204,7 +204,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Once);
         }
 
-        [Fact(DisplayName = "Update client with addresses and contacts with success")]
+        [Fact(DisplayName = "Update client without addresses and contacts with success")]
         [Trait("Categoria", "Cliente - Serviço")]
         public async Task Update_UpdateClientWithoutAddressesAndContacts_ShouldUpdateWithSuccess()
         {
@@ -221,10 +221,10 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             mocker.GetMock<IRepositoryClient>().Verify(r => r.Update(It.IsAny<Client>()), Times.Once);
 
-            mocker.GetMock<IServiceAddress>().Verify(r => r.RemoveAllByClientId(It.IsAny<Guid>()), Times.Never);
+            mocker.GetMock<IServiceAddress>().Verify(r => r.RemoveAllByClientId(It.IsAny<Guid>()), Times.Once);
             mocker.GetMock<IServiceAddress>().Verify(r => r.Add(It.IsAny<Address>()), Times.Never);
 
-            mocker.GetMock<IServiceContact>().Verify(r => r.RemoveAllByClientId(It.IsAny<Guid>()), Times.Never);
+            mocker.GetMock<IServiceContact>().Verify(r => r.RemoveAllByClientId(It.IsAny<Guid>()), Times.Once);
             mocker.GetMock<IServiceContact>().Verify(r => r.Add(It.IsAny<Contact>()), Times.Never);
             mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Once);
         }
@@ -321,10 +321,11 @@ namespace SystemV1.Domain.Test.ServiceTests
             mocker.GetMock<IRepositoryClient>().Verify(r => r.Update(It.IsAny<Client>()), Times.Never);
 
             mocker.GetMock<IServiceAddress>().Verify(r => r.RemoveAllByClientId(It.IsAny<Guid>()), Times.Once);
-            mocker.GetMock<IServiceAddress>().Verify(r => r.Add(It.IsAny<Address>()), Times.Once);
+            mocker.GetMock<IServiceContact>().Verify(r => r.RemoveAllByClientId(It.IsAny<Guid>()), Times.Once);
 
-            mocker.GetMock<IServiceContact>().Verify(r => r.RemoveAllByClientId(It.IsAny<Guid>()), Times.Never);
+            mocker.GetMock<IServiceAddress>().Verify(r => r.Add(It.IsAny<Address>()), Times.Once);
             mocker.GetMock<IServiceContact>().Verify(r => r.Add(It.IsAny<Contact>()), Times.Never);
+            
             mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
             mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
         }

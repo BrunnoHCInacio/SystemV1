@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SystemV1.Application.Resources;
 using SystemV1.Application.ViewModels;
@@ -22,10 +23,10 @@ namespace SystemV1.Domain.Test.IntegrationTest
         private readonly IntegrationTestFixture<StartupApiTests> _integrationTestFixture;
         private string _requestAdd => "api/client/Add";
         private string _requestGetAll => "api/client/GetAll";
-        private string _requestGetById => "api/client";
+        private string _requestGetById => "api/client/GetById/";
         private string _requestGetByName => "api/client";
-        private string _requestUpdate => "api/client";
-        private string _requestDelete => "api/client";
+        private string _requestUpdate => "api/client/Update/";
+        private string _requestRemove => "api/client/Remove/";
 
         private string _requestCityGetAll => "api/city/GetAll";
 
@@ -33,7 +34,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         {
             _integrationTestFixture = integrationTestFixture;
             var stateApiTest = new CityApiTest(_integrationTestFixture);
-            Task.Run(() => stateApiTest.AddCityAsync(1)).Wait();
+            Task.Run(() => stateApiTest.AddCityAsync(20)).Wait();
         }
 
         #region Function Add
@@ -59,10 +60,11 @@ namespace SystemV1.Domain.Test.IntegrationTest
         public async Task Add_AddNewClientWithIvalidAddress_ShouldNotAddAndReturnNotifications()
         {
             //Arrange
-            var cityViewModel = await GetCityAsync();
+            var cityApiTest = new CityApiTest(_integrationTestFixture);
+            var citiesViewModel = await cityApiTest.GetCitiesAsync();
             var clientFixture = new ClientTestFixture();
             var clientsViewModel = clientFixture.GenerateClientViewModel(qtyClients: 1,
-                                                                         cityViewModel: cityViewModel,
+                                                                         citiesViewModel: citiesViewModel,
                                                                          qtyAddress: 1,
                                                                          isValidAddress: false);
 
@@ -79,37 +81,38 @@ namespace SystemV1.Domain.Test.IntegrationTest
         #endregion
 
         # region Function Get
-        private async Task<CityViewModel> GetCityAsync()
-        {
-            var response = await _integrationTestFixture.Client.GetAsync(_requestCityGetAll + "?page=1&pageSize=1");
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            var stateDeserialized = JsonConvert.DeserializeObject<DeserializeList<CityViewModel>>(jsonResponse);
-            return stateDeserialized.Data.FirstOrDefault();
-        }
-
         [Fact(DisplayName = "Get all clients with success"), Priority(2)]
         [Trait("Categoria", "Cliente - Integração")]
         public async Task Client_GetAllClients_ShouldReturnsWithSuccess()
         {
             //Arrange
             var page = 1;
-            var pageSize = 2;
+            var pageSize = 10;
 
             //Act
             var response = await _integrationTestFixture.Client.GetAsync(_requestGetAll + $"?page={page}&pageSize={pageSize}");
-            var responseDeserialized = TestTools.DeserializeResponseAsync<DeserializeList<ClientViewModel>>(response);
+            var responseDeserialized = await TestTools.DeserializeResponseAsync<DeserializeList<ClientViewModel>>(response);
 
             //Assert
+            Assert.True(responseDeserialized.Success);
+            Assert.True(responseDeserialized.Data.Any());
+            var client = TestTools.GetRandomEntityInList(responseDeserialized.Data);
+            _integrationTestFixture.ClientId = client.Id;
         }
 
         [Fact(DisplayName = "Get client by id with success"), Priority(3)]
         [Trait("Categoria", "Cliente - Integração")]
         public async Task Client_GetById_ShouldHasSuccess()
         {
-            //Arrange
-            //Act
+            //Arrange and Act
+            Deserialize<ClientViewModel> responseDeserialized = await GetClientByIdAsync(_integrationTestFixture.ClientId);
+
             //Assert
+            Assert.True(responseDeserialized.Success);
+            Assert.NotNull(responseDeserialized.Data);
+            Assert.Equal(_integrationTestFixture.ClientId, responseDeserialized.Data.Id);
         }
+
         #endregion
 
         #region Function Update
@@ -118,8 +121,137 @@ namespace SystemV1.Domain.Test.IntegrationTest
         public async Task Client_UpdateClient_ShouldHasSuccess()
         {
             //Arrange
+            var updateName = " alterado";
+            var updateDocument = "56745894025";
+            var clientViewModel = await GetClientByIdAsync(_integrationTestFixture.ClientId);
+            clientViewModel.Data.Name += updateName;
+            clientViewModel.Data.Document = updateDocument;
             //Act
+            var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate + clientViewModel.Data.Id, clientViewModel.Data);
+            
+            var clientUpdatedViewModel = await GetClientByIdAsync(_integrationTestFixture.ClientId);
+            
             //Assert
+            Assert.Equal(_integrationTestFixture.ClientId, clientViewModel.Data.Id);
+            Assert.Contains(updateName, clientUpdatedViewModel.Data.Name);
+            var documentWithoutMask = Regex.Replace(updateDocument, @"[^0-9]", string.Empty);
+            Assert.Equal(updateDocument, documentWithoutMask);
+        }
+
+        [Fact(DisplayName = "Update client, remove addresses"), Priority(4)]
+        [Trait("Categoria", "Cliente - Integração")]
+        public async Task Update_UpdateClientRemoveAddresses_MustUpdateWithSuccess()
+        {
+            //Arrange
+            var updateName = " alterado";
+            var updateDocument = "56745894025";
+            var clientViewModel = await GetClientByIdAsync(_integrationTestFixture.ClientId);
+            clientViewModel.Data.Name += updateName;
+            clientViewModel.Data.Document = updateDocument;
+            clientViewModel.Data.Addresses = null;
+            //Act
+            var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate + clientViewModel.Data.Id, clientViewModel.Data);
+
+            var clientUpdatedViewModel = await GetClientByIdAsync(_integrationTestFixture.ClientId);
+
+            //Assert
+            Assert.Equal(_integrationTestFixture.ClientId, clientViewModel.Data.Id);
+            Assert.Contains(updateName, clientUpdatedViewModel.Data.Name);
+            var documentWithoutMask = Regex.Replace(updateDocument, @"[^0-9]", string.Empty);
+            Assert.Equal(updateDocument, documentWithoutMask);
+            Assert.False(clientUpdatedViewModel.Data.Addresses.Any());
+        }
+
+        [Fact(DisplayName = "Update client, remove addresses"), Priority(4)]
+        [Trait("Categoria", "Cliente - Integração")]
+        public async Task Update_UpdateClientRemoveContacts_MustUpdateWithSuccess()
+        {
+            //Arrange
+            var updateName = " alterado";
+            var updateDocument = "56745894025";
+            var clientViewModel = await GetClientByIdAsync(_integrationTestFixture.ClientId);
+            clientViewModel.Data.Name += updateName;
+            clientViewModel.Data.Document = updateDocument;
+            clientViewModel.Data.Contacts = null;
+            //Act
+            var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate + clientViewModel.Data.Id, clientViewModel.Data);
+
+            var clientUpdatedViewModel = await GetClientByIdAsync(_integrationTestFixture.ClientId);
+
+            //Assert
+            Assert.Equal(_integrationTestFixture.ClientId, clientViewModel.Data.Id);
+            Assert.Contains(updateName, clientUpdatedViewModel.Data.Name);
+            var documentWithoutMask = Regex.Replace(updateDocument, @"[^0-9]", string.Empty);
+            Assert.Equal(updateDocument, documentWithoutMask);
+            Assert.False(clientUpdatedViewModel.Data.Contacts.Any());
+        }
+
+        [Fact(DisplayName = "Update invalid client"), Priority(4)]
+        [Trait("Categoria", "Cliente - Integração")]
+        public async Task Update_UpdateInvalidClient_MustNotUpdateAndReturnMessageNotification()
+        {
+            //Arrange
+            var clientViewModel = new ClientViewModel();
+            
+            //Act
+            var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate+clientViewModel.Id, clientViewModel);
+            var responseDeserialized = await TestTools.DeserializeResponseAsync<Deserialize<ClientViewModel>>(response);
+
+            //Assert
+            Assert.False(responseDeserialized.Success);
+            Assert.Contains(ConstantMessages.PeopleNameRequired_PT, responseDeserialized.Errors);
+            Assert.Contains(ConstantMessages.ClientDocumentRequired_PT, responseDeserialized.Errors);
+        }
+
+        [Fact(DisplayName = "Update client not saved "), Priority(4)]
+        [Trait("Categoria", "Cliente - Integração")]
+        public async Task Update_UpdateClientNotSaved_MustNotUpdateAndReturnMessageNotification()
+        {
+            //Arrange
+            var clientFixture = new ClientTestFixture();
+            var clientsViewModel = clientFixture.GenerateClientViewModel(1, null);
+            var clientViewModel = clientsViewModel.FirstOrDefault();
+            
+            //Act
+            var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate + clientViewModel.Id, clientViewModel);
+            var responseDeserialized = await TestTools.DeserializeResponseAsync<Deserialize<ClientViewModel>>(response);
+
+            //Assert
+            Assert.False(responseDeserialized.Success);
+        }
+
+        [Fact(DisplayName = "Update valid client with invalid address "), Priority(4)]
+        [Trait("Categoria", "Cliente - Integração")]
+        public async Task Update_UpdateValidClientWithInvalidAddresses_MustNotUpdateAndReturnMessageNotification()
+        {
+            //Arrange
+            var clientViewModel =await  GetClientByIdAsync(_integrationTestFixture.ClientId);
+            clientViewModel.Data.Addresses = new List<AddressViewModel> { new AddressViewModel() };
+
+            //Act
+            var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate + clientViewModel.Data.Id, clientViewModel.Data);
+            var responseDeserialized = await TestTools.DeserializeResponseAsync<Deserialize<ClientViewModel>>(response);
+
+            //Assert
+            Assert.False(responseDeserialized.Success);
+            Assert.Contains(ConstantMessages.StreetRequiredt_PT, responseDeserialized.Errors);
+            Assert.Contains(ConstantMessages.DistrictRequired_PT, responseDeserialized.Errors);
+        }
+
+        [Fact(DisplayName = "Update valid client with invalid address "), Priority(4)]
+        [Trait("Categoria", "Cliente - Integração")]
+        public async Task Update_UpdateValidClientWithInvalidContacts_MustNotUpdateAndReturnMessageNotification()
+        {
+            //Arrange
+            var clientViewModel = await GetClientByIdAsync(_integrationTestFixture.ClientId);
+            clientViewModel.Data.Contacts = new List<ContactViewModel> { new ContactViewModel() };
+
+            //Act
+            var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate + clientViewModel.Data.Id, clientViewModel.Data);
+            var responseDeserialized = await TestTools.DeserializeResponseAsync<Deserialize<ClientViewModel>>(response);
+
+            //Assert
+            Assert.False(responseDeserialized.Success);
         }
         #endregion
 
@@ -129,8 +261,10 @@ namespace SystemV1.Domain.Test.IntegrationTest
         public async Task Client_RemoveClient_MustRemoveWithSuccess()
         {
             //Arrange and Act
-            _integrationTestFixture.Client.DeleteAsync(_requestDelete + _integrationTestFixture.CLien);
+            var response = await _integrationTestFixture.Client.DeleteAsync(_requestRemove + _integrationTestFixture.ClientId);
+
             //Assert
+            response.EnsureSuccessStatusCode();
         }
         #endregion
 
@@ -144,10 +278,10 @@ namespace SystemV1.Domain.Test.IntegrationTest
                                              bool isSuccessCase = true)
         {
             //Arrange
-            var cityViewModel = await GetCityAsync();
+            var citiesViewModel = await GetCitiesAsync();
             var clientFixture = new ClientTestFixture();
             var clientsViewModel = clientFixture.GenerateClientViewModel(qtyClients,
-                                                                         cityViewModel,
+                                                                         citiesViewModel,
                                                                          qtyAddress,
                                                                          qtyContact,
                                                                          isValidAddress,
@@ -157,8 +291,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             {
                 //Act
                 var postResponse = await _integrationTestFixture.Client.PostAsJsonAsync(_requestAdd, client);
-                var jsonResponse = await postResponse.Content.ReadAsStringAsync();
-
+                
                 //Assert
                 if (isSuccessCase)
                 {
@@ -167,6 +300,19 @@ namespace SystemV1.Domain.Test.IntegrationTest
             };
         }
 
+        private async Task<List<CityViewModel>> GetCitiesAsync()
+        {
+            var response = await _integrationTestFixture.Client.GetAsync(_requestCityGetAll + "?page=1&pageSize=1");
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var stateDeserialized = JsonConvert.DeserializeObject<DeserializeList<CityViewModel>>(jsonResponse);
+            return stateDeserialized.Data;
+        }
+
+        private async Task<Deserialize<ClientViewModel>> GetClientByIdAsync(Guid id)
+        {
+            var response = await _integrationTestFixture.Client.GetAsync(_requestGetById + id);
+            return await TestTools.DeserializeResponseAsync<Deserialize<ClientViewModel>>(response);
+        }
         #endregion
     }
 }

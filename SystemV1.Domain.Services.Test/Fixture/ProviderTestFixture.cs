@@ -4,6 +4,7 @@ using Bogus.Extensions.Brazil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
 using Xunit;
 
@@ -84,6 +85,30 @@ namespace SystemV1.Domain.Test.Fixture
                 Document = faker.Person.Cpf()
             };
         }
+
+        public List<ProviderViewModel> GenerateValidProviderViewModel(int qty,
+                                                                      List<CityViewModel> citiesViewModel,
+                                                                      int qtyAddress = 0,
+                                                                      int qtyContacts = 0,
+                                                                      bool isValidAddress = true,
+                                                                      bool isValidContact = true)
+        {
+            var addressFixture = new AddressTestFixture();
+            var contactsFixture = new ContactTestFixture();
+
+            var client = new Faker<ProviderViewModel>("pt_BR")
+                                .FinishWith(
+                                (f, p) =>
+                                {
+                                    p.Name = f.Company.CompanyName();
+                                    p.Document = f.Company.Cnpj();
+                                    p.Addresses = addressFixture.GenerateAddress(qtyAddress, isValidAddress, addressFixture, citiesViewModel);
+                                    p.Contacts =  contactsFixture.GenerateContact(qtyContacts, isValidContact, contactsFixture);
+                                });
+            return client.Generate(qty);
+        }
+
+
 
         public void Dispose()
         {

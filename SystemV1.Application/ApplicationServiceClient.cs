@@ -27,6 +27,11 @@ namespace SystemV1.Application
             await _serviceClient.AddAsyncUow(client);
         }
 
+        public async Task<bool> ExistsClient(Guid id)
+        {
+            return await _serviceClient.ExistClient(id);
+        }
+
         public async Task<IEnumerable<ClientViewModel>> GetAllAsync(int page, int pageSize)
         {
             var clients = await _serviceClient.GetAllAsync(page, pageSize);

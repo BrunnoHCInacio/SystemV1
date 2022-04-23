@@ -11,6 +11,8 @@ namespace SystemV1.Application.Interfaces
 
         Task UpdateAsync(ClientViewModel clientViewModel);
 
+        Task<bool> ExistsClient(Guid id);
+
         Task RemoveAsync(Guid id);
 
         Task<ClientViewModel> GetByIdAsync(Guid id);

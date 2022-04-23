@@ -42,14 +42,14 @@ namespace SystemV1.Domain.Entitys
             return new ContactValidation().Validate(this);
         }
 
-        public void SetClient(Client client)
+        public void SetClient(Guid clientId)
         {
-            Client = client;
+            ClientId = clientId;
         }
 
-        public void SetProvider(Provider provider)
+        public void SetProvider(Guid providerId)
         {
-            Provider = provider;
+            ProviderId = providerId;
         }
     }
 }

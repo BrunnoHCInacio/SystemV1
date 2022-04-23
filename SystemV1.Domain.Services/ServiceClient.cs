@@ -15,7 +15,6 @@ namespace SystemV1.Domain.Services
         private readonly IServiceAddress _serviceAddress;
         private readonly IServiceContact _serviceContact;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly INotifier _notifier;
 
         public ServiceClient(IRepositoryClient repositoruClient,
                              IUnitOfWork unitOfWork,
@@ -27,7 +26,6 @@ namespace SystemV1.Domain.Services
             _unitOfWork = unitOfWork;
             _serviceAddress = serviceAddress;
             _serviceContact = serviceContact;
-            _notifier = notifier;
         }
 
         public void Add(Client client)
@@ -47,7 +45,7 @@ namespace SystemV1.Domain.Services
             {
                 foreach (var contact in client.Contacts)
                 {
-                    contact.ClientId = client.Id;
+                    contact.SetClient(client.Id);
                     _serviceContact.Add(contact);
                 }
             }
@@ -70,6 +68,11 @@ namespace SystemV1.Domain.Services
             {
                 Notify("Falha ao adicionar o cliente.");
             }
+        }
+
+        public async Task<bool> ExistClient(Guid id)
+        {
+            return await _repositoryClient.ExistClient(id);
         }
 
         public async Task<IEnumerable<Client>> GetAllAsync(int page, int pageSize)
@@ -147,9 +150,11 @@ namespace SystemV1.Domain.Services
 
         public void Update(Client client)
         {
+            _serviceAddress.RemoveAllByClientId(client.Id);
+            _serviceContact.RemoveAllByClientId(client.Id);
+
             if (client.Addresses.Any())
             {
-                _serviceAddress.RemoveAllByClientId(client.Id);
                 foreach (var address in client.Addresses)
                 {
                     _serviceAddress.Add(address);
@@ -158,7 +163,6 @@ namespace SystemV1.Domain.Services
 
             if (client.Contacts.Any())
             {
-                _serviceContact.RemoveAllByClientId(client.Id);
                 foreach (var contact in client.Contacts)
                 {
                     _serviceContact.Add(contact);

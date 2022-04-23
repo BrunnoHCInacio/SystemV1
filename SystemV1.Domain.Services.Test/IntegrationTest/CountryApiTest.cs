@@ -42,7 +42,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         public async Task Country_AddNewCountry_ShouldHaveSuccess()
         {
             //Arrange, act and assert
-            await AddNewCountriesAsync(1);
+            await AddNewCountriesAsync(1, true, 1);
         }
 
         [Fact(DisplayName = "Add new country with states with success"), Priority(1)]

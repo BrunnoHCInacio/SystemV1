@@ -31,7 +31,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Add new provider with success")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task Add_AddNewProviderValid_ShouldAddWithSuccess()
+        public async Task Add_AddNewProviderValid_MustAddWithSuccess()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateValidProvider();
@@ -48,7 +48,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Add new invalid provider")]
         [Trait("Categoria","Fornecedor - Serviço")]
-        public async Task Add_AddNewProviderInvalid_ShouldNotAddAndNotifyValidations()
+        public async Task Add_AddNewProviderInvalid_MustNotAddAndNotifyValidations()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateInvalidProvider();
@@ -66,7 +66,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Add new valid provider with invalid contact")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task Add_AddNewProviderWithInvalidContact_ShouldNotAddAndNotfyValidation()
+        public async Task Add_AddNewProviderWithInvalidContact_MustNotAddAndNotfyValidation()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateProvider(1, true, false, false).FirstOrDefault();
@@ -84,7 +84,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Add new valid provider with invalid addresses")]
         [Trait("Categoria","Fornecedor - Serviço")]
-        public async Task Add_AddNewValidProviderWithValidContactsAndInvalidAddresses_ShouldNotAddAndNotifyValidation()
+        public async Task Add_AddNewValidProviderWithValidContactsAndInvalidAddresses_MustNotAddAndNotifyValidation()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateProvider(1, true, true, true, false).FirstOrDefault();
@@ -102,7 +102,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Add new valid provider with exception")]
         [Trait("Cateoria","Fornecedor - Serviço")]
-        public async Task Add_AddNewValidProviderWithException_ShouldNotAddAndNotifyErrorMessage()
+        public async Task Add_AddNewValidProviderWithException_MustNotAddAndNotifyErrorMessage()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateValidProvider();
@@ -127,7 +127,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName = "Get all providers with success")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task GetAll_GetAllProviders_ShouldReturnAllProviders()
+        public async Task GetAll_GetAllProviders_MustReturnAllProviders()
         {
             //Arrange
             var mocker = new AutoMocker();
@@ -147,7 +147,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Get all providers with exception")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task GetAll_GetAllProvideresWithException_ShouldNotReturnAndNotifyError()
+        public async Task GetAll_GetAllProvideresWithException_MustNotReturnAndNotifyError()
         {
             //Arrange
             var mocker = new AutoMocker();
@@ -167,7 +167,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName = "Get provider by id with success")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task GetById_GetProviderById_ShouldReturnProvider()
+        public async Task GetById_GetProviderById_MustReturnProvider()
         {
             //Arrange
             var mocker = new AutoMocker();
@@ -186,7 +186,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName = "Get provider by id with exception")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task GetById_GetProviderByIdWithException_ShouldNotReturnAndNotifyError()
+        public async Task GetById_GetProviderByIdWithException_MustNotReturnAndNotifyError()
         {
             //Arrange
             var mocker = new AutoMocker();
@@ -206,7 +206,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName = "Get provider by name with success")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task GetByName_GetProviderByName_ShouldReturnProviders()
+        public async Task GetByName_GetProviderByName_MustReturnProviders()
         {
             //Arrange
             var mocker = new AutoMocker();
@@ -226,7 +226,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName = "Get provider by name with exception")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task GetByName_GetProviderByNameWithException_ShouldNotReturnAndNotifyError()
+        public async Task GetByName_GetProviderByNameWithException_MustNotReturnAndNotifyError()
         {
             //Arrange
             var mocker = new AutoMocker();
@@ -246,7 +246,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName = "Get provider by name with invalid name")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task GetByName_GetProviderByNameWithInvalidName_ShouldNotReturnAndNotifyError()
+        public async Task GetByName_GetProviderByNameWithInvalidName_MustNotReturnAndNotifyError()
         {
             //Arrange
             var mocker = new AutoMocker();
@@ -266,7 +266,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Update valid provider with success")]
         [Trait("Categoria","Fornecedor - Serviço")]
-        public async Task Update_UpdateValidProvider_ShouldUpdateWithSuccess()
+        public async Task Update_UpdateValidProvider_MustUpdateWithSuccess()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateValidProvider();
@@ -283,7 +283,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Update invalid provider")]
         [Trait("Categoria","Fornecedor - Serviço")]
-        public async Task Update_UpdateInvalidProvider_ShouldNotUpdateAndNotifyValidations()
+        public async Task Update_UpdateInvalidProvider_MustNotUpdateAndNotifyValidations()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateInvalidProvider();
@@ -301,7 +301,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Update valid provider with invalid address")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task Update_UpdateValidProviderWithInvalidAddress_ShouldNotUpdateAndNotifyValidations()
+        public async Task Update_UpdateValidProviderWithInvalidAddress_MustNotUpdateAndNotifyValidations()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateValidProvider(true, false);
@@ -319,7 +319,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Update valid provider with invalid contact")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task Update_UpdateValidProviderWithInvalidContact_ShouldNotUpdateAndNotifyValidations()
+        public async Task Update_UpdateValidProviderWithInvalidContact_MustNotUpdateAndNotifyValidations()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateValidProvider(true, true, true, false);
@@ -340,7 +340,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName ="Remove provider with success")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task Remove_RemoveProvider_ShouldRemoveWithSuccess()
+        public async Task Remove_RemoveProvider_MustRemoveWithSuccess()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateValidProvider();
@@ -357,7 +357,7 @@ namespace SystemV1.Domain.Test.ServiceTests
 
         [Fact(DisplayName = "Remove provider with exception")]
         [Trait("Categoria", "Fornecedor - Serviço")]
-        public async Task Remove_RemoveProviderWithException_ShouldNotRemove()
+        public async Task Remove_RemoveProviderWithException_MustNotRemove()
         {
             //Arrange
             var provider = _providerTestFixture.GenerateValidProvider();

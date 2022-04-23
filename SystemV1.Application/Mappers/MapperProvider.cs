@@ -23,6 +23,11 @@ namespace SystemV1.Application.Mappers
 
         public ProviderViewModel EntityToViewModel(Provider provider)
         {
+            if(provider == null)
+            {
+                return null;
+            }
+
             return new ProviderViewModel
             {
                 Id = provider.Id,
@@ -43,9 +48,17 @@ namespace SystemV1.Application.Mappers
             var provider = new Provider(providerViewModel.Id,
                                         providerViewModel.Name,
                                         providerViewModel.Document);
+            if (providerViewModel.Addresses != null
+               && providerViewModel.Addresses.Any())
+            {
+                provider.AddAddresses(providerViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a)).ToList());
+            }
 
-            provider.AddAddresses(providerViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a)).ToList());
-            provider.AddContacts(providerViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c)).ToList());
+            if (providerViewModel.Contacts!= null
+               && providerViewModel.Contacts.Any())
+            {
+                provider.AddContacts(providerViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c)).ToList());
+            }
 
             return provider;
         }

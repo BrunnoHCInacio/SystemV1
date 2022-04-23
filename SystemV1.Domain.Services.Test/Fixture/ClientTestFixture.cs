@@ -92,7 +92,7 @@ namespace SystemV1.Domain.Test.Fixture
         }
 
         public List<ClientViewModel> GenerateClientViewModel(int qtyClients,
-                                                             CityViewModel cityViewModel,
+                                                             List<CityViewModel> citiesViewModel,
                                                              int qtyAddress = 0,
                                                              int qtyContacts = 0,
                                                              bool isValidAddress = true,
@@ -107,12 +107,11 @@ namespace SystemV1.Domain.Test.Fixture
                                 {
                                     c.Name = f.Name.FullName();
                                     c.Document = f.Person.Cpf();
-                                    GenerateAddress(qtyAddress, isValidAddress, c, addressFixture, cityViewModel);
-                                    GenerateContact(qtyContacts, isValidContact, c, contactsFixture);
+                                    c.Addresses = addressFixture.GenerateAddress(qtyAddress, isValidAddress, addressFixture, citiesViewModel);
+                                    c.Contacts = contactsFixture.GenerateContact(qtyContacts, isValidContact, contactsFixture);
                                 });
             return client.Generate(qtyClients);
         }
-
 
         public ClientViewModel GenerateInvalidClientViewModel()
         {
@@ -123,48 +122,8 @@ namespace SystemV1.Domain.Test.Fixture
         {
         }
 
-        private static void GenerateContact(int qtyContacts, 
-                                            bool isValidContact, 
-                                            ClientViewModel clientViewModel, 
-                                            ContactTestFixture contactsFixture)
-        {
-            if (qtyContacts > 0)
-            {
-                if (isValidContact)
-                {
-                    List<ContactViewModel> contacts = contactsFixture.GenerateValidContactViewModel(EnumTypeContact.TypeContactCellPhone, qtyContacts);
-                    contacts.AddRange(contactsFixture.GenerateValidContactViewModel(EnumTypeContact.TypeContactEmail, qtyContacts));
+       
 
-                    clientViewModel.Contacts = contacts;
-                }
-                else
-                {
-                    List<ContactViewModel> contacts = new List<ContactViewModel>();
-
-                    contacts.AddRange(contactsFixture.GenerateInvalidContactViewModel(EnumTypeContact.TypeContactCellPhone, qtyContacts));
-                    contacts.AddRange(contactsFixture.GenerateInvalidContactViewModel(EnumTypeContact.TypeContactPhone, qtyContacts));
-                    contacts.AddRange(contactsFixture.GenerateInvalidContactViewModel(EnumTypeContact.TypeContactEmail, qtyContacts));
-                }
-            }
-        }
-
-        private static void GenerateAddress(int qtyAddress,
-                                            bool isValidAddress, 
-                                            ClientViewModel clientViewModel, 
-                                            AddressTestFixture addressFixture,
-                                            CityViewModel cityViewModel)
-        {
-            if (qtyAddress > 0)
-            {
-                if (isValidAddress)
-                {
-                    clientViewModel.Addresses = addressFixture.GenerateValidAddressViewModel(qtyAddress, cityViewModel);
-                }
-                else
-                {
-                    clientViewModel.Addresses = addressFixture.GenerateInvalidAddressViewModel();
-                }
-            }
-        }
+        
     }
 }

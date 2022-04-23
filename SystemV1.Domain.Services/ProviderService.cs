@@ -30,10 +30,13 @@ namespace SystemV1.Domain.Services
 
         public void Add(Provider provider)
         {
+            _repositoryProvider.Add(provider);
+
             if (provider.Addresses.Any())
             {
                 foreach (var address in provider.Addresses)
                 {
+                    address.SetProvider(provider.Id);
                     _serviceAddress.Add(address);
                 }
             }
@@ -42,11 +45,10 @@ namespace SystemV1.Domain.Services
             {
                 foreach (var contact in provider.Contacts)
                 {
+                    contact.SetProvider(provider.Id);
                     _serviceContact.Add(contact);
                 }
             }
-
-            _repositoryProvider.Add(provider);
         }
 
         public async Task AddAsyncUow(Provider provider)

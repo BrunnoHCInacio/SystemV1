@@ -56,25 +56,30 @@ namespace SystemV1.API2.Controllers
         [HttpPut("Update/{id:guid}")]
         public async Task<ActionResult> UpdateAsync(Guid id, ClientViewModel clientViewModel)
         {
-            var client = await _applicationServiceClient.GetByIdAsync(id);
-
-            if (client == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return OkResult(ModelState);
             }
 
-            if (client.Id != clientViewModel.Id)
+            if(!await _applicationServiceClient.ExistsClient(id))
             {
-                return BadRequest();
+                Notify("Cliente não encontrato.");
+                return OkResult();
             }
 
             await _applicationServiceClient.UpdateAsync(clientViewModel);
             return OkResult();
         }
 
-        [HttpDelete("Delete/{id:guid}")]
+        [HttpDelete("Remove/{id:guid}")]
         public async Task<ActionResult> RemoveAsync(Guid id)
         {
+            if(!await _applicationServiceClient.ExistsClient(id))
+            {
+                Notify("Cliente não encontrato.");
+                return OkResult();
+            }
+
             await _applicationServiceClient.RemoveAsync(id);
             return OkResult();
         }

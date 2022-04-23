@@ -18,6 +18,7 @@ namespace SystemV1.Application.Mappers
                 Street = address.Street,
                 Complement = address.Complement,
                 Number = address.Number,
+                District = address.District,
                 ZipCode = address.ZipCode,
                 
             };

@@ -40,7 +40,14 @@ namespace SystemV1.Infrastructure.Data.Repositorys
 
         public async Task<Provider> GetProviderByIdAsync(System.Guid id)
         {
-            return await _sqlContext.Providers.SingleAsync(p => p.IsActive && p.Id == id);
+            var query = from provider in _sqlContext.Providers
+                        where provider.IsActive && provider.Id == id
+                        select new Provider(provider.Id,
+                                            provider.Name,
+                                            provider.Document,
+                                            _sqlContext.Address.Where(a => a.IsActive && a.ProviderId == provider.Id).ToList(),
+                                            _sqlContext.Contact.Where(a => a.IsActive && a.ProviderId == provider.Id).ToList());
+            return await query.FirstOrDefaultAsync() ;
         }
     }
 }

@@ -33,12 +33,7 @@ namespace SystemV1.Infrastructure.Data.Repositorys
 
         public void RemoveAllByClientId(Guid clientId)
         {
-            var sql = $@"UPDATE 
-                            {"\""}Address{"\""} 
-                         SET {"\""}IsActive{"\""} = false 
-                         WHERE {"\""}ClientId{"\""} = '{clientId}' and {"\""}IsActive{"\""}";
-
-            _sqlContext.Connection.Execute(sql);
+            RemoveRange(a => a.ClientId == clientId);
         }
     }
 }

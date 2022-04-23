@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using SystemV1.Application.Interfaces;
 using SystemV1.Application.ViewModels;
@@ -16,7 +14,7 @@ namespace SystemV1.API2.Controllers
     {
         private readonly IApplicationServiceCity _applicationServiceCity;
         public CityController(INotifier notifier, 
-                                 IApplicationServiceCity applicationServiceCity) : base(notifier)
+                              IApplicationServiceCity applicationServiceCity) : base(notifier)
         {
             _applicationServiceCity = applicationServiceCity;
         }
@@ -39,7 +37,7 @@ namespace SystemV1.API2.Controllers
             if(page == 0 || pageSize == 0)
             {
                 Notify("É necessário informar a página e a quantidade de itens por página");
-                OkResult();
+                return OkResult();
             }
 
             var cities = await _applicationServiceCity.GetAllAsync(page, pageSize);

@@ -18,6 +18,19 @@ namespace SystemV1.Domain.Entitys
             Contacts = new List<Contact>();
         }
 
+        public Client(Guid id,
+                      string name,
+                      string document,
+                      List<Address> addresses, 
+                      List<Contact> contacts)
+        {
+            Id = id;
+            Name = name;
+            Document = SetDocumentMask(document);
+            Addresses = addresses;
+            Contacts = contacts;
+        }
+
         public List<Address> Addresses { get; private set; }
         public List<Contact> Contacts { get; private set; }
 

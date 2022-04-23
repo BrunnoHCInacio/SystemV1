@@ -6,6 +6,7 @@ using System.Text;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services.Test.Fixture;
+using SystemV1.Domain.Test.IntegrationTest;
 using Xunit;
 
 namespace SystemV1.Domain.Test.Fixture
@@ -81,11 +82,17 @@ namespace SystemV1.Domain.Test.Fixture
             return new Address(new Guid(), null, null, null, null, null, null);
         }
 
-        public List<AddressViewModel> GenerateValidAddressViewModel(int quantity, CityViewModel cityViewModel)
+        public List<AddressViewModel> GenerateValidAddressViewModel(int quantity, List<CityViewModel> citiesViewModel)
         {
+            var city = new CityViewModel();
             var address = GenerateAddress(quantity);
 
             var addressesViewModel = new List<AddressViewModel>();
+
+            if (citiesViewModel != null) 
+            { 
+                city = TestTools.GetRandomEntityInList<CityViewModel>(citiesViewModel);
+            }
 
             addressesViewModel.AddRange(address.Select(a => new AddressViewModel
             {
@@ -95,8 +102,8 @@ namespace SystemV1.Domain.Test.Fixture
                 Complement = a.Complement,
                 ZipCode = a.ZipCode,
                 District = a.District,
-                CityId = cityViewModel.Id,
-                CityName = cityViewModel.Name
+                CityId = city.Id,
+                CityName = city.Name
             }));
 
             return addressesViewModel;
@@ -116,6 +123,25 @@ namespace SystemV1.Domain.Test.Fixture
                     District = invalidAddress.District,
                 } 
             };
+        }
+
+        public List<AddressViewModel> GenerateAddress(int qtyAddress,
+                                                      bool isValidAddress,
+                                                      AddressTestFixture addressFixture,
+                                                      List<CityViewModel> citiesViewModel)
+        {
+            if (qtyAddress > 0)
+            {
+                if (isValidAddress)
+                {
+                    return addressFixture.GenerateValidAddressViewModel(qtyAddress, citiesViewModel);
+                }
+                else
+                {
+                    return addressFixture.GenerateInvalidAddressViewModel();
+                }
+            }
+            return null;
         }
     }
 }

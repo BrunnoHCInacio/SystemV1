@@ -18,6 +18,9 @@ namespace SystemV1.Domain.Test.IntegrationTest.Config
         public Guid CountryId { get; set; }
         public Guid StateId { get; set; }
         public Guid CityId { get; set; }
+        public Guid ClientId { get; set; }
+
+        public Guid ProviderId { get; set; }
 
         public IntegrationTestFixture()
         {

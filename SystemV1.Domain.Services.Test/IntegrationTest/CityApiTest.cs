@@ -65,17 +65,12 @@ namespace SystemV1.Domain.Test.IntegrationTest
         [Trait("Categoria", "Cidade - Integração"), Priority(2)]
         public async Task GetAll_GetAllCities_MustReturnListOfTheCities()
         {
-            //Arrange
-            var page = 1;
-            var pageSize = 10;
-
-            //Act
-            var response = await _integrationTestFixture.Client.GetAsync(_requestGetAll + $"?page={page}&pageSize={pageSize}");
-            var responseDeserialized = await TestTools.DeserializeResponseAsync<DeserializeList<CityViewModel>>(response);
+            //Arrange and act
+            var cities = await GetCitiesAsync();
+            var city = TestTools.GetRandomEntityInList<CityViewModel>(cities);
 
             //Assert
-            Assert.NotEmpty(responseDeserialized.Data);
-            var city = TestTools.GetRandomEntityInList<CityViewModel>(responseDeserialized.Data);
+            Assert.NotNull(city);
             _integrationTestFixture.CityId = city.Id;
         }
 
@@ -165,6 +160,20 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         #endregion
+
+        internal async Task<List<CityViewModel>> GetCitiesAsync()
+        {
+            //Arrange
+            var page = 1;
+            var pageSize = 10;
+
+            //Act
+            var response = await _integrationTestFixture.Client.GetAsync(_requestGetAll + $"?page={page}&pageSize={pageSize}");
+            var responseDeserialized = await TestTools.DeserializeResponseAsync<DeserializeList<CityViewModel>>(response);
+
+            return responseDeserialized.Data;
+        }
+
 
         internal async Task AddCityAsync(int qty,
                                        bool isValid = true)
