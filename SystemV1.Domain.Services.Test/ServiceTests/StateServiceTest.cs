@@ -15,6 +15,7 @@ using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services;
 using SystemV1.Domain.Services.Notifications;
 using SystemV1.Domain.Services.Test.Fixture;
+using SystemV1.Domain.Test.Fixture;
 using Xunit;
 
 namespace SystemV1.Domain.Test.ServiceTests
@@ -36,7 +37,8 @@ namespace SystemV1.Domain.Test.ServiceTests
         public async Task StateService_AddNewStateService_ShouldHaveSuccess()
         {
             //Arrange
-            var state = _stateTestFixture.GenerateValidState();
+            var countryFixture = new CountryTestFixture();
+            var state = _stateTestFixture.GenerateValidState(countryFixture.GenerateValidCountry());
             var mocker = new AutoMocker();
             var stateService = mocker.CreateInstance<ServiceState>();
             mocker.GetMock<IUnitOfWork>().Setup(u => u.CommitAsync()).Returns(Task.FromResult(true));
@@ -64,7 +66,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Asert
             mocker.GetMock<IRepositoryState>().Verify(r => r.Add(state), Times.Never);
             mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
-            mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Exactly(1));
+            mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Exactly(2));
         }
 
         [Fact(DisplayName ="Add state with exception fail")]
@@ -113,7 +115,8 @@ namespace SystemV1.Domain.Test.ServiceTests
         public async Task StateService_UpdateStateService_ShouldHasSuccess()
         {
             //Arrange
-            var state = _stateTestFixture.GenerateValidState();
+            var countryFixture = new CountryTestFixture();
+            var state = _stateTestFixture.GenerateValidState(countryFixture.GenerateValidCountry());
             var mocker = new AutoMocker();
 
             var stateService = mocker.CreateInstance<ServiceState>();
@@ -143,7 +146,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             mocker.GetMock<IServiceState>().Verify(s => s.Update(state), Times.Never);
             mocker.GetMock<IUnitOfWork>().Verify(s => s.CommitAsync(), Times.Never);
-            mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
+            mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Exactly(2));
         }
         
         [Fact(DisplayName ="Update state with exception fail")]
@@ -267,10 +270,12 @@ namespace SystemV1.Domain.Test.ServiceTests
         public async Task StateService_GetStateCountry_ShouldHasSuccess()
         {
             //Arrange
+            var countryFixture = new CountryTestFixture();
+            var country = countryFixture.GenerateValidCountry();
             var mocker = new AutoMocker();
             mocker.GetMock<IRepositoryState>()
                   .Setup(r => r.GetStateCountryByIdAsync(It.IsAny<Guid>()))
-                  .Returns(Task.FromResult( _stateTestFixture.GenerateStates(quantity: 1, getRelationShip: true).FirstOrDefault()));
+                  .Returns(Task.FromResult( _stateTestFixture.GenerateStates(quantity: 1, country: country).FirstOrDefault()));
             var stateService = mocker.CreateInstance<ServiceState>();
 
             //Act

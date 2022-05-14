@@ -18,6 +18,8 @@ namespace SystemV1.Domain.Test.IntegrationTest
     [Collection(nameof(IntegrationApiTestFixtureCollection))]
     public class CityApiTest
     {
+        //Criar testes para exclusão de cidade que contém em um endereço.
+
         private readonly IntegrationTestFixture<StartupApiTests> _integrationTestFixture;
         private readonly StateApiTests _stateApiTests;
 

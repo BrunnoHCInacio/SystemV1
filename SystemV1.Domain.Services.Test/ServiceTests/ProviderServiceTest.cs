@@ -61,7 +61,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             mocker.GetMock<IRepositoryProvider>().Verify(r => r.Add(It.IsAny<Provider>()), Times.Never);
             mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
-            mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);   
+            mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Exactly(2));   
         }
 
         [Fact(DisplayName ="Add new valid provider with invalid contact")]
@@ -296,7 +296,7 @@ namespace SystemV1.Domain.Test.ServiceTests
             //Assert
             mocker.GetMock<IRepositoryProvider>().Verify(r=>r.Update(It.IsAny<Provider>()),Times.Never);
             mocker.GetMock<IUnitOfWork>().Verify(r=>r.CommitAsync(),Times.Never);
-            mocker.GetMock<INotifier>().Verify(r=>r.Handle(It.IsAny<Notification>()),Times.Once);
+            mocker.GetMock<INotifier>().Verify(r=>r.Handle(It.IsAny<Notification>()),Times.Exactly(2));
         }
 
         [Fact(DisplayName ="Update valid provider with invalid address")]
@@ -333,6 +333,32 @@ namespace SystemV1.Domain.Test.ServiceTests
             mocker.GetMock<IRepositoryProvider>().Verify(r => r.Update(It.IsAny<Provider>()), Times.Never);
             mocker.GetMock<IUnitOfWork>().Verify(n => n.CommitAsync(), Times.Never);
             mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Exactly(2));
+        }
+
+        [Fact(DisplayName = "Update provider without addresses and contacts with success")]
+        [Trait("Categoria", "Fornecedor - Serviço")]
+        public async Task Update_UpdateClientWithoutAddressesAndContacts_ShouldUpdateWithSuccess()
+        {
+            //Arrange
+            var provider = _providerTestFixture.GenerateValidProvider();
+            provider.Addresses.Clear();
+            provider.Contacts.Clear();
+            var mocker = new AutoMocker();
+            var serviceProvider = mocker.CreateInstance<ProviderService>();
+
+            //Act
+            await serviceProvider.UpdateAsyncUow(provider);
+
+            //Assert
+            mocker.GetMock<IRepositoryProvider>().Verify(r => r.Update(It.IsAny<Provider>()), Times.Once);
+
+            mocker.GetMock<IServiceAddress>().Verify(r => r.RemoveAllByProviderId(It.IsAny<Guid>()), Times.Once);
+            mocker.GetMock<IServiceContact>().Verify(r => r.RemoveAllByProviderId(It.IsAny<Guid>()), Times.Once);
+
+            mocker.GetMock<IServiceAddress>().Verify(r => r.Add(It.IsAny<Address>()), Times.Never);
+            mocker.GetMock<IServiceContact>().Verify(r => r.Add(It.IsAny<Contact>()), Times.Never);
+
+            mocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Once);
         }
         #endregion
 

@@ -26,6 +26,11 @@ namespace SystemV1.Application
             await _providerService.AddAsyncUow(provider);
         }
 
+        public async Task<bool> ExistsProvider(Guid id)
+        {
+            return await _providerService.ExistsProvider(id);
+        }
+
         public async Task<IEnumerable<ProviderViewModel>> GetAllAsync(int page, int pageSize)
         {
             var providers = await _providerService.GetAllAsync(page, pageSize);

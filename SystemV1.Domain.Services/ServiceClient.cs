@@ -186,9 +186,9 @@ namespace SystemV1.Domain.Services
                 Update(client);
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception)
-            {
-                Notify("Falha ao alterar o cliente.");
+            catch (Exception ex)
+            {   
+                Notify($"Falha ao alterar o cliente. {ex.Message}");
             }
         }
     }

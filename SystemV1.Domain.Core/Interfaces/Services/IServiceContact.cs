@@ -9,5 +9,6 @@ namespace SystemV1.Domain.Core.Interfaces.Services
     public interface IServiceContact : IService<Contact>
     {
         void RemoveAllByClientId(Guid clientId);
+        void RemoveAllByProviderId(Guid providerId);
     }
 }

@@ -20,7 +20,8 @@ namespace SystemV1.Application.Mappers
                 Number = address.Number,
                 District = address.District,
                 ZipCode = address.ZipCode,
-                
+                CityId = address.City.Id,
+                CityName = address.City.Name
             };
         }
 

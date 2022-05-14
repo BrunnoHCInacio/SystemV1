@@ -36,8 +36,8 @@ namespace SystemV1.Infrastructure.Data.Repositorys
                                              country.DateChange.GetValueOrDefault(),
                                              country.IdUserRegister,
                                              country.IdUserChange,
-                                             country.IsActive,
-                                             _sqlContext.State.Where(s => s.CountryId == country.Id && s.IsActive).ToList()));
+                                             country.IsActive, 
+                                             null));
 
             var test = await result.Skip(skip).Take(pageSize).ToListAsync();
             return test;
@@ -57,6 +57,11 @@ namespace SystemV1.Infrastructure.Data.Repositorys
                                             country.IsActive,
                                             _sqlContext.State.Where(s => s.CountryId == country.Id && s.IsActive).ToList()));
             return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> ExistsCountry(Guid id)
+        {
+            return await _sqlContext.Country.AnyAsync(c => c.IsActive && c.Id == id);
         }
     }
 }

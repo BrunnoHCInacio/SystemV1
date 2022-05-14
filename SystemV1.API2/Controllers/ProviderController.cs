@@ -52,5 +52,36 @@ namespace SystemV1.API2.Controllers
             var provider = await _applicationServideProvider.GetByIdAsync(id);
             return OkResult(provider);
         }
+
+        [HttpPut("Update/{id:guid}")]
+        public async Task<ActionResult> Update(Guid id, ProviderViewModel providerViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return OkResult(ModelState);
+            }
+
+            if(!await _applicationServideProvider.ExistsProvider(id))
+            {
+                Notify("Fornecedor não encontrato");
+                return OkResult();
+            }
+
+            await _applicationServideProvider.UpdateAsync(providerViewModel);
+            return OkResult();
+        }
+
+        [HttpDelete("Remove/{id:guid}")]
+        public async Task<ActionResult> Remove(Guid id)
+        {
+            if (!await _applicationServideProvider.ExistsProvider(id))
+            {
+                Notify("Fornecedor não encontrato");
+                return OkResult();
+            }
+
+            await _applicationServideProvider.RemoveAsync(id);
+            return OkResult();
+        }
     }
 }

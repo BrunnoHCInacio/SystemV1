@@ -10,5 +10,6 @@ namespace SystemV1.Domain.Core.Interfaces.Repositorys
         Task<IEnumerable<Address>> GetAllAddressesAsync(int page, int pageSize);
         Task<Address> GetAddressByIdAsync(Guid id);
         void RemoveAllByClientId(Guid clientId);
+        void RemoveAllByProviderId(Guid providerId);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
@@ -16,6 +16,11 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         public RepositoryProvider(SqlContext sqlContext) : base(sqlContext)
         {
             _sqlContext = sqlContext;
+        }
+
+        public async Task<bool> ExistsProvider(Guid id)
+        {
+            return await _sqlContext.Providers.AnyAsync(p => p.Id == id);
         }
 
         public async Task<IEnumerable<Provider>> GetAllProvidersAsync(int page, int pageSize)

@@ -41,5 +41,7 @@ namespace SystemV1.Application.Resources
         public const string StateNameLenght_Pt = "O nome do estado deve conter entre 2 e 100 catacteres.";
 
         public static string pageAndPageSizeRequired => "É necessário informar a página e a quantidade de itens por página";
+        public static string ProviderNotFound => "Fornecedor não encontrato";
+        public static string ClientNotFound => "Cliente não encontrado.";
     }
 }

@@ -19,5 +19,7 @@ namespace SystemV1.Application.Interfaces
         Task UpdateAsync(CountryViewModel countryViewModel);
 
         Task RemoveAsync(Guid id);
+
+        Task<bool> ExistsCountry(Guid id);
     }
 }

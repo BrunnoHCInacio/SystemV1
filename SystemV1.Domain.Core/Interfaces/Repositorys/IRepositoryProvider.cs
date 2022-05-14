@@ -10,5 +10,6 @@ namespace SystemV1.Domain.Core.Interfaces.Repositorys
         Task<IEnumerable<Provider>> GetAllProvidersAsync(int page, int pageSize);
         Task<Provider> GetProviderByIdAsync(Guid id);
         Task<IEnumerable<Provider>> GetByNameAsync(string name);
+        Task<bool> ExistsProvider(Guid id);
     }
 }

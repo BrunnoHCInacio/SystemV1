@@ -83,13 +83,13 @@ namespace SystemV1.Domain.Test
 
             //Assert
             Assert.False(result.IsValid);
-            Assert.Single(result.Errors);
-            Assert.Contains(StateValidation.CountryNotActive, result.Errors.Select(e => e.ErrorMessage));
+            Assert.NotEmpty(result.Errors);
+            Assert.Contains(StateValidation.StateNotActive, result.Errors.Select(e => e.ErrorMessage));
         }
 
         [Fact(DisplayName = "Validate valid state disabled")]
         [Trait("Categoria", "Cadastro - Estado")]
-        public void State_ValidateNewStateDisabled_ShouldFailed()
+        public void State_ValidateNewStateDisabled_ShouldBeDisabledAndInvalid()
         {
             //Arrange
             var state = _stateTestFixture.GenerateValidState();
@@ -98,8 +98,8 @@ namespace SystemV1.Domain.Test
             var result = state.ValidateState();
 
             //Assert
-            Assert.True(result.IsValid);
-            Assert.False(result.Errors.Any());
+            Assert.False(result.IsValid);
+            Assert.NotEmpty(result.Errors);
         }
 
         [Fact(DisplayName = "Validate State Invalid")]

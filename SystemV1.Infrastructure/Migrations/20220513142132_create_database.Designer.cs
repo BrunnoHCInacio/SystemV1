@@ -10,8 +10,8 @@ using SystemV1.Infrastructure.Data;
 namespace SystemV1.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20220415112817_Initial")]
-    partial class Initial
+    [Migration("20220513142132_create_database")]
+    partial class create_database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,7 +27,7 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("CityId")
+                    b.Property<Guid>("CityId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ClientId")
@@ -376,7 +376,9 @@ namespace SystemV1.Infrastructure.Migrations
                 {
                     b.HasOne("SystemV1.Domain.Entitys.City", "City")
                         .WithMany()
-                        .HasForeignKey("CityId");
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SystemV1.Domain.Entitys.Client", "Client")
                         .WithMany("Addresses")

@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using SystemV1.Application.Interfaces;
+using SystemV1.Application.Resources;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Core.Interfaces.Services;
 
@@ -63,7 +64,7 @@ namespace SystemV1.API2.Controllers
 
             if(!await _applicationServiceClient.ExistsClient(id))
             {
-                Notify("Cliente não encontrato.");
+                Notify(ConstantMessages.ClientNotFound);
                 return OkResult();
             }
 
@@ -74,9 +75,9 @@ namespace SystemV1.API2.Controllers
         [HttpDelete("Remove/{id:guid}")]
         public async Task<ActionResult> RemoveAsync(Guid id)
         {
-            if(!await _applicationServiceClient.ExistsClient(id))
+            if (!await _applicationServiceClient.ExistsClient(id))
             {
-                Notify("Cliente não encontrato.");
+                Notify(ConstantMessages.ClientNotFound);
                 return OkResult();
             }
 

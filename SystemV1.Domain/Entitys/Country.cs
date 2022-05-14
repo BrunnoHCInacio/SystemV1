@@ -8,6 +8,10 @@ namespace SystemV1.Domain.Entitys
 {
     public class Country : Entity
     {
+        public Country()
+        {
+            States = new List<State>();
+        }
         public Country(Guid id,
                        string name)
         {
@@ -44,7 +48,7 @@ namespace SystemV1.Domain.Entitys
             States = states;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         public List<State> States { get; private set; }
 
@@ -55,7 +59,7 @@ namespace SystemV1.Domain.Entitys
 
         public void AddStates(List<State> states)
         {
-            States.AddRange(states);
+            States = states;
         }
 
         public void AddState(State state)

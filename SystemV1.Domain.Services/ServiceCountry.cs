@@ -95,10 +95,14 @@ namespace SystemV1.Domain.Services
 
         public void Remove(Country country)
         {
-            country.States.ForEach(state => 
-            {
-                state.DisableRegister();
-            });
+            if (country.States != null
+                && country.States.Any()) 
+            { 
+                country.States.ForEach(state =>
+                {
+                    state.DisableRegister();
+                });
+            }
 
             country.DisableRegister();
             Update(country);
@@ -106,6 +110,12 @@ namespace SystemV1.Domain.Services
 
         public async Task RemoveAsyncUow(Country country)
         {
+            if(country == null)
+            {
+                Notify("Falha ao remover: País não encontrato");
+                return;
+            }
+
             try
             {
                 Remove(country);
@@ -192,6 +202,11 @@ namespace SystemV1.Domain.Services
                 Notify("Falha ao adicionar o estado.");
                 throw;
             }
+        }
+
+        public async Task<bool> ExistsCountry(Guid id)
+        {
+            return await _repositoryCountry.ExistsCountry(id);
         }
     }
 }

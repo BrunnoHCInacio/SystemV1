@@ -35,5 +35,10 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         {
             RemoveRange(c => c.ClientId == clientId);
         }
+
+        public void RemoveAllByProviderId(Guid providerId)
+        {
+            RemoveRange(c => c.ProviderId == providerId);
+        }
     }
 }

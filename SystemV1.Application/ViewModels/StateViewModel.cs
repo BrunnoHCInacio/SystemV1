@@ -15,6 +15,7 @@ namespace SystemV1.Application.ViewModels
         [StringLength(100, ErrorMessage = ConstantMessages.StateNameLenght_Pt, MinimumLength = 2)]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = ConstantMessages.CountryNameRequired_PT)]
         public Guid CountryId { get; set; }
         public string CountryName { get; set; }
     }

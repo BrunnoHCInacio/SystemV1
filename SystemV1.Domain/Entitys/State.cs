@@ -7,6 +7,11 @@ namespace SystemV1.Domain.Entitys
 {
     public class State : Entity
     {
+        public State()
+        {
+            Cities = new List<City>();
+        }
+
         public State(Guid id,
                      string name)
         {
@@ -45,9 +50,9 @@ namespace SystemV1.Domain.Entitys
             IsActive = isActive;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public Guid CountryId { get; private set; }
-        public Country Country { get; private set; }
+        public Country Country { get; set; }
 
         public List<City> Cities { get; private set; }
 
@@ -59,6 +64,7 @@ namespace SystemV1.Domain.Entitys
         public void SetCountry(Country country)
         {
             Country = country;
+            CountryId = country != null ? country.Id : Guid.Empty;
         }
 
         public ValidationResult ValidateState()

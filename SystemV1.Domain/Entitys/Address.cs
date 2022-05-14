@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using System;
+using SystemV1.Domain.Enums;
 using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Entitys
@@ -37,8 +38,9 @@ namespace SystemV1.Domain.Entitys
             City = city;
         }
 
-        public Client Client { get; private set; }
+        public Client Client{ get; private set; }
         public Guid ClientId { get; private set; }
+
         public Provider Provider { get; private set; }
         public Guid ProviderId { get; private set; }
 
@@ -63,12 +65,25 @@ namespace SystemV1.Domain.Entitys
 
         public void SetClient(Guid clientId)
         {
-            ClientId = ClientId;
+            ClientId = clientId;
+            
         }
 
         public void SetCity(Guid cityId)
         {
             CityId = cityId;
+        }
+
+        public void SetPeopleProvider(Provider provider)
+        {
+            Provider = provider;
+            ProviderId = provider != null ? provider.Id : Guid.Empty;
+        }
+
+        public void SetClient(Client client)
+        {
+            Client = client;
+            ClientId = client != null ? client.Id : Guid.Empty;
         }
     }
 }

@@ -46,12 +46,13 @@ namespace SystemV1.Infrastructure.Data.Repositorys
 
         public async Task<Client> GetClientByIdAsync(Guid id)
         {
+            
             var query = (from client in _sqlContext.Client
                          where client.IsActive && client.Id == id
                          select new Client(client.Id, 
                                            client.Name, 
-                                           client.Document, 
-                                           _sqlContext.Address.Where(a=>a.IsActive && a.ClientId == client.Id).ToList(),
+                                           client.Document,
+                                           _sqlContext.Address.Where(c => c.IsActive && c.ClientId == client.Id).Include(c=> c.City).ToList(),
                                            _sqlContext.Contact.Where(c=>c.IsActive && c.ClientId == client.Id).ToList()));
 
             return await query.FirstOrDefaultAsync();

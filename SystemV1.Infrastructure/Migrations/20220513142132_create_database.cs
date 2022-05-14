@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SystemV1.Infrastructure.Migrations
 {
-    public partial class Initial : Migration
+    public partial class create_database : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -89,8 +89,8 @@ namespace SystemV1.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProviderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ProviderId = table.Column<Guid>(type: "uuid", nullable: true),
                     TypeContact = table.Column<int>(type: "integer", nullable: false),
                     Ddd = table.Column<string>(type: "text", nullable: true),
                     Ddi = table.Column<string>(type: "text", nullable: true),
@@ -106,18 +106,6 @@ namespace SystemV1.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Contact", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Contact_Client_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Client",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Contact_Providers_ProviderId",
-                        column: x => x.ProviderId,
-                        principalTable: "Providers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -208,7 +196,7 @@ namespace SystemV1.Infrastructure.Migrations
                     Number = table.Column<string>(type: "text", nullable: true),
                     Complement = table.Column<string>(type: "text", nullable: true),
                     District = table.Column<string>(type: "text", nullable: true),
-                    CityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CityId = table.Column<Guid>(type: "uuid", nullable: false),
                     DateRegister = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DateChange = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     IdUserRegister = table.Column<Guid>(type: "uuid", nullable: false),
@@ -222,18 +210,6 @@ namespace SystemV1.Infrastructure.Migrations
                         name: "FK_Address_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Address_Client_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Client",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Address_Providers_ProviderId",
-                        column: x => x.ProviderId,
-                        principalTable: "Providers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });

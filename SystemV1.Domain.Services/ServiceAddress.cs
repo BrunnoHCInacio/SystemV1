@@ -81,6 +81,11 @@ namespace SystemV1.Domain.Services
             _repositoryAddress.RemoveAllByClientId(clientId);
         }
 
+        public void RemoveAllByProviderId(Guid providerId)
+        {
+            _repositoryAddress.RemoveAllByProviderId(providerId);
+        }
+
         public async Task RemoveAsyncUow(Address address)
         {
             try

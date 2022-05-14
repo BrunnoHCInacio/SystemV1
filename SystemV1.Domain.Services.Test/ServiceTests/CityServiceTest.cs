@@ -18,6 +18,8 @@ namespace SystemV1.Domain.Test.ServiceTests
     [Collection(nameof(CityCollection))]
     public class CityServiceTest
     {
+        //Adicionar teste para exclusão de cidade de um endereço
+
         private readonly CityTestFixture _cityTestFixture;
         private readonly AutoMocker _autoMocker;
 

@@ -9,9 +9,8 @@ namespace SystemV1.Application.Interfaces.Mapper
     public interface IMapperCountry
     {
         CountryViewModel EntityToViewModel(Country country);
-
         Country ViewModelToEntity(CountryViewModel countryViewModel);
-
+        Country ViewModelToEntity(CountryViewModel countryViewModel, Country countryPersisted);
         IEnumerable<CountryViewModel> ListEntityToViewModel(IEnumerable<Country> countries);
     }
 }

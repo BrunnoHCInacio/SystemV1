@@ -77,8 +77,7 @@ namespace SystemV1.API2.Controllers
         [HttpDelete("Delete/{id:guid}")]
         public async Task<ActionResult> Remove(Guid id)
         {
-            var country = await _applicationServiceCountry.GetByIdAsync(id);
-            if (country == null)
+            if (!await _applicationServiceCountry.ExistsCountry(id))
             {
                 Notify("Não foi encontrato o país com o id informado.");
                 return OkResult();

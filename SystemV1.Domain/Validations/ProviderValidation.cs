@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Domain.Validations
@@ -12,6 +13,7 @@ namespace SystemV1.Domain.Validations
         public static string NameMinLength => "O nome deve conter pelo menos 2 caracteres.";
         public static string NameMaxLength => "O nome deve conter até 100 caracteres.";
         public static string ProviderNotActive => "O fornecedor deve estar ativo.";
+        public static string DocumentInvalid => "O documento inválido.";
 
         public ProviderValidation()
         {
@@ -30,6 +32,14 @@ namespace SystemV1.Domain.Validations
             RuleFor(p => p.IsActive)
                 .Equal(true)
                 .WithMessage(ProviderNotActive);
+
+            RuleFor(p => p.Document)
+                .Must(document => document != null 
+                                    ? Regex.Replace(document, @"[^0-9]", string.Empty).Length == 14
+                                    : false)
+                .WithMessage(DocumentInvalid);
         }
+
+        
     }
 }

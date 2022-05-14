@@ -41,6 +41,12 @@ namespace SystemV1.Application
         public async Task<ClientViewModel> GetByIdAsync(Guid id)
         {
             var client = await _serviceClient.GetByIdAsync(id);
+            
+            if(client == null)
+            {
+                return null;
+            }
+
             return _mapperClient.EntityToViewModel(client);
         }
 

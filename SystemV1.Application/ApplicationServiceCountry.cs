@@ -27,6 +27,11 @@ namespace SystemV1.Application
             await _serviceCountry.AddAsyncUow(country);
         }
 
+        public async Task<bool> ExistsCountry(Guid id)
+        {
+            return await _serviceCountry.ExistsCountry(id);
+        }
+
         public async Task<IEnumerable<CountryViewModel>> GetAllAsync(int page, int pageSize)
         {
             var countries = await _serviceCountry.GetAllAsync(page, pageSize);
@@ -48,16 +53,13 @@ namespace SystemV1.Application
         public async Task RemoveAsync(Guid id)
         {
             var country = await _serviceCountry.GetByIdAsync(id);
-            if (country == null)
-            {
-            }
-
             await _serviceCountry.RemoveAsyncUow(country);
         }
 
         public async Task UpdateAsync(CountryViewModel countryViewModel)
         {
-            var country = _mapperCountry.ViewModelToEntity(countryViewModel);
+            var countryPersisted = await _serviceCountry.GetByIdAsync(countryViewModel.Id.GetValueOrDefault());
+            var country = _mapperCountry.ViewModelToEntity(countryViewModel, countryPersisted);
             await _serviceCountry.UpdateAsyncUow(country);
         }
     }

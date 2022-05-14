@@ -128,7 +128,8 @@ namespace SystemV1.Domain.Test.IntegrationTest
             clientViewModel.Data.Document = updateDocument;
             //Act
             var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate + clientViewModel.Data.Id, clientViewModel.Data);
-            
+            response.EnsureSuccessStatusCode();
+
             var clientUpdatedViewModel = await GetClientByIdAsync(_integrationTestFixture.ClientId);
             
             //Assert
@@ -265,6 +266,19 @@ namespace SystemV1.Domain.Test.IntegrationTest
 
             //Assert
             response.EnsureSuccessStatusCode();
+        }
+
+        [Fact(DisplayName = "Remove client with invalid id"), Priority(5)]
+        [Trait("Categoria", "Cliente - Integração")]
+        public async Task Client_RemoveClient_MustNotRemoveAndReturnMessageNotification()
+        {
+            //Arrange and Act
+            var response = await _integrationTestFixture.Client.DeleteAsync(_requestRemove + Guid.Empty);
+            var responseDeserialized = await TestTools.DeserializeResponseAsync<Deserialize<ClientViewModel>>(response);
+
+            //Assert
+            Assert.False(responseDeserialized.Success);
+            Assert.Contains(ConstantMessages.ClientNotFound, responseDeserialized.Errors);
         }
         #endregion
 

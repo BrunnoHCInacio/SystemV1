@@ -12,5 +12,6 @@ namespace SystemV1.Domain.Core.Interfaces.Repositorys
         Task<IEnumerable<Country>> GetAllCountriesAsync(int page, int pageSize);
 
         Task<Country> GetCountryByIdAsync(Guid id);
+        Task<bool> ExistsCountry(Guid id);
     }
 }

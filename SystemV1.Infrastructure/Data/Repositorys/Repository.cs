@@ -28,7 +28,8 @@ namespace SystemV1.Infrastructure.Data.Repositorys
 
         public void RemoveRange(Expression<Func<TEntity, bool>> conditional)
         {
-            _sqlContext.Set<TEntity>().RemoveRange(_sqlContext.Set<TEntity>().Where(conditional));
+            var entities = _sqlContext.Set<TEntity>().Where(conditional).ToList();
+            _sqlContext.Set<TEntity>().RemoveRange(entities);
         }
 
         public void Update(TEntity entity)

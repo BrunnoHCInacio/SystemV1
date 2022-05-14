@@ -71,6 +71,11 @@ namespace SystemV1.Domain.Services
             }
         }
 
+        public async Task<bool> ExistsProvider(Guid id)
+        {
+            return await _repositoryProvider.ExistsProvider(id);
+        }
+
         public async Task<IEnumerable<Provider>> GetAllAsync(int page, int pageSize)
         {
             try
@@ -138,6 +143,25 @@ namespace SystemV1.Domain.Services
 
         public void Update(Provider provider)
         {
+            _serviceAddress.RemoveAllByProviderId(provider.Id);
+            _serviceContact.RemoveAllByProviderId(provider.Id);
+
+            if (provider.Addresses.Any())
+            {
+                provider.Addresses.ForEach(address => 
+                {
+                    _serviceAddress.Add(address);
+                });
+            }
+
+            if (provider.Contacts.Any())
+            {
+                provider.Contacts.ForEach(contact => 
+                {
+                    _serviceContact.Add(contact);
+                });
+
+            }
             _repositoryProvider.Update(provider);
         }
 

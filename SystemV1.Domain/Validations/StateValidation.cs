@@ -10,7 +10,7 @@ namespace SystemV1.Domain.Validations
     {
         public static string StateNameRequired => "O nome do estado é obrigatório.";
         public static string CountryRequired => "O país é obrigatório.";
-        public static string CountryNotActive => "O pais deve estar ativo.";
+        public static string StateNotActive => "O estado deve estar ativo.";
 
         public StateValidation()
         {
@@ -19,12 +19,13 @@ namespace SystemV1.Domain.Validations
                 .WithMessage(StateNameRequired);
 
             RuleFor(s => s.CountryId)
-                .Must( s=> s != Guid.Empty || s != Guid.NewGuid())
+                .NotEmpty()
+                .NotNull()
                 .WithMessage(CountryRequired);
 
             RuleFor(s => s.IsActive)
                 .Equal(true)
-                .WithMessage(CountryNotActive);
+                .WithMessage(StateNotActive);
         }
     }
 }

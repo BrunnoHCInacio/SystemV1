@@ -24,7 +24,7 @@ namespace SystemV1.Application.Mappers
             {
                 Id = country.Id,
                 Name = country.Name,
-                States = country.States.Any() 
+                States = country.States != null && country.States.Any() 
                             ? _mapperState.ListEntityToViewModel(country.States) 
                             : null
             };
@@ -35,9 +35,25 @@ namespace SystemV1.Application.Mappers
             return countries.Select(c => EntityToViewModel(c));
         }
 
+        public Country ViewModelToEntity(CountryViewModel countryViewModel, Country countryPersisted)
+        {
+            countryPersisted.Id = countryViewModel.Id.GetValueOrDefault();
+            countryPersisted.Name = countryViewModel.Name;
+
+            if (countryViewModel.States != null 
+                && countryViewModel.States.Any())
+            {
+                
+                countryPersisted.AddStates(_mapperState.ListViewModelToEntity(countryViewModel.States));
+                
+            }
+
+            return countryPersisted;
+        }
+
         public Country ViewModelToEntity(CountryViewModel countryViewModel)
         {
-            if (countryViewModel.States != null 
+            if (countryViewModel.States != null
                 && countryViewModel.States.Any())
             {
                 return new Country(countryViewModel.Id.GetValueOrDefault(),

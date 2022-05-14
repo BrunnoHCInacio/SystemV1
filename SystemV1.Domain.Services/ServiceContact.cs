@@ -81,6 +81,11 @@ namespace SystemV1.Domain.Services
             _repositoryContact.RemoveAllByClientId(clientId);
         }
 
+        public void RemoveAllByProviderId(Guid providerId)
+        {
+            _repositoryContact.RemoveAllByProviderId(providerId);
+        }
+
         public async Task RemoveAsyncUow(Contact contact)
         {
             try

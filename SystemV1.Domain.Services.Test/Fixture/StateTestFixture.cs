@@ -19,7 +19,7 @@ namespace SystemV1.Domain.Services.Test.Fixture
     {
         public List<State> GenerateStates(int quantity, 
                                           bool registerActive = true,
-                                          bool getRelationShip = false)
+                                          Country country = null)
         {
             var countryFixture = new CountryTestFixture();
 
@@ -29,17 +29,15 @@ namespace SystemV1.Domain.Services.Test.Fixture
                                 .FinishWith((f, s) =>
                                 {
                                     if (!registerActive) s.DisableRegister();
-                                    if (getRelationShip)
-                                    {
-                                        s.SetCountry(countryFixture.GenerateValidCountry());
-                                    }
+                                    
+                                    s.SetCountry(country);
                                 });
             return state.Generate(quantity);
         }
 
-        public State GenerateValidState()
+        public State GenerateValidState(Country country = null)
         {
-            return GenerateStates(1).FirstOrDefault();
+            return GenerateStates(quantity: 1, country: country).FirstOrDefault();
         }
 
         public State GenerateValidStateDisabled()

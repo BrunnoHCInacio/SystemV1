@@ -9,5 +9,6 @@ namespace SystemV1.Domain.Core.Interfaces.Services
     public interface IProviderService : IService<Provider>
     {
         Task<IEnumerable<Provider>> GetByNameAsync(string name);
+        Task<bool> ExistsProvider(Guid id);
     }
 }

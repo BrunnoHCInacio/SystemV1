@@ -10,5 +10,6 @@ namespace SystemV1.Domain.Core.Interfaces.Repositorys
         Task<IEnumerable<Contact>> GetAllContactsAsync(int page, int pageSize);
         Task<Contact> GetContactByIdAsync(Guid id);
         void RemoveAllByClientId(Guid clientId);
+        void RemoveAllByProviderId(Guid providerId);
     }
 }

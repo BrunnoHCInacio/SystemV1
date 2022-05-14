@@ -475,6 +475,27 @@ namespace SystemV1.Domain.Test.ServiceTests
             mocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
             Assert.Throws<Exception>(() => countryService.Remove(country));
         }
+        #endregion
+
+        #region Function Exists Country
+        [Fact(DisplayName ="Verify if exists register of the country")]
+        [Trait("Categoria", "País - Serviço")]
+        public async Task ExistsCountry_VerifyIfExistsCountryById_MustReturnTrue() 
+        {
+            //Arrange
+            var mocker = new AutoMocker();
+            mocker.GetMock<IRepositoryCountry>()
+                  .Setup(r => r.ExistsCountry(It.IsAny<Guid>()))
+                  .Returns(Task.FromResult(true));
+
+            var serviceCountry = mocker.CreateInstance<ServiceCountry>();
+
+            //Act
+            var exist = await serviceCountry.ExistsCountry(Guid.NewGuid());
+
+            //Arrange
+            Assert.True(exist);
+        }
 
         #endregion
     }

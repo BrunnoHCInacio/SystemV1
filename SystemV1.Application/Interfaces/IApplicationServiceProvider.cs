@@ -18,5 +18,6 @@ namespace SystemV1.Application.Interfaces
         Task<ProviderViewModel> GetByIdAsync(Guid id);
 
         Task<IEnumerable<ProviderViewModel>> GetByNameAsync(string name);
+        Task<bool> ExistsProvider(Guid id);
     }
 }

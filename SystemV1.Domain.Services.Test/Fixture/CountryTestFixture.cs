@@ -36,7 +36,7 @@ namespace SystemV1.Domain.Test.Fixture
         {
             var stateFixture = new StateTestFixture();
             var country = GenerateValidCountry();
-            country.AddStates(stateFixture.GenerateStates(3));
+            country.AddStates(stateFixture.GenerateStates(quantity: 3, country: country));
             return country;
         }
 
@@ -97,8 +97,8 @@ namespace SystemV1.Domain.Test.Fixture
         #endregion
 
         public List<CountryViewModel> GenerateCountryViewModel(int qty,
-                                                               bool withState = false,
-                                                               bool invalidState = false,
+                                                               bool withState = true,
+                                                               bool validState = true,
                                                                int qtyOfState = 0)
         {
             var stateFixture = new StateTestFixture();
@@ -107,7 +107,7 @@ namespace SystemV1.Domain.Test.Fixture
                                                               {
                                                                   if (withState)
                                                                   {
-                                                                      if (!invalidState)
+                                                                      if (validState)
                                                                       {
                                                                           c.States = stateFixture.GenerateStatesViewModel(qtyOfState);
                                                                       }

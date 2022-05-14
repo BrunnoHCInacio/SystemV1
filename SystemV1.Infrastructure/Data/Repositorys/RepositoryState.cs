@@ -34,12 +34,22 @@ namespace SystemV1.Infrastructure.Data.Repositorys
                          join country in _sqlContext.Country
                          on state.CountryId equals country.Id
                          where state.IsActive
-                         select new State(state.Id, state.Name, new Country(country.Id, country.Name)));
+                         select new State
+                         {
+                             Id = state.Id,
+                             Name = state.Name,
+                             Country = new Country
+                             {
+                                 Id = country.Id,
+                                 Name = country.Name
+                             }
+                         });
 
-            return await query.Skip(skip)
+            var t =await query.Skip(skip)
                               .Take(pageSize)
                               .OrderBy(s => s.Name)
                               .ToListAsync();
+            return t;
         }
 
         public async Task<State> GetStateByIdAsync(Guid id)
