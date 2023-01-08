@@ -13,6 +13,7 @@ namespace SystemV1.Domain.Test.Fixture
     public class CityCollection : ICollectionFixture<CityTestFixture>
     {
     }
+
     public class CityTestFixture : IDisposable
     {
         public List<City> GenerateCity(int qty)
@@ -44,9 +45,9 @@ namespace SystemV1.Domain.Test.Fixture
             return new City(Guid.Empty, "");
         }
 
-        public List<CityViewModel> GenerateValidCityViewModel(int qty, Guid stateId)
+        public List<CityViewModel> GenerateValidCityViewModel(int qty, Guid stateId, Guid? id = null)
         {
-            return GenerateCityViewModel(qty, stateId);
+            return GenerateCityViewModel(qty, stateId, id);
         }
 
         public CityViewModel GenerateInvalidCityViewModel()
@@ -54,13 +55,13 @@ namespace SystemV1.Domain.Test.Fixture
             return new CityViewModel();
         }
 
-        public List<CityViewModel> GenerateCityViewModel(int qty, Guid stateId)
+        public List<CityViewModel> GenerateCityViewModel(int qty, Guid stateId, Guid? id = null)
         {
             var faker = new Faker<CityViewModel>("pt_BR");
             return faker.CustomInstantiator(f =>
             new CityViewModel
             {
-                Id = Guid.NewGuid(),
+                Id = id.GetValueOrDefault(),
                 Name = f.Address.City(),
                 StateId = stateId
             }).Generate(qty);

@@ -3,12 +3,13 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Application.Resources;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Services.Test.Fixture;
+using SystemV1.Domain.Test.Fixture;
 using SystemV1.Domain.Test.IntegrationTest.Config;
 using Xunit;
 using Xunit.Priority;
@@ -17,18 +18,20 @@ namespace SystemV1.Domain.Test.IntegrationTest
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     [Collection(nameof(IntegrationApiTestFixtureCollection))]
-    public class StateApiTests
+    public class StateApiTests : IntegrationTestBase
     {
         private readonly IntegrationTestFixture<StartupApiTests> _integrationTestFixture;
-        
-        private string requestAdd => "api/state/Add";
-        private string requestGetById => "api/state/GetById/";
-        private string requestGetStateCountryById => "api/state/GetStateCountryById/";
+
+        private string _requestAdd => "api/state/Add";
+        private string _requestCityAdd => "api/city/Add";
+        private string _requestGetById => "api/state/GetById/";
+        private string _requestGetStateCountryById => "api/state/GetStateCountryById/";
         private string requestGetCountryById => "api/country/GetById/";
         private string requestUpdate => "api/state/Update/";
-        private string requestDelete => "api/state/Delete/";
+        private string _requestDelete => "api/state/Delete/";
+        private string _requestCityDelete => "api/city/Delete/";
 
-        public StateApiTests(IntegrationTestFixture<StartupApiTests> integrationTestFixture)
+        public StateApiTests(IntegrationTestFixture<StartupApiTests> integrationTestFixture) : base(integrationTestFixture)
         {
             _integrationTestFixture = integrationTestFixture;
         }
@@ -36,15 +39,15 @@ namespace SystemV1.Domain.Test.IntegrationTest
         #region Function Add
 
         [Fact(DisplayName = "Add new state with success"), Priority(1)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task State_AddNewState_ShoulHaveSuccess()
         {
             //Arrange, Act and Assert
             await AddNewStateAsync(1);
         }
 
-        [Fact(DisplayName ="Add new invalid state"), Priority(1)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Fact(DisplayName = "Add new invalid state"), Priority(1)]
+        [Trait("UnitTests - Integration", "State")]
         public async Task Add_AddNewInvalidState_ShouldNotAddAndReturnValidationMessages()
         {
             //Arrange
@@ -58,24 +61,24 @@ namespace SystemV1.Domain.Test.IntegrationTest
             Assert.Contains(ConstantMessages.StateNameRequired_Pt, responseDeserialized.Errors);
         }
 
-        #endregion
+        #endregion Function Add
 
         #region Function Get
 
         [Fact(DisplayName = "Get all states with success"), Priority(2)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task State_GetAllStates_ShoulReturnWithSuccess()
         {
             //Arrange, Act and Assert
-            var statesViewModel = await GetAllStatesAsync(1,5);
+            var statesViewModel = await GetAllStatesAsync(1, 5);
             var stateViewModel = statesViewModel.FirstOrDefault();
             _integrationTestFixture.StateId = stateViewModel.Id;
         }
 
-        [Theory(DisplayName ="Get all states with pagination")]
-        [Trait("Categoria", "Estado - Integração")]
-        [InlineData(50,5)]
-        [InlineData(10,2)]
+        [Theory(DisplayName = "Get all states with pagination")]
+        [Trait("UnitTests - Integration", "State")]
+        [InlineData(50, 5)]
+        [InlineData(10, 2)]
         public async Task GetAll_GetAllStatesWithPagination(int qtyStates, int qtyItemsPage)
         {
             await AddNewStateAsync(qtyStates);
@@ -97,26 +100,18 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Get state by id with success"), Priority(3)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task State_GetStateById_ShoulHaveReturnWithSuccess()
         {
             //Arrange & Act
-            var response = await _integrationTestFixture.Client.GetAsync(PrepareRequestGetById(_integrationTestFixture.StateId));
-            var jsonState = await response.Content.ReadAsStringAsync();
+            var response = await GetByIdAsync<Deserialize<StateViewModel>>(_integrationTestFixture.StateId, _requestGetById);
 
             //Assert
-            response.EnsureSuccessStatusCode();
-            var stateDeserialized = JsonConvert.DeserializeObject<Deserialize<StateViewModel>>(jsonState);
-            Assert.NotNull(stateDeserialized.Data);
-        }
-
-        private string PrepareRequestGetById(Guid id)
-        {
-            return $"{requestGetById}{id}";
+            Assert.NotNull(response.Data);
         }
 
         [Fact(DisplayName = "Get state by id with invalid id")]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task GetById_GetStateByIdWithInvalidId_ShouldReturnMessageInformation()
         {
             //Arrange and act
@@ -127,11 +122,11 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Get state with country by id with success"), Priority(3)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task GetStateCountryById_GetStateWithCountryById_ShoulReturnWithSuccess()
         {
             //Arrange & Act
-            var stateDeserialized = await GetStateByIdAsync(_integrationTestFixture.StateId);
+            var stateDeserialized = await GetStateByIdAsync(_integrationTestFixture.StateId, true);
 
             //Assert
             Assert.NotNull(stateDeserialized.Data);
@@ -140,50 +135,47 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Get state country by id with success"), Priority(3)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task State_GetStateCountryById_ShoulHaveReturnWithSuccess()
         {
             //Arrange & Act
-            var response = await _integrationTestFixture.Client.GetAsync($"{requestGetStateCountryById}{_integrationTestFixture.StateId}");
-            var jsonState = await response.Content.ReadAsStringAsync();
+            var stateDeserialized = await GetStateByIdAsync(_integrationTestFixture.StateId, true);
 
             //Assert
-            response.EnsureSuccessStatusCode();
-            var stateDeserialized = JsonConvert.DeserializeObject<Deserialize<StateViewModel>>(jsonState);
             Assert.NotNull(stateDeserialized.Data);
         }
 
-        #endregion
+        #endregion Function Get
 
         #region Function update
 
         [Fact(DisplayName = "Update state with success"), Priority(4)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task State_UpdateState_ShouldHadSuccess()
         {
             //Arrange
-            var stateDeserialized = await GetStateByIdAsync(_integrationTestFixture.StateId);
+            var stateDeserialized = await GetStateByIdAsync(_integrationTestFixture.StateId, true);
             var stateViewModel = stateDeserialized.Data;
             stateViewModel.Name = "Estado alterado";
 
             //Act
-            var responseUpdateState = await UpdateStateAsync(stateViewModel);
+            await UpdateStateAsync(stateViewModel);
 
             //Assert
-            var responseGetStateUpdated = await _integrationTestFixture.Client.GetAsync($"{requestGetById}{stateViewModel.Id}");
-            var jsonResponseGetStateUpdated = await responseGetStateUpdated.Content.ReadAsStringAsync();
-            var stateViewModelUpdated = JsonConvert.DeserializeObject<Deserialize<StateViewModel>>(jsonResponseGetStateUpdated)?.Data;
+            var responseUpdated = await GetByIdAsync<Deserialize<StateViewModel>>(stateViewModel.Id, _requestGetById);
+
+            var stateViewModelUpdated = responseUpdated.Data;
 
             Assert.Equal(stateViewModel.Id, stateViewModelUpdated.Id);
             Assert.Equal(stateViewModel.Name, stateViewModelUpdated.Name);
         }
 
         [Fact(DisplayName = "Update country in valid state"), Priority(4)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task Update_UpdateCountryInValidState_ShouldUpdateWithSuccess()
         {
             //Arrange
-            var stateDeserialized = await GetStateByIdAsync(_integrationTestFixture.StateId);
+            var stateDeserialized = await GetStateByIdAsync(_integrationTestFixture.StateId, true);
             var stateViewModel = stateDeserialized.Data;
 
             var countries = await GetAllCountriesAsync(1, 15);
@@ -192,18 +184,18 @@ namespace SystemV1.Domain.Test.IntegrationTest
             stateViewModel.CountryId = country.Id.GetValueOrDefault();
 
             //Act
-            var stateDeserialize = await UpdateStateAsync(stateViewModel, false);
+            await UpdateStateAsync(stateViewModel, false);
 
             //Assert
-            var stateUpdatedDeserialized = await GetStateByIdAsync(_integrationTestFixture.StateId);
+            var stateUpdatedDeserialized = await GetStateByIdAsync(_integrationTestFixture.StateId, true);
             var stateUpdatedViewModel = stateUpdatedDeserialized.Data;
 
-            Assert.Equal(stateUpdatedViewModel.CountryId, country.Id);
+            Assert.Equal(stateUpdatedViewModel.CountryId, country.Id.GetValueOrDefault());
             Assert.Equal(stateUpdatedViewModel.CountryName, country.Name);
         }
 
-        [Fact(DisplayName ="Update invalid state"), Priority(4)]
-        [Trait("Categoria","Estado - Integração")]
+        [Fact(DisplayName = "Update invalid state"), Priority(4)]
+        [Trait("UnitTests - Integration", "State")]
         public async Task Update_UpdateStateWithInvalidArguments_ShouldNotUpdateAndReturnNotifications()
         {
             //Arrange
@@ -222,27 +214,32 @@ namespace SystemV1.Domain.Test.IntegrationTest
             Assert.Contains(ConstantMessages.StateNameLenght_Pt, stateDeserialize.Errors);
         }
 
-        #endregion
+        #endregion Function update
 
         #region Function Delete
 
         [Fact(DisplayName = "Delete state with success"), Priority(5)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task State_DeleteState_ShouldHadSuccess()
         {
-            //Arrange and Act
-            var responseDelete = await _integrationTestFixture.Client.DeleteAsync($"{requestDelete}{_integrationTestFixture.StateId}");
+            //Arrange
+            var stateId = Guid.NewGuid();
+            await AddNewStateAsync(1, stateId);
+
+            //Act
+            var responseDelete = await RemoveAsync(stateId,
+                                                   _requestDelete);
 
             //Assert
             responseDelete.EnsureSuccessStatusCode();
         }
 
         [Fact(DisplayName = "Delete state with invalid id"), Priority(5)]
-        [Trait("Categoria", "Estado - Integração")]
+        [Trait("UnitTests - Integration", "State")]
         public async Task Delete_DeleteStateWithInvalidId_ShouldNotDeleteAndReturnNotifications()
         {
             //Act
-            var responseDelete = await _integrationTestFixture.Client.DeleteAsync($"{requestDelete}{Guid.NewGuid()}");
+            var responseDelete = await _integrationTestFixture.Client.DeleteAsync($"{_requestDelete}{Guid.NewGuid()}");
             var jsonResponse = await responseDelete.Content.ReadAsStringAsync();
             var stateDeserialized = JsonConvert.DeserializeObject<Deserialize<StateViewModel>>(jsonResponse);
 
@@ -250,18 +247,60 @@ namespace SystemV1.Domain.Test.IntegrationTest
             Assert.False(stateDeserialized.Success);
         }
 
-        public async Task<List<StateViewModel>> GetAllStatesAsync(int page, int pageSize)
+        [Fact(DisplayName = "Delete state associated with city"), Priority(5)]
+        [Trait("UnitTests - Integration", "State")]
+        public async Task Remove_RemoveStateAssociatedWithCity_ShouldNotRemove()
         {
-            var response = await _integrationTestFixture.Client.GetAsync(PrepareRequestGetAllStates(page, pageSize));
-            var jsonStates = await response.Content.ReadAsStringAsync();
+            //Arrange
+            var stateId = Guid.NewGuid();
+            var cityId = Guid.NewGuid();
 
-            response.EnsureSuccessStatusCode();
-            var statesDeserialized = JsonConvert.DeserializeObject<StatesDeserialize>(jsonStates);
-            return statesDeserialized.States;
+            await AddNewStateAsync(1, stateId);
 
+            var cityFixture = new CityTestFixture();
+            var cityViewModel = cityFixture.GenerateValidCityViewModel(1, stateId, cityId);
+
+            await AddAsync<CityViewModel>(cityViewModel.FirstOrDefault(), _requestCityAdd);
+
+            //Act
+            var response = await RemoveAsync(stateId, _requestDelete);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
-        #endregion
+        [Fact(DisplayName = "Delete state and city"), Priority(5)]
+        [Trait("UnitTests - Integration", "State")]
+        public async Task Remove_RemoveStateAndCity_ShouldRemoveWithSucess()
+        {
+            //Arrange
+            var stateId = Guid.NewGuid();
+            var cityId = Guid.NewGuid();
+
+            await AddNewStateAsync(1, stateId);
+
+            var cityFixture = new CityTestFixture();
+            var cityViewModel = cityFixture.GenerateValidCityViewModel(1, stateId, cityId);
+
+            await AddAsync<CityViewModel>(cityViewModel.FirstOrDefault(), _requestCityAdd);
+
+            //Act
+            var responseCity = await RemoveAsync(cityId, _requestCityDelete);
+            var response = await RemoveAsync(stateId, _requestDelete);
+
+            //Assert
+            responseCity.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
+        }
+
+        #endregion Function Delete
+
+        public async Task<List<StateViewModel>> GetAllStatesAsync(int page, int pageSize)
+        {
+            var response = await GetAllAsync<DeserializeList<StateViewModel>>(PrepareRequestGetAllStates(page, pageSize));
+
+            return response.Data;
+        }
 
         #region Private Methods
 
@@ -270,7 +309,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             var response = await _integrationTestFixture
                                                 .Client
                                                 .PutAsJsonAsync($"{requestUpdate}{stateViewModel.Id}", stateViewModel);
-            
+
             if (successCase)
             {
                 response.EnsureSuccessStatusCode();
@@ -282,16 +321,13 @@ namespace SystemV1.Domain.Test.IntegrationTest
 
         private async Task<Deserialize<StateViewModel>> AddStateAsync(StateViewModel stateViewModel, bool successCase = true)
         {
-            var response = await _integrationTestFixture.Client.PostAsJsonAsync(requestAdd, stateViewModel);
+            var response = await AddAsync<StateViewModel>(stateViewModel, _requestAdd, successCase);
             var jsonResponse = await response.Content.ReadAsStringAsync();
-            if (successCase)
-            {
-                response.EnsureSuccessStatusCode();
-            }
+
             return JsonConvert.DeserializeObject<Deserialize<StateViewModel>>(jsonResponse);
         }
 
-        private async Task<List<CountryViewModel>> GetAllCountriesAsync(int page,int pageSize)
+        private async Task<List<CountryViewModel>> GetAllCountriesAsync(int page, int pageSize)
         {
             var response = await _integrationTestFixture.Client.GetAsync(PrepareRequestGetAllCountries(page, pageSize));
             var jsonContries = await response.Content.ReadAsStringAsync();
@@ -299,33 +335,30 @@ namespace SystemV1.Domain.Test.IntegrationTest
             return countriesViewModel.Data;
         }
 
-        internal async Task AddNewStateAsync(int qty)
+        internal async Task AddNewStateAsync(int qty, Guid? id = null)
         {
             for (int i = 0; i < qty; i++)
             {
                 var countryApi = new CountryApiTest(_integrationTestFixture);
-                await countryApi.AddNewCountriesAsync(1, false);
+                await countryApi.AddNewCountriesAsync(1);
 
                 var countriesViewModel = await GetAllCountriesAsync(1, 5);
                 var countryViewModel = countriesViewModel.FirstOrDefault();
 
                 var stateFixture = new StateTestFixture();
-                var state = stateFixture.GenerateValidStateViewModel();
-                state.CountryId = countryViewModel.Id.GetValueOrDefault();
+                var state = stateFixture.GenerateValidStateViewModel(id, countryViewModel.Id);
 
-                var postResponse = await _integrationTestFixture.Client.PostAsJsonAsync(requestAdd, state);
-                postResponse.EnsureSuccessStatusCode();
-            }  
+                await AddAsync<StateViewModel>(state, _requestAdd);
+            }
         }
 
-        private async Task<Deserialize<StateViewModel>> GetStateByIdAsync(Guid id)
+        private async Task<Deserialize<StateViewModel>> GetStateByIdAsync(Guid id, bool withState = false)
         {
-            var response = await _integrationTestFixture.Client.GetAsync(PrepareRequestGetById(id));
-            var jsonState = await response.Content.ReadAsStringAsync();
-
-            response.EnsureSuccessStatusCode();
-            var stateDeserialized = JsonConvert.DeserializeObject<Deserialize<StateViewModel>>(jsonState);
-            return stateDeserialized;
+            if (withState)
+            {
+                return await GetByIdAsync<Deserialize<StateViewModel>>(id, _requestGetStateCountryById);
+            }
+            return await GetByIdAsync<Deserialize<StateViewModel>>(id, _requestGetById);
         }
 
         private string PrepareRequestGetAllCountries(int page, int pageSize)
@@ -338,16 +371,6 @@ namespace SystemV1.Domain.Test.IntegrationTest
             return $"api/state/GetAll?page={page}&pageSize={pageSize}";
         }
 
-        #endregion
+        #endregion Private Methods
     }
-
-    public class StatesDeserialize
-    {
-        [JsonProperty("success")]
-        public bool Success { get; set; }
-
-        [JsonProperty("data")]
-        public List<StateViewModel> States = new List<StateViewModel>();
-    }
-
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using SystemV1.Domain.Entitys;
+﻿using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Test.Fixture;
-using SystemV1.Domain.Validations;
 using Xunit;
 
 namespace SystemV1.Domain.Test
@@ -20,7 +17,7 @@ namespace SystemV1.Domain.Test
         #region Test validate for each property from entity
 
         [Fact(DisplayName = "Validate set as correct properties for phone")]
-        [Trait("Categoria", "Cadastro - Contato")]
+        [Trait("UnitTests - Entity", "Contact")]
         public void Contact_NewContact_ShouldSetCorrectPropertiesForPhoneWithSuccess()
         {
             //Arrange
@@ -29,6 +26,7 @@ namespace SystemV1.Domain.Test
             //Act
             var phone = new Contact(contactPhoneExpected.Id,
                                     contactPhoneExpected.TypeContact,
+                                    null,
                                     contactPhoneExpected.Ddd,
                                     contactPhoneExpected.Ddi,
                                     null,
@@ -41,11 +39,10 @@ namespace SystemV1.Domain.Test
             Assert.Equal(contactPhoneExpected.Ddd, phone.Ddd);
             Assert.Equal(contactPhoneExpected.Ddi, phone.Ddi);
             Assert.Equal(contactPhoneExpected.PhoneNumber, phone.PhoneNumber);
-
         }
 
-        [Fact(DisplayName ="Validate set as correct properties for cellphone")]
-        [Trait("Categoria", "Cadastro Contato")]
+        [Fact(DisplayName = "Validate set as correct properties for cellphone")]
+        [Trait("UnitTests - Entity", "Contact")]
         public void Contact_NewContact_ShouldSetCorrectPropertiresForCellPhoneWithSuccess()
         {
             //Arrange
@@ -54,6 +51,7 @@ namespace SystemV1.Domain.Test
             //Act
             var cellPhone = new Contact(contactCellPhoneExpected.Id,
                                        contactCellPhoneExpected.TypeContact,
+                                       null,
                                        contactCellPhoneExpected.Ddd,
                                        contactCellPhoneExpected.Ddi,
                                        contactCellPhoneExpected.CellPhoneNumber,
@@ -68,16 +66,17 @@ namespace SystemV1.Domain.Test
             Assert.Equal(contactCellPhoneExpected.CellPhoneNumber, cellPhone.CellPhoneNumber);
         }
 
-        [Fact(DisplayName = "Validade set as correct proprerties for email") ]
-        [Trait("Categoria", "Cadastro Contato")]
+        [Fact(DisplayName = "Validade set as correct proprerties for email")]
+        [Trait("UnitTests - Entity", "Contact")]
         public void Contact_NewContact_ShouldSetCorrectPropertiesForEmailWithSuccess()
         {
-            //Arrange 
+            //Arrange
             var contactEmailExpected = _contactTestFixture.GenerateValidContactExpectedTypeEmail();
 
             //Act
             var email = new Contact(contactEmailExpected.Id,
                                    contactEmailExpected.TypeContact,
+                                   null,
                                    null,
                                    null,
                                    null,
@@ -90,189 +89,6 @@ namespace SystemV1.Domain.Test
             Assert.Equal(contactEmailExpected.Email, email.Email);
         }
 
-        #endregion
-
-        #region Test validation for data
-
-        [Fact(DisplayName = "Validate valid contact type phone")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypePhone_ShouldBeValid()
-        {
-            //Arrange
-            var contact = _contactTestFixture.GenerateValidContactTypePhone();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.True(result.IsValid);
-            Assert.False(result.Errors.Any());
-        }
-
-        [Fact(DisplayName = "Validate valid contact type cellphone")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypeCellPhone_ShouldBeValid()
-        {
-            //Arrange
-            var contact = _contactTestFixture.GenerateValidContactTypeCellPhone();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.True(result.IsValid);
-            Assert.False(result.Errors.Any());
-        }
-
-        [Fact(DisplayName = "Validate valid contact type email")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypeEmail_ShouldBeValid()
-        {
-            //Arrange
-            var contact = _contactTestFixture.GenerateValidContactTypeEmail();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.True(result.IsValid);
-            Assert.False(result.Errors.Any());
-        }
-
-        [Fact(DisplayName = "Validate invalid contact type email")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypeEmail_ShouldBeInvalid()
-        {
-            //Arrange
-            var contact = _contactTestFixture.GenerateInvalidContactTypeEmail();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            
-            Assert.Contains(ContactValidation.EmailRequired, result.Errors.Select(e => e.ErrorMessage));
-        }
-
-        [Fact(DisplayName = "Validate invalid contact type phone")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypePhone_ShouldBeInvalid()
-        {
-            //Arrange
-            var contact = _contactTestFixture.GenerateInvalidContactTypePhone();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            Assert.Equal(4, result.Errors.Count);
-
-            Assert.Contains(ContactValidation.DddRequired, result.Errors.Select(e => e.ErrorMessage));
-            Assert.Contains(ContactValidation.DddMinLength, result.Errors.Select(e => e.ErrorMessage));
-
-            Assert.Contains(ContactValidation.PhoneNumberRequired, result.Errors.Select(e => e.ErrorMessage));
-            Assert.Contains(ContactValidation.PhoneNumberMinLength, result.Errors.Select(e => e.ErrorMessage));
-        }
-
-        [Fact(DisplayName = "Validate invalid contact type phone")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypePhone_ShouldHavePropertiesInvalid()
-        {
-            //Arrange
-            var contact = _contactTestFixture.GenerateInvalidContactTypePhone();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            Assert.Equal(4, result.Errors.Count);
-
-            Assert.Contains(ContactValidation.DddRequired, result.Errors.Select(e => e.ErrorMessage));
-            Assert.Contains(ContactValidation.DddMinLength, result.Errors.Select(e => e.ErrorMessage));
-            Assert.Contains(ContactValidation.PhoneNumberMaxLength, result.Errors.Select(e => e.ErrorMessage));
-            Assert.Contains(ContactValidation.PhoneNumberMinLength, result.Errors.Select(e => e.ErrorMessage));
-        }
-
-        [Fact(DisplayName = "Validate invalid contact type cellphone")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypeCellPhone_ShouldBeInvalid()
-        {
-            var contact = _contactTestFixture.GenerateInvalidCellPhoneContactWithInvalidProperies();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            Assert.Equal(3, result.Errors.Count);
-
-            Assert.Contains(ContactValidation.DddRequired, result.Errors.Select(e => e.ErrorMessage));
-            Assert.Contains(ContactValidation.DddMinLength, result.Errors.Select(e => e.ErrorMessage));
-
-            Assert.Contains(ContactValidation.CellPhoneMinLength, result.Errors.Select(e => e.ErrorMessage));
-        }
-
-        [Fact(DisplayName = "Validate disabled valid contact type phone")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypePhone_ShouldFailed()
-        {
-            //Arrange
-            var contact = _contactTestFixture.GenerateValidContactTypePhoneDisabled();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            Assert.Single(result.Errors);
-
-            Assert.Contains(ContactValidation.ContactNotActive, result.Errors.Select(e => e.ErrorMessage));
-        }
-
-        [Fact(DisplayName = "Validate disabled valid contact type cellphone")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypeCellPhone_ShouldFailed()
-        {
-            //Arrange
-            var contact = _contactTestFixture.GenerateValidContactTypeCellPhoneDisabled();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            Assert.Single(result.Errors);
-
-            Assert.Contains(ContactValidation.ContactNotActive, result.Errors.Select(e => e.ErrorMessage));
-        }
-
-        [Fact(DisplayName = "Validate disabled valid contact type email")]
-        [Trait("Categoria", "Cadastro - Contato")]
-        public void Contact_NewContactTypeEmail_ShouldFailed()
-        {
-            //Arrange
-            var contact = _contactTestFixture.GenerateValidContactTypeEmailDisabled();
-
-            //Act
-            var result = contact.ValidateContact();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            Assert.Single(result.Errors);
-
-            Assert.Contains(ContactValidation.ContactNotActive, result.Errors.Select(e => e.ErrorMessage));
-        }
-
-        #endregion
+        #endregion Test validate for each property from entity
     }
 }

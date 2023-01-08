@@ -1,10 +1,9 @@
 ﻿using API2;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Test.Fixture;
@@ -23,22 +22,23 @@ namespace SystemV1.Domain.Test.IntegrationTest
         private readonly IntegrationTestFixture<StartupApiTests> _integrationTestFixture;
         private readonly StateApiTests _stateApiTests;
 
+        private readonly string _requestAdd = "api/city/Add";
+        private readonly string _requestUpdate = "api/city/Update/";
+        private readonly string _requestDelete = "api/city/Delete/";
+        private readonly string _requestGetAll = "api/city/GetAll";
+        private readonly string _requestGetById = "api/city/GetById/";
+        private readonly string _requestGetCityStateById = "api/city/GetCityStateById/";
+
         public CityApiTest(IntegrationTestFixture<StartupApiTests> integrationTestFixture)
         {
             _integrationTestFixture = integrationTestFixture;
             _stateApiTests = new StateApiTests(_integrationTestFixture);
         }
 
-        private string _requestAdd => "api/city/Add";
-        private string _requestUpdate => "api/city/Update/";
-        private string _requestDelete => "api/city/Delete/";
-        private string _requestGetAll => "api/city/GetAll";
-        private string _requestGetById = "api/city/GetById/";
-
         #region Function Add
 
-        [Fact(DisplayName ="Add new city with success"), Priority(1)]
-        [Trait("Categoria", "Cidade - Integração")]
+        [Fact(DisplayName = "Add new city with success"), Priority(1)]
+        [Trait("UnitTests - Integration", "City")]
         public async Task Add_AddNewCity_MustAddWithSuccess()
         {
             //Arrange, act and assert
@@ -46,25 +46,27 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Add new invalid city"), Priority(1)]
-        [Trait("Categoria", "Cidade - Integração")]
+        [Trait("UnitTests - Integration", "City")]
         public async Task Add_AddNewInvalidCity_MustNotAddAndReturnMessageNotification()
         {
             //Arrange
             var cityTestFixture = new CityTestFixture();
             var cityViewModel = cityTestFixture.GenerateInvalidCityViewModel();
-            
-            //Act 
+
+            //Act
             var response = await _integrationTestFixture.Client.PostAsJsonAsync(_requestAdd, cityViewModel);
             var responseDeserialized = await TestTools.DeserializeResponseAsync<Deserialize<CityViewModel>>(response);
 
             //Assert
             Assert.False(responseDeserialized.Success);
         }
-        #endregion
+
+        #endregion Function Add
 
         #region Function Get
+
         [Fact(DisplayName = "Get all cities")]
-        [Trait("Categoria", "Cidade - Integração"), Priority(2)]
+        [Trait("UnitTests - Integration", "City"), Priority(2)]
         public async Task GetAll_GetAllCities_MustReturnListOfTheCities()
         {
             //Arrange and act
@@ -77,7 +79,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Get all withou page and page size")]
-        [Trait("Categoria", "Cidade - Integração"), Priority(2)]
+        [Trait("UnitTests - Integration", "City"), Priority(2)]
         public async Task GetAll_GetAllCitiesWithOutPageAndPageSize_MustNotReturnCities()
         {
             //Arrange
@@ -94,11 +96,11 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Get city by id")]
-        [Trait("Categoria", "Cidade - Integração"), Priority(3)]
+        [Trait("UnitTests - Integration", "City"), Priority(3)]
         public async Task GetById_GetCityById_MustReturnCity()
         {
             //Arrange and act
-            var city = await GetCityByIdAsync(_integrationTestFixture.CityId);
+            var city = await GetCityByIdAsync(_integrationTestFixture.CityId, true);
 
             //Assert
             Assert.NotNull(city);
@@ -107,20 +109,17 @@ namespace SystemV1.Domain.Test.IntegrationTest
             Assert.False(string.IsNullOrWhiteSpace(city.StateName));
         }
 
-        public async Task GetByName_GetCityByName_MustReturnListOfTheCity()
-        {
-
-        }
-        #endregion
+        #endregion Function Get
 
         #region Function Update
+
         [Fact(DisplayName = "Update city with success")]
-        [Trait("Categoria", "Cidade - Integração"), Priority(4)]
+        [Trait("UnitTests - Integration", "City"), Priority(4)]
         public async Task Update_UpdateCityValid_MustUpdateWithSuccess()
         {
             //Arrange
             var alteracao = " Alterado";
-            var city = await GetCityByIdAsync(_integrationTestFixture.CityId);
+            var city = await GetCityByIdAsync(_integrationTestFixture.CityId, true);
             city.Name += alteracao;
 
             //Act
@@ -131,11 +130,29 @@ namespace SystemV1.Domain.Test.IntegrationTest
             response.EnsureSuccessStatusCode();
             Assert.Contains(alteracao, cityUpdated.Name);
         }
-        #endregion 
+
+        [Fact(DisplayName = "Update with invalid city")]
+        [Trait("UnitTests - Integration", "City"), Priority(4)]
+        public async Task Update_UpdateInvalidCity_MustNotUpdate()
+        {
+            //Arrange
+            var city = await GetCityByIdAsync(_integrationTestFixture.CityId);
+            city.Name = "";
+
+            //Act
+            var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate + city.Id, city);
+            var responseDeserialized = TestTools.DeserializeResponseAsync<CityViewModel>(response);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        #endregion Function Update
 
         #region Function Delete
+
         [Fact(DisplayName = "Delete city with success")]
-        [Trait("Categoria", "Cidade - Integração"), Priority(5)]
+        [Trait("UnitTests - Integration", "City"), Priority(5)]
         public async Task Delete_DeleteCity_MustDeleteWithSuccess()
         {
             //Arrange
@@ -149,7 +166,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         [Fact(DisplayName = "Delete invalid city")]
-        [Trait("Categoria", "Cidade - Integração"), Priority(5)]
+        [Trait("UnitTests - Integration", "City"), Priority(5)]
         public async Task Delete_DeleteCity_MustNotDeleteAndReturnMessageNotification()
         {
             //Arrange and Act
@@ -161,7 +178,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             Assert.True(responseDeserialized.Errors.Any());
         }
 
-        #endregion
+        #endregion Function Delete
 
         internal async Task<List<CityViewModel>> GetCitiesAsync()
         {
@@ -175,7 +192,6 @@ namespace SystemV1.Domain.Test.IntegrationTest
 
             return responseDeserialized.Data;
         }
-
 
         internal async Task AddCityAsync(int qty,
                                        bool isValid = true)
@@ -205,12 +221,23 @@ namespace SystemV1.Domain.Test.IntegrationTest
         }
 
         #region Private methods
-        private async Task<CityViewModel> GetCityByIdAsync(Guid cityId)
+
+        private async Task<CityViewModel> GetCityByIdAsync(Guid cityId, bool withState = false)
         {
-            var response = await _integrationTestFixture.Client.GetAsync(_requestGetById + cityId);
+            var url = "";
+            if (withState)
+            {
+                url = _requestGetCityStateById + cityId;
+            }
+            else
+            {
+                url = _requestGetById + cityId;
+            }
+            var response = await _integrationTestFixture.Client.GetAsync(url);
             var cityDeserialized = await TestTools.DeserializeResponseAsync<Deserialize<CityViewModel>>(response);
             return cityDeserialized.Data;
         }
-        #endregion
+
+        #endregion Private methods
     }
 }

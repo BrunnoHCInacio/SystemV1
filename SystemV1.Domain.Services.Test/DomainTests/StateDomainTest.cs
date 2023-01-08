@@ -3,7 +3,6 @@ using System.Linq;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services.Test.Fixture;
-using SystemV1.Domain.Validations;
 using Xunit;
 
 namespace SystemV1.Domain.Test
@@ -18,8 +17,8 @@ namespace SystemV1.Domain.Test
             _stateTestFixture = stateTestFixture;
         }
 
-        [Fact(DisplayName ="Validate set as correct properties")]
-        [Trait("Categoria", "Cadastro - Estado")]
+        [Fact(DisplayName = "Validate set as correct properties")]
+        [Trait("UnitTests - Entity", "State")]
         public void State_NewState_ReturnFillDomain()
         {
             var stateExpected = _stateTestFixture.GenerateStateValidExpected();
@@ -30,8 +29,8 @@ namespace SystemV1.Domain.Test
             Assert.Equal(stateExpected.Name, state.Name);
         }
 
-        [Fact(DisplayName ="Validate set as correct properties in view model")]
-        [Trait("Categoria", "Cadastro - Estado")]
+        [Fact(DisplayName = "Validate set as correct properties in view model")]
+        [Trait("UnitTests - Entity", "State")]
         public void StateViewModel_NewState_ShouldSetCorrectProperties()
         {
             //Arrange
@@ -54,6 +53,7 @@ namespace SystemV1.Domain.Test
         [InlineData("Amazonas")]
         [InlineData("Minas Gerais")]
         [InlineData("Rio de Janeiro")]
+        [Trait("UnitTests - Entity", "State")]
         public void State_NewState_MultipleVerifyDomainState(string stateName)
         {
             //Arrange
@@ -69,54 +69,6 @@ namespace SystemV1.Domain.Test
             //Assert
             Assert.Equal(stateExpected.Id, state.Id);
             Assert.Equal(stateExpected.Name, state.Name);
-        }
-
-        [Fact(DisplayName = "Validate State Valid")]
-        [Trait("Categoria", "Cadastro - Estado")]
-        public void State_ValidateNewState_ShouldBeValid()
-        {
-            //Arrange
-            var state = _stateTestFixture.GenerateValidStateDisabled();
-
-            //Act
-            var result = state.ValidateState();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.NotEmpty(result.Errors);
-            Assert.Contains(StateValidation.StateNotActive, result.Errors.Select(e => e.ErrorMessage));
-        }
-
-        [Fact(DisplayName = "Validate valid state disabled")]
-        [Trait("Categoria", "Cadastro - Estado")]
-        public void State_ValidateNewStateDisabled_ShouldBeDisabledAndInvalid()
-        {
-            //Arrange
-            var state = _stateTestFixture.GenerateValidState();
-
-            //Act
-            var result = state.ValidateState();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.NotEmpty(result.Errors);
-        }
-
-        [Fact(DisplayName = "Validate State Invalid")]
-        [Trait("Categoria", "Cadastro - Estado")]
-        public void State_ValidateNewState_ShouldBeInvalid()
-        {
-            //Arrange
-            var state = _stateTestFixture.GenerateInvalidState();
-
-            //Act
-            var result = state.ValidateState();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            
-            Assert.Contains(StateValidation.StateNameRequired, result.Errors.Select(e => e.ErrorMessage));
         }
     }
 }

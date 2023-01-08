@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services.Test.Fixture;
@@ -11,19 +10,18 @@ using Xunit;
 namespace SystemV1.Domain.Test.Fixture
 {
     [CollectionDefinition(nameof(CountryCollection))]
-    public class CountryCollection : ICollectionFixture<CountryTestFixture> { }
+    public class CountryCollection : ICollectionFixture<CountryTestFixture>
+    { }
 
     public class CountryTestFixture : IDisposable
     {
         #region Generate valid data
-        public List<Country> GenerateCountry(int quantity, bool registerActive = true)
+
+        public List<Country> GenerateCountry(int quantity)
         {
             var country = new Faker<Country>("pt_BR")
-                                .CustomInstantiator(f => new Country(Guid.NewGuid(), f.Address.Country()))
-                                .FinishWith((f,c)=>
-                                {
-                                    if (!registerActive) c.DisableRegister();
-                                });
+                                .CustomInstantiator(f => new Country(Guid.NewGuid(), f.Address.Country(), null));
+
             return country.Generate(quantity);
         }
 
@@ -40,17 +38,18 @@ namespace SystemV1.Domain.Test.Fixture
             return country;
         }
 
-        #endregion
+        #endregion Generate valid data
 
         #region Generate invalid data
+
         public Country GenerateInvalidCountry()
         {
-            return new Country(Guid.NewGuid(), "");
+            return new Country(Guid.NewGuid(), "", null);
         }
 
         public Country GenerateInvalidCountryWithStates()
         {
-            var country = new Country(Guid.NewGuid(), "");
+            var country = new Country(Guid.NewGuid(), "", null);
             var stateFixture = new StateTestFixture();
             country.AddState(stateFixture.GenerateInvalidState());
             country.AddState(stateFixture.GenerateInvalidState());
@@ -69,9 +68,11 @@ namespace SystemV1.Domain.Test.Fixture
 
             return country;
         }
-        #endregion
+
+        #endregion Generate invalid data
 
         #region Generate expected data
+
         public dynamic GenerateCountryExpected()
         {
             var faker = new Faker("pt_BR");
@@ -87,43 +88,24 @@ namespace SystemV1.Domain.Test.Fixture
             var stateFixture = new StateTestFixture();
             return stateFixture.GenerateStateValidExpected();
         }
-        #endregion
 
-        #region Generation valid disable data
-        public Country GenerateValidCountryDisabled()
-        {
-            return GenerateCountry(1, false).FirstOrDefault();
-        }
-        #endregion
+        #endregion Generate expected data
 
-        public List<CountryViewModel> GenerateCountryViewModel(int qty,
-                                                               bool withState = true,
-                                                               bool validState = true,
-                                                               int qtyOfState = 0)
+        public List<CountryViewModel> GenerateCountryViewModel(int qty, Guid? id = null)
         {
-            var stateFixture = new StateTestFixture();
-            var country = new Faker<CountryViewModel>("pt_BR").RuleFor(c => c.Name, f => f.Address.Country())
-                                                              .FinishWith((f,c) => 
-                                                              {
-                                                                  if (withState)
-                                                                  {
-                                                                      if (validState)
-                                                                      {
-                                                                          c.States = stateFixture.GenerateStatesViewModel(qtyOfState);
-                                                                      }
-                                                                      else
-                                                                      {
-                                                                          c.States = new List<StateViewModel> { stateFixture.GenerateInvalidStateViewModel() };
-                                                                      }
-                                                                  }
-                                                              });
+            var country = new Faker<CountryViewModel>("pt_BR").FinishWith((f, c) =>
+            {
+                c.Id = id;
+                c.Name = f.Address.Country();
+             
+            });
 
             return country.Generate(qty);
         }
 
-        public CountryViewModel GenerateValidContryViewModel()
+        public CountryViewModel GenerateValidContryViewModel(Guid? id = null)
         {
-            return GenerateCountryViewModel(1).FirstOrDefault();
+            return GenerateCountryViewModel(1, id).FirstOrDefault();
         }
 
         public void Dispose()

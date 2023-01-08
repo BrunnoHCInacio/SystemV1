@@ -15,5 +15,18 @@ namespace SystemV1.Domain.Core.Interfaces.Repositorys
         void Remove(TEntity entity);
 
         void RemoveRange(Expression<Func<TEntity, bool>> conditional);
+
+        Task<List<TEntity>> SearchAsync(Expression<Func<TEntity, bool>> conditional);
+
+        Task<List<TEntity>> SearchAsync(Expression<Func<TEntity, bool>> conditional,
+                                        int page,
+                                        int pageSize);
+
+        Task<TEntity> GetEntityAsync(Expression<Func<TEntity, bool>> conditional,
+                                     string includes = null);
+
+        Task<int> CountAsync(Expression<Func<TEntity, bool>> conditional);
+
+        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> conditional);
     }
 }

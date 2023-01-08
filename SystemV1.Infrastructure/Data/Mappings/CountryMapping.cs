@@ -13,8 +13,6 @@ namespace SystemV1.Infrastructure.Data.Mappings
                    .IsRequired()
                    .HasColumnType("varchar(200)");
 
-            builder.Property(c => c.IsActive);
-
             builder.HasMany(c => c.States)
                    .WithOne(s => s.Country)
                    .HasForeignKey(s => s.CountryId);

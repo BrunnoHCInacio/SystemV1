@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
@@ -10,24 +8,15 @@ namespace SystemV1.Application.Mappers
 {
     public class MapperClient : IMapperClient
     {
-        private readonly IMapperAddress _mapperAddress;
-        private readonly IMapperContact _mapperContact;
-
-        public MapperClient(IMapperAddress mapperAddress, IMapperContact mapperContact)
-        {
-            _mapperAddress = mapperAddress;
-            _mapperContact = mapperContact;
-        }
+        public MapperClient()
+        { }
 
         public ClientViewModel EntityToViewModel(Client client)
         {
             return new ClientViewModel
             {
                 Id = client.Id,
-                Name = client.Name,
-                Document = client.Document,
-                Addresses = client.Addresses.Select(a => _mapperAddress.EntityToViewModel(a)),
-                Contacts = client.Contacts.Select(c => _mapperContact.EntityToViewModel(c))
+                PeopleId = client.Id
             };
         }
 
@@ -38,22 +27,8 @@ namespace SystemV1.Application.Mappers
 
         public Client ViewModelToEntity(ClientViewModel clientViewModel)
         {
-            var client = new Client(clientViewModel.Id,
-                                    clientViewModel.Name,
-                                    clientViewModel.Document);
-
-            if (clientViewModel.Addresses != null 
-                && clientViewModel.Addresses.Any())
-            {
-                client.AddAddresses(clientViewModel.Addresses.Select(a => _mapperAddress.ViewModelToEntity(a)).ToList());
-            }
-            if (clientViewModel.Contacts != null 
-                && clientViewModel.Contacts.Any())
-            {
-                client.AddContacts(clientViewModel.Contacts.Select(c => _mapperContact.ViewModelToEntity(c)).ToList());
-            }
-
-            return client;
+            return new Client(clientViewModel.Id,
+                              clientViewModel.PeopleId);
         }
     }
 }

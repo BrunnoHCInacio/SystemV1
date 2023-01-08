@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Application.Interfaces.Mapper
@@ -11,8 +9,8 @@ namespace SystemV1.Application.Interfaces.Mapper
 
         TEntity ViewModelToEntity(TViewModel viewModel);
 
-        IEnumerable<TViewModel> ListEntityToViewModel(IEnumerable<TEntity> entities);
+        List<TViewModel> ListEntityToViewModel(List<TEntity> entities);
 
-        List<TEntity> ListViewModelToEntity(IEnumerable<TViewModel> viewModels);
+        List<TEntity> ListViewModelToEntity(List<TViewModel> viewModels);
     }
 }

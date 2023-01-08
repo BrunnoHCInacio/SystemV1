@@ -28,30 +28,30 @@ namespace SystemV1.Application
 
         public async Task<bool> ExistsProvider(Guid id)
         {
-            return await _providerService.ExistsProvider(id);
+            return await _providerService.ExistsAsync(p => p.Id == id);
         }
 
         public async Task<IEnumerable<ProviderViewModel>> GetAllAsync(int page, int pageSize)
         {
-            var providers = await _providerService.GetAllAsync(page, pageSize);
+            var providers = await _providerService.SearchAsync(null, page, pageSize);
             return _mapperProvider.ListEntityToViewModel(providers);
         }
 
         public async Task<ProviderViewModel> GetByIdAsync(Guid id)
         {
-            var provider = await _providerService.GetByIdAsync(id);
+            var provider = await _providerService.GetEntityAsync(c => c.Id == id);
             return _mapperProvider.EntityToViewModel(provider);
         }
 
         public async Task<IEnumerable<ProviderViewModel>> GetByNameAsync(string name)
         {
-            var providers = await _providerService.GetByNameAsync(name);
+            var providers = await _providerService.SearchAsync(p => p.People.Name.ToUpper() == name.ToUpper());
             return _mapperProvider.ListEntityToViewModel(providers);
         }
 
         public async Task RemoveAsync(Guid id)
         {
-            var provider = await _providerService.GetByIdAsync(id);
+            var provider = await _providerService.GetEntityAsync(c => c.Id == id);
             await _providerService.RemoveAsyncUow(provider);
         }
 

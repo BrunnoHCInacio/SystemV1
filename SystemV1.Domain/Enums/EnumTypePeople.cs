@@ -4,9 +4,9 @@ using System.Text;
 
 namespace SystemV1.Domain.Enums
 {
-    public enum EnumTypeAssociationAddress
+    public enum EnumTypePeople
     {
-        CLIENT = 0,
-        PROVIDER
+        PHYSICAL = 0,
+        JURIDICAL
     }
 }

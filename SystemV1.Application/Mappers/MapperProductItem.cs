@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
@@ -30,10 +28,11 @@ namespace SystemV1.Application.Mappers
 
         public ProductItem ViewModelToEntity(ProductItemViewModel productViewModel)
         {
-            var productItem = new ProductItem(productViewModel.Id, productViewModel.Modelo, productViewModel.Value);
+            //var productItem = new ProductItem(productViewModel.Id, productViewModel.Modelo, productViewModel.Value);
 
-            productItem.SetProduct(new Product(productViewModel.IdProduct.GetValueOrDefault(), null));
-            return productItem;
+            //productItem.SetProduct(new Product(productViewModel.IdProduct.GetValueOrDefault(), null));
+            //return productItem;
+            return null;
         }
     }
 }

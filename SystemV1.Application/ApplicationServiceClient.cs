@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Application.Interfaces;
 using SystemV1.Application.Interfaces.Mapper;
@@ -29,20 +28,20 @@ namespace SystemV1.Application
 
         public async Task<bool> ExistsClient(Guid id)
         {
-            return await _serviceClient.ExistClient(id);
+            return await _serviceClient.ExistsAsync(c => c.Id == id);
         }
 
         public async Task<IEnumerable<ClientViewModel>> GetAllAsync(int page, int pageSize)
         {
-            var clients = await _serviceClient.GetAllAsync(page, pageSize);
+            var clients = await _serviceClient.SearchAsync(null, page, pageSize);
             return _mapperClient.ListEntityToViewModel(clients);
         }
 
         public async Task<ClientViewModel> GetByIdAsync(Guid id)
         {
-            var client = await _serviceClient.GetByIdAsync(id);
-            
-            if(client == null)
+            var client = await _serviceClient.GetEntityAsync(c => c.Id == id, null);
+
+            if (client == null)
             {
                 return null;
             }
@@ -52,13 +51,13 @@ namespace SystemV1.Application
 
         public async Task<IEnumerable<ClientViewModel>> GetByNameAsync(string name)
         {
-            var clients = await _serviceClient.GetByNameAsync(name);
+            var clients = await _serviceClient.SearchAsync(c => c.People.Name.ToUpper() == name.ToUpper());
             return _mapperClient.ListEntityToViewModel(clients);
         }
 
         public async Task RemoveAsync(Guid id)
         {
-            var client = await _serviceClient.GetByIdAsync(id);
+            var client = await _serviceClient.GetEntityAsync(c => c.Id == id);
             await _serviceClient.RemoveAsyncUow(client);
         }
 

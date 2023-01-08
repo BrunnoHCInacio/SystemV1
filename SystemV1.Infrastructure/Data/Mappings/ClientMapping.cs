@@ -13,23 +13,8 @@ namespace SystemV1.Infrastructure.Data.Mappings
         {
             builder.HasKey(c => c.Id);
 
-            builder.Property(c => c.Name)
-                   .IsRequired()
-                   .HasColumnType("varchar(1024)");
+            builder.HasOne(c => c.People);
 
-            builder.Property(c => c.Document)
-                   .IsRequired()
-                   .HasColumnType("varchar(1024)");
-
-            builder.HasMany(c => c.Addresses)
-                   .WithOne(a => a.Client)
-                   .HasForeignKey(a => a.ClientId);
-
-            builder.HasMany(c => c.Contacts)
-                   .WithOne(ct => ct.Client)
-                   .HasForeignKey(ct => ct.ClientId);
-
-            builder.Property(c => c.IsActive);
             builder.ToTable("Clients");
         }
     }

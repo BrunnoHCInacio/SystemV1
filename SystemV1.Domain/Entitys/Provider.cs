@@ -1,62 +1,21 @@
-﻿using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using SystemV1.Domain.Validations;
+﻿using System;
 
 namespace SystemV1.Domain.Entitys
 {
-    public class Provider : People
+    public class Provider : Entity
     {
-        public Provider(Guid id, 
-                        string name, 
-                        string document)
+        public Provider(Guid id)
         {
             Id = id;
-            Name = name;
-            Document = document;
-            Addresses = new List<Address>();
-            Contacts = new List<Contact>();
         }
 
-        public Provider(Guid id, 
-                        string name, 
-                        string document,
-                        List<Address> addresses,
-                        List<Contact> contacts)
+        public Provider(Guid id, Guid peopleId)
         {
             Id = id;
-            Name = name;
-            Document = document;
-            Addresses = addresses;
-            Contacts = contacts;
+            PeopleId = peopleId;
         }
 
-        public List<Address> Addresses { get; private set; }
-        public List<Contact> Contacts { get; private set; }
-
-        public void AddAddresses(List<Address> addresses)
-        {
-            Addresses.AddRange(addresses);
-        }
-
-        public void AddAddress(Address address)
-        {
-            Addresses.Add(address);
-        }
-
-        public void AddContacts(List<Contact> contacts)
-        {
-            Contacts.AddRange(contacts);
-        }
-
-        public void AddContact(Contact contact)
-        {
-            Contacts.Add(contact);
-        }
-
-        public ValidationResult ValidateProvider()
-        {
-            return new ProviderValidation().Validate(this);
-        }
+        public People People { get; private set; }
+        public Guid PeopleId { get; private set; }
     }
 }

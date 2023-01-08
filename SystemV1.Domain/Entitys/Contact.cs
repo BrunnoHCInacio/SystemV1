@@ -1,14 +1,16 @@
-﻿using FluentValidation.Results;
-using System;
+﻿using System;
 using SystemV1.Domain.Enums;
-using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Entitys
 {
     public class Contact : Entity
     {
+        public Contact()
+        { }
+
         public Contact(Guid id,
                        EnumTypeContact typeContact,
+                       People people,
                        string ddd = "",
                        string ddi = "",
                        string cellPhoneNumber = "",
@@ -22,13 +24,12 @@ namespace SystemV1.Domain.Entitys
             CellPhoneNumber = cellPhoneNumber;
             PhoneNumber = phoneNumber;
             Email = email;
+            People = people;
+            PeopleId = people?.Id ?? Guid.Empty;
         }
 
-        public Client Client { get; private set; }
-        public Guid ClientId { get; set; }
-        public Provider Provider { get; private set; }
-
-        public Guid ProviderId { get; set; }
+        public People People { get; private set; }
+        public Guid PeopleId { get; private set; }
 
         public EnumTypeContact TypeContact { get; private set; }
         public string Ddd { get; private set; }
@@ -36,20 +37,5 @@ namespace SystemV1.Domain.Entitys
         public string CellPhoneNumber { get; private set; }
         public string PhoneNumber { get; private set; }
         public string Email { get; private set; }
-
-        public ValidationResult ValidateContact()
-        {
-            return new ContactValidation().Validate(this);
-        }
-
-        public void SetClient(Guid clientId)
-        {
-            ClientId = clientId;
-        }
-
-        public void SetProvider(Guid providerId)
-        {
-            ProviderId = providerId;
-        }
     }
 }

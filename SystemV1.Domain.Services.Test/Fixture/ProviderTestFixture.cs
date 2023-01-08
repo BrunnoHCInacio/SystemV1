@@ -1,5 +1,4 @@
 ﻿using Bogus;
-using Bogus.DataSets;
 using Bogus.Extensions.Brazil;
 using System;
 using System.Collections.Generic;
@@ -18,61 +17,24 @@ namespace SystemV1.Domain.Test.Fixture
     public class ProviderTestFixture : IDisposable
     {
         public List<Provider> GenerateProvider(int quantity,
-                                               bool withContact = true,
-                                               bool useValidContact = true,
-                                               bool withAddress = true,
-                                               bool useValidAddress = true)
+                                               Guid peopleId)
         {
             var addressFixture = new AddressTestFixture();
             var contactFixtute = new ContactTestFixture();
             var provider = new Faker<Provider>()
-                            .CustomInstantiator(f => new Provider(Guid.NewGuid(), f.Person.FullName, f.Company.Cnpj()))
-                            .FinishWith((f, p) =>
-                            {
-                                if (withAddress)
-                                {
-                                    if (useValidAddress)
-                                    {
-                                        p.AddAddresses(addressFixture.GenerateAddress(2));
-                                    }
-                                    else
-                                    {
-                                        p.AddAddress(addressFixture.GenerateInvalidAddress());
-                                        p.AddAddress(addressFixture.GenerateInvalidAddress());
-                                        p.AddAddress(addressFixture.GenerateInvalidAddress());
-                                    }
-                                }
-
-                                if (withContact)
-                                {
-                                    if (useValidContact)
-                                    {
-                                        p.AddContacts(contactFixtute.GenerateContact(Enums.EnumTypeContact.TypeContactCellPhone, 2));
-                                        p.AddContact(contactFixtute.GenerateValidContactTypeEmail());
-                                    }
-                                    else
-                                    {
-                                        p.AddContact(contactFixtute.GenerateInvalidContactTypeCellPhone());
-                                        p.AddContact(contactFixtute.GenerateInvalidContactTypeEmail());
-                                        p.AddContact(contactFixtute.GenerateInvalidContactTypePhone());
-                                    }
-                                }
-                            });
+                            .CustomInstantiator(f => new Provider(Guid.NewGuid(), peopleId));
 
             return provider.Generate(quantity);
         }
 
-        public Provider GenerateValidProvider(bool withContact = true,
-                                              bool useValidContact = true,
-                                              bool withAddress = true,
-                                              bool useValidAddress =  true)
+        public Provider GenerateValidProvider(Guid peopleId)
         {
-            return GenerateProvider(1, withContact, useValidContact, withAddress, useValidAddress).FirstOrDefault();
+            return GenerateProvider(1, peopleId).FirstOrDefault();
         }
 
         public Provider GenerateInvalidProvider()
         {
-            return new Provider(new Guid(), null, null);
+            return new Provider(Guid.Empty);
         }
 
         public dynamic GenerateProviderExpected()
@@ -86,29 +48,16 @@ namespace SystemV1.Domain.Test.Fixture
             };
         }
 
-        public List<ProviderViewModel> GenerateValidProviderViewModel(int qty,
-                                                                      List<CityViewModel> citiesViewModel,
-                                                                      int qtyAddress = 0,
-                                                                      int qtyContacts = 0,
-                                                                      bool isValidAddress = true,
-                                                                      bool isValidContact = true)
+        public List<ProviderViewModel> GenerateValidProviderViewModel(int qty, Guid peopleId)
         {
-            var addressFixture = new AddressTestFixture();
-            var contactsFixture = new ContactTestFixture();
-
             var client = new Faker<ProviderViewModel>("pt_BR")
                                 .FinishWith(
                                 (f, p) =>
                                 {
-                                    p.Name = f.Company.CompanyName();
-                                    p.Document = f.Company.Cnpj();
-                                    p.Addresses = addressFixture.GenerateAddress(qtyAddress, isValidAddress, addressFixture, citiesViewModel);
-                                    p.Contacts =  contactsFixture.GenerateContact(qtyContacts, isValidContact, contactsFixture);
+                                    p.PeopleId = peopleId;
                                 });
             return client.Generate(qty);
         }
-
-
 
         public void Dispose()
         {

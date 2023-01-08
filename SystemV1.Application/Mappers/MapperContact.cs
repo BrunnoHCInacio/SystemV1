@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
@@ -33,20 +31,12 @@ namespace SystemV1.Application.Mappers
         {
             var contact = new Contact(contactViewModel.Id,
                                       contactViewModel.TypeContact,
+                                      new People(contactViewModel.peopleId),
                                       contactViewModel.Ddd,
                                       contactViewModel.Ddi,
                                       contactViewModel.CellPhoneNumber,
                                       contactViewModel.PhoneNumber,
                                       contactViewModel.Email);
-
-            if (contactViewModel.IdProvider.HasValue)
-            {
-                // contact.Provider = new Provider { Id = contactViewModel.IdProvider.GetValueOrDefault() };
-            }
-            if (contactViewModel.IdClient.HasValue)
-            {
-                // contact.Client = new Client(contactViewModel.IdClient.GetValueOrDefault(), null, null);
-            }
 
             return contact;
         }

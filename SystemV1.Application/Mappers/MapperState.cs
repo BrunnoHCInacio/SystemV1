@@ -23,9 +23,9 @@ namespace SystemV1.Application.Mappers
             };
         }
 
-        public IEnumerable<StateViewModel> ListEntityToViewModel(IEnumerable<State> states)
+        public List<StateViewModel> ListEntityToViewModel(List<State> states)
         {
-            return states.Select(s => EntityToViewModel(s));
+            return states.Select(s => EntityToViewModel(s)).ToList();
         }
 
         public State ViewModelToEntity(StateViewModel stateViewModel)
@@ -40,7 +40,7 @@ namespace SystemV1.Application.Mappers
             return state;
         }
 
-        public List<State> ListViewModelToEntity(IEnumerable<StateViewModel> statesViewModel)
+        public List<State> ListViewModelToEntity(List<StateViewModel> statesViewModel)
         {
             return statesViewModel.Select(s => ViewModelToEntity(s)).ToList();
         }

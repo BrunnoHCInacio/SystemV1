@@ -1,13 +1,11 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SystemV1.Domain.Core.Interfaces.Validations;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Enums;
 
-namespace SystemV1.Domain.Validations
+namespace SystemV1.Domain.Services.Validations
 {
-    public class ContactValidation : AbstractValidator<Contact>
+    public class ValidationContact : AbstractValidator<Contact>, IValidationContact
     {
         public static string TypeContactRequired => "O tipo de contato deve ser informado.";
         public static string PhoneNumberRequired => "O telefone fixo é obrigatório.";
@@ -25,42 +23,56 @@ namespace SystemV1.Domain.Validations
         public static string EmailValid => "Informe um email válido.";
         public static string ContactNotActive => "O contato deve estar ativo.";
 
-        public ContactValidation()
+        public ValidationContact()
+        {
+        }
+
+        public void RulesForAdd()
+        {
+            RuleForAddAndUpdate();
+        }
+
+        public void RulesForUpdate()
+        {
+            RuleForAddAndUpdate();
+        }
+
+        public void RulesForDelete()
+        {
+        }
+
+        private void RuleForAddAndUpdate()
         {
             RuleFor(c => c.TypeContact)
-                .NotNull()
-                .WithMessage(TypeContactRequired);
-
-            RuleFor(c => c.IsActive)
-                .Equal(true)
-                .WithMessage(ContactNotActive);
+                                   .NotNull()
+                                   .WithMessage(TypeContactRequired);
 
             When(c => c.TypeContact == EnumTypeContact.TypeContactPhone,
                 () =>
                 {
                     RuleFor(c => c.PhoneNumber)
-                        .NotEmpty()
-                        .WithMessage(PhoneNumberRequired);
+                    .NotEmpty()
+                    .WithMessage(PhoneNumberRequired);
 
                     RuleFor(c => c.PhoneNumber)
-                        .MinimumLength(8)
-                        .WithMessage(PhoneNumberMinLength);
+                    .MinimumLength(8)
+                    .WithMessage(PhoneNumberMinLength);
 
                     RuleFor(c => c.PhoneNumber)
-                        .MaximumLength(8)
-                        .WithMessage(PhoneNumberMaxLength);
+                    .MaximumLength(8)
+                    .WithMessage(PhoneNumberMaxLength);
 
                     RuleFor(c => c.Ddd)
-                        .NotEmpty()
-                        .WithMessage(DddRequired);
+                    .NotEmpty()
+                    .WithMessage(DddRequired);
 
                     RuleFor(c => c.Ddd)
-                        .MinimumLength(1)
-                        .WithMessage(DddMinLength);
+                    .MinimumLength(1)
+                    .WithMessage(DddMinLength);
 
                     RuleFor(c => c.Ddd)
-                        .MaximumLength(3)
-                        .WithMessage(DddMaxLength);
+                    .MaximumLength(3)
+                    .WithMessage(DddMaxLength);
                 });
 
             When(c => c.TypeContact == EnumTypeContact.TypeContactCellPhone,

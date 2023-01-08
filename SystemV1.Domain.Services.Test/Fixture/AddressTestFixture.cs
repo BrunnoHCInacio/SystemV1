@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services.Test.Fixture;
@@ -12,7 +11,8 @@ using Xunit;
 namespace SystemV1.Domain.Test.Fixture
 {
     [CollectionDefinition(nameof(AddressCollection))]
-    public class AddressCollection : ICollectionFixture<AddressTestFixture> { }
+    public class AddressCollection : ICollectionFixture<AddressTestFixture>
+    { }
 
     public class AddressTestFixture : IDisposable
     {
@@ -52,18 +52,16 @@ namespace SystemV1.Domain.Test.Fixture
 
         public List<Address> GenerateAddress(int quantity, bool registerEnable = true)
         {
-
             var address = new Faker<Address>("pt_BR")
                             .CustomInstantiator(f => new Address(Guid.NewGuid(),
                                                                 f.Address.ZipCode(),
                                                                 f.Address.StreetName(),
                                                                 f.Random.Number(1, 99999).ToString(),
                                                                 f.Address.SecondaryAddress(),
-                                                                f.Address.Direction()))
-                            .FinishWith((f,a) => 
-                                        {
-                                            if (!registerEnable) a.DisableRegister();
-                                        });
+                                                                f.Address.Direction(),
+                                                                Guid.NewGuid(),
+                                                                Guid.NewGuid()));
+
             return address.Generate(quantity).ToList();
         }
 
@@ -79,7 +77,7 @@ namespace SystemV1.Domain.Test.Fixture
 
         public Address GenerateInvalidAddress()
         {
-            return new Address(new Guid(), null, null, null, null, null, null);
+            return new Address(new Guid(), null, null, null, null, null, Guid.Empty, Guid.Empty);
         }
 
         public List<AddressViewModel> GenerateValidAddressViewModel(int quantity, List<CityViewModel> citiesViewModel)
@@ -89,8 +87,8 @@ namespace SystemV1.Domain.Test.Fixture
 
             var addressesViewModel = new List<AddressViewModel>();
 
-            if (citiesViewModel != null) 
-            { 
+            if (citiesViewModel != null)
+            {
                 city = TestTools.GetRandomEntityInList<CityViewModel>(citiesViewModel);
             }
 
@@ -121,7 +119,7 @@ namespace SystemV1.Domain.Test.Fixture
                     Complement = invalidAddress.Complement,
                     ZipCode = invalidAddress.ZipCode,
                     District = invalidAddress.District,
-                } 
+                }
             };
         }
 

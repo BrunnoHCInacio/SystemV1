@@ -14,7 +14,7 @@ namespace SystemV1.API2.Controllers
     {
         private readonly IApplicationServiceProvider _applicationServideProvider;
 
-        public ProviderController(INotifier notifier, 
+        public ProviderController(INotifier notifier,
                                   IApplicationServiceProvider applicationServideProvider) : base(notifier)
         {
             _applicationServideProvider = applicationServideProvider;
@@ -34,14 +34,8 @@ namespace SystemV1.API2.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<ProviderViewModel>>> GetAll(int page, int pageSize)
+        public async Task<ActionResult<IEnumerable<ProviderViewModel>>> GetAll(int page = 1, int pageSize = 10)
         {
-            if(page == 0 || pageSize == 0)
-            {
-                Notify("É necessário informar a página e a quantidade de itens por página");
-                return OkResult();
-            }
-
             var providers = await _applicationServideProvider.GetAllAsync(page, pageSize);
             return OkResult(providers);
         }
@@ -61,7 +55,7 @@ namespace SystemV1.API2.Controllers
                 return OkResult(ModelState);
             }
 
-            if(!await _applicationServideProvider.ExistsProvider(id))
+            if (!await _applicationServideProvider.ExistsProvider(id))
             {
                 Notify("Fornecedor não encontrato");
                 return OkResult();

@@ -1,42 +1,40 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
 using Moq.AutoMock;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
-using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
+using SystemV1.Domain.Core.Interfaces.Validations;
 using SystemV1.Domain.Entitys;
 using SystemV1.Domain.Services;
-using SystemV1.Domain.Services.Notifications;
+using SystemV1.Domain.Services.Validations;
 using SystemV1.Domain.Test.Fixture;
 using Xunit;
 
 namespace SystemV1.Domain.Test.ServiceTests
 {
     [Collection(nameof(CityCollection))]
-    public class CityServiceTest
+    public class CityServiceTest : ServiceTestBase
     {
         //Adicionar teste para exclusão de cidade de um endereço
 
         private readonly CityTestFixture _cityTestFixture;
-        private readonly AutoMocker _autoMocker;
 
-        public CityServiceTest(CityTestFixture cityTestFixture)
+        public CityServiceTest(CityTestFixture cityTestFixture) : base(new AutoMocker())
         {
             _cityTestFixture = cityTestFixture;
-            _autoMocker = new AutoMocker();
         }
 
         #region Function Add
 
         [Fact(DisplayName = "Add new valid city")]
-        [Trait("Categoria", "Cidade - Serviço")]
+        [Trait("UnitTests - Services", "City")]
         public async Task Add_AddNewValidCity_MustAddCityWithSuccess()
         {
             //Arrange
             var city = _cityTestFixture.GenerateValidCity();
+            SetSetupMock<City, IValidationCity>(city);
             var cityService = _autoMocker.CreateInstance<ServiceCity>();
 
             //Act
@@ -48,11 +46,13 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Add new invalid city")]
-        [Trait("Categoria", "Cidade - Serviço")]
+        [Trait("UnitTests - Services", "City")]
         public async Task Add_AddNewInvalidCity_MustNotAddCity()
         {
             //Arrange
             var city = _cityTestFixture.GenerateInvalidCity();
+            var errors = GenerateMockErrors("Name", ValidationCity.NameRequired);
+            SetSetupMock<City, IValidationCity>(city, errors);
             var cityService = _autoMocker.CreateInstance<ServiceCity>();
 
             //Act
@@ -63,33 +63,18 @@ namespace SystemV1.Domain.Test.ServiceTests
             _autoMocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
         }
 
-        [Fact(DisplayName = "Add new valid city with exception on repository")]
-        [Trait("Categoria", "Cidade - Serviço")]
-        public async Task Add_AddNewValidCityWithExceptionOnRepository_MustNotAddCityAndNotifyErrors()
-        {
-            //Arrange
-            var city = _cityTestFixture.GenerateValidCity();
-            _autoMocker.GetMock<IRepositoryCity>().Setup(r => r.Add(It.IsAny<City>())).Throws(new Exception());
-            var cityService = _autoMocker.CreateInstance<ServiceCity>();
-
-            //Act
-            await cityService.AddAsyncUow(city);
-
-            //Assert
-            _autoMocker.GetMock<IRepositoryCity>().Verify(r => r.Add(city), Times.Once);
-            _autoMocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
-            _autoMocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
-            Assert.Throws<Exception>(() => cityService.Add(city));
-        }
-        #endregion
+        #endregion Function Add
 
         #region Function Update
+
         [Fact(DisplayName = "Update valid city")]
-        [Trait("Categoria", "Cidade - Serviço")]
+        [Trait("UnitTests - Services", "City")]
         public async Task Update_UpdateValidCity_MustUpdateCityWithSuccess()
         {
             //Arrange
             var city = _cityTestFixture.GenerateValidCity();
+
+            SetSetupMock<City, IValidationCity>(city);
             var cityService = _autoMocker.CreateInstance<ServiceCity>();
 
             //Act
@@ -101,11 +86,13 @@ namespace SystemV1.Domain.Test.ServiceTests
         }
 
         [Fact(DisplayName = "Update invalid city")]
-        [Trait("Categoria", "Cidade - Serviço")]
+        [Trait("UnitTests - Services", "City")]
         public async Task Update_UpdateInvalidCity_MustNotUpdateCity()
         {
             //Arrange
             var city = _cityTestFixture.GenerateInvalidCity();
+            var errors = GenerateMockErrors("Name", ValidationCity.NameRequired);
+            SetSetupMock<City, IValidationCity>(city, errors);
             var cityService = _autoMocker.CreateInstance<ServiceCity>();
 
             //Act
@@ -116,186 +103,108 @@ namespace SystemV1.Domain.Test.ServiceTests
             _autoMocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
         }
 
-        [Fact(DisplayName = "Update valid city with exception on repository")]
-        [Trait("Categoria", "Cidade - Serviço")]
-        public async Task Update_UptadeValidCityWithExceptionOnRepository_MustNotUPdateCityAndNotifyErrors()
-        {
-            //Arrange
-            var city = _cityTestFixture.GenerateValidCity();
-            _autoMocker.GetMock<IRepositoryCity>().Setup(r => r.Update(It.IsAny<City>())).Throws(new Exception());
-            var cityService = _autoMocker.CreateInstance<ServiceCity>();
-
-            //Act
-            await cityService.UpdateAsyncUow(city);
-
-            //Assert
-            _autoMocker.GetMock<IRepositoryCity>().Verify(r => r.Update(city), Times.Once);
-            _autoMocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
-            _autoMocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
-            Assert.Throws<Exception>(() => cityService.Update(city));
-        }
-        #endregion
+        #endregion Function Update
 
         #region Function Remove
+
         [Fact(DisplayName = "Remove city with success")]
-        [Trait("Categoria", "Cidade - Serviço")]
+        [Trait("UnitTests - Services", "City")]
         public async Task Remove_RemoveCity_MustRemoveCityWithSuccess()
         {
             //Arrange
             var city = _cityTestFixture.GenerateValidCity();
+
+            SetSetupMock<City, IValidationCity>(city);
             var cityService = _autoMocker.CreateInstance<ServiceCity>();
 
             //Act
             await cityService.RemoveAsyncUow(city);
 
             //Assert
-            _autoMocker.GetMock<IRepositoryCity>().Verify(r => r.Update(city), Times.Once);
+            _autoMocker.GetMock<IRepositoryCity>().Verify(r => r.Remove(city), Times.Once);
             _autoMocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Once);
         }
 
-        [Fact(DisplayName = "Remove city with exception on repository")]
-        [Trait("Categoria", "Cidade - Serviço")]
-        public async Task Remove_RemoveCityWithExceptionOnRepository_MustNotRemoveCityAndNotifyErrors()
+        [Fact(DisplayName = "Remove city with references")]
+        [Trait("UnitTests - Services", "City")]
+        public async Task Remove_RemoveCityWithReferences_ShouldNotRemove()
         {
             //Arrange
             var city = _cityTestFixture.GenerateValidCity();
-            _autoMocker.GetMock<IRepositoryCity>().Setup(r => r.Update(It.IsAny<City>())).Throws(new Exception());
+            var errors = GenerateMockErrors("", ValidationCity.CityNotDeleteHaveLinks);
+            SetSetupMock<City, IValidationCity>(city, errors);
+
             var cityService = _autoMocker.CreateInstance<ServiceCity>();
 
             //Act
             await cityService.RemoveAsyncUow(city);
 
             //Assert
-            _autoMocker.GetMock<IRepositoryCity>().Verify(r => r.Update(city), Times.Once);
+            _autoMocker.GetMock<IRepositoryCity>().Verify(r => r.Remove(city), Times.Never);
             _autoMocker.GetMock<IUnitOfWork>().Verify(u => u.CommitAsync(), Times.Never);
-            _autoMocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
-            Assert.Throws<Exception>(() => cityService.Remove(city));
         }
-        #endregion
+
+        #endregion Function Remove
 
         #region Function Get
+
         [Fact(DisplayName = "Get all citeis")]
-        [Trait("Categoria", "Cidade - Serviço")]
+        [Trait("UnitTests - Services", "City")]
         public async Task GetAll_GetAllCities_MustReturnListOfTheCity()
         {
             //Arrange
+            var page = 1;
+            var pageSize = 10;
             _autoMocker.GetMock<IRepositoryCity>()
-                  .Setup(r => r.GetAllCitiesAsync(1, 10))
-                  .Returns(Task.FromResult((IEnumerable<City>)_cityTestFixture.GenerateCity(5)));
+                  .Setup(r => r.SearchAsync(null, page, pageSize))
+                  .Returns(Task.FromResult(_cityTestFixture.GenerateCity(5)));
             var serviceCity = _autoMocker.CreateInstance<ServiceCity>();
 
             //Act
-            var cities = await serviceCity.GetAllAsync(1, 10);
+            var cities = await serviceCity.SearchAsync(null, page, pageSize);
 
             //Assert
             Assert.NotEmpty(cities);
         }
 
-        [Fact(DisplayName = "Get all citeis with exception")]
-        [Trait("Categoria", "Cidade - Serviço")]
-        public async Task GetAll_GetAllCities_MustReturnErrorNotification()
-        {
-            //Arrange
-            _autoMocker.GetMock<IRepositoryCity>()
-                  .Setup(r => r.GetAllCitiesAsync(1, 10))
-                  .Throws(new Exception());
-            var serviceCity = _autoMocker.CreateInstance<ServiceCity>();
-
-            //Act
-            var cities = await serviceCity.GetAllAsync(1, 10);
-
-            //Assert
-            Assert.Null(cities);
-            _autoMocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
-        }
-
         [Fact(DisplayName = "Get city by id with success")]
-        [Trait("Categoria", "Cidade - Serviço")]
+        [Trait("UnitTests - Services", "City")]
         public async Task GetById_GetCityByIdAsync_MustReturnACity()
         {
             //Arrange
+            var cityId = Guid.NewGuid();
             _autoMocker.GetMock<IRepositoryCity>()
-                       .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+                       .Setup(r => r.GetEntityAsync(c => c.Id == cityId, null))
                        .Returns(Task.FromResult(_cityTestFixture.GenerateValidCity()));
             var serviceCity = _autoMocker.CreateInstance<ServiceCity>();
 
             //Act
-            var city = await serviceCity.GetByIdAsync(Guid.NewGuid());
+            var city = await serviceCity.GetEntityAsync(c => c.Id == cityId, null);
 
             //Assert
             Assert.NotNull(city);
         }
 
-        [Fact(DisplayName = "Get city by id with exception")]
-        [Trait("Categoria", "Cidade - Serviço")]
-        public async Task GetById_GetCityByIdAsync_MustReturnErrorNotification()
-        {
-            //Arrange
-            _autoMocker.GetMock<IRepositoryCity>()
-                       .Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
-                       .Throws(new Exception());
-            var serviceCity = _autoMocker.CreateInstance<ServiceCity>();
-
-            //Act
-            var city = await serviceCity.GetByIdAsync(Guid.NewGuid());
-
-            //Assert
-            Assert.Null(city);
-            _autoMocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
-        }
-
-        [Fact(DisplayName ="Get city by name with success")]
-        [Trait("Categoria", "Cidade - Serviço")]
+        [Fact(DisplayName = "Get city by name with success")]
+        [Trait("UnitTests - Services", "City")]
         public async Task GetByName_GetByName_MustReturnListOfTheCities()
         {
             //Arrange
+            var name = "aaaa";
             _autoMocker.GetMock<IRepositoryCity>()
-                       .Setup(r => r.GetByNameAsync("AAAss"))
-                       .Returns(Task.FromResult((IEnumerable<City>)_cityTestFixture.GenerateCity(10)));
+                       .Setup(r => r.SearchAsync(c => c.Name.ToUpper() == name.ToUpper()))
+                       .Returns(Task.FromResult(_cityTestFixture.GenerateCity(10)));
             var serviceCity = _autoMocker.CreateInstance<ServiceCity>();
 
             //Act
-            var cities = await serviceCity.GetByNameAsync("AAAss");
+            var cities = await serviceCity.SearchAsync(c => c.Name.ToUpper() == name.ToUpper());
 
             //Assert
 
-            Assert.NotEmpty(cities);
+            cities.Should().NotBeEmpty();
+            cities.Should().HaveCount(10);
         }
 
-        [Fact(DisplayName = "Get city by invalid name")]
-        [Trait("Categoria", "Cidade - Serviço")]
-        public async Task GetByName_GetByNameWithInvalidName_MustReturndNotifyMessage()
-        {
-            //Arrange
-            var serviceCity = _autoMocker.CreateInstance<ServiceCity>();
-
-            //Act
-            var cities = await serviceCity.GetByNameAsync("");
-
-            //Assert
-
-            Assert.Null(cities);
-            _autoMocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
-        }
-
-        [Fact(DisplayName = "Get city by name with exception")]
-        [Trait("Categoria", "Cidade - Serviço")]
-        public async Task GetByName_GetByNameWithException_MustReturndNotifyMessage()
-        {
-            //Arrange
-            _autoMocker.GetMock<IRepositoryCity>()
-                       .Setup(r => r.GetByNameAsync("AAA"))
-                       .Throws(new Exception());
-            var serviceCity = _autoMocker.CreateInstance<ServiceCity>();
-
-            //Act
-            var cities = await serviceCity.GetByNameAsync("AAA");
-
-            //Assert
-
-            Assert.Null(cities);
-            _autoMocker.GetMock<INotifier>().Verify(n => n.Handle(It.IsAny<Notification>()), Times.Once);
-        }
-        #endregion
+        #endregion Function Get
     }
 }

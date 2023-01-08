@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using SystemV1.Domain.Entitys;
 
 namespace SystemV1.Infrastructure.Data.Mappings
@@ -18,9 +15,7 @@ namespace SystemV1.Infrastructure.Data.Mappings
             builder.Property(c => c.Ddi).HasColumnType("varchar(1024)");
             builder.Property(c => c.Email).HasColumnType("varchar(1024)");
             builder.Property(c => c.TypeContact).HasColumnType("varchar(200)");
-            builder.HasOne(c => c.Provider);
-            builder.HasOne(c => c.Client);
-            builder.Property(c => c.IsActive);
+            builder.HasOne(c => c.People);
             builder.ToTable("Contacts");
         }
     }

@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SystemV1.Domain.Core.Interfaces.Validations;
 using SystemV1.Domain.Entitys;
 
-namespace SystemV1.Domain.Validations
+namespace SystemV1.Domain.Services.Validations
 {
-    public class AddressValidation : AbstractValidator<Address>
+    public class ValidationAddress : AbstractValidator<Address>, IValidationAddress
     {
         public static string StreetRequired => "O logradoudo é obrigatório.";
 
@@ -16,8 +14,25 @@ namespace SystemV1.Domain.Validations
 
         public static string DistrictLenght2_50 => "O bairro deve conter entre 2 e 50 caracteres.";
 
-        public static string AddressNotActive => "O endereço deve estar ativo.";
-        public AddressValidation()
+        public ValidationAddress()
+        {
+        }
+
+        public void RulesForAdd()
+        {
+            RuleForAddAndUpdate();
+        }
+
+        public void RulesForUpdate()
+        {
+            RuleForAddAndUpdate();
+        }
+
+        public void RulesForDelete()
+        {
+        }
+
+        private void RuleForAddAndUpdate()
         {
             RuleFor(a => a.Street)
                .NotEmpty()
@@ -32,10 +47,6 @@ namespace SystemV1.Domain.Validations
             RuleFor(a => a.District)
                 .Length(2, 50)
                 .WithMessage(DistrictLenght2_50);
-
-            RuleFor(a => a.IsActive)
-                .Equal(true)
-                .WithMessage(AddressNotActive);
         }
     }
 }

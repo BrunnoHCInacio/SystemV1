@@ -1,7 +1,4 @@
 ﻿using Autofac;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using SystemV1.Application;
 using SystemV1.Application.Interfaces;
 using SystemV1.Application.Interfaces.Mapper;
@@ -9,8 +6,10 @@ using SystemV1.Application.Mappers;
 using SystemV1.Domain.Core.Interfaces.Repositorys;
 using SystemV1.Domain.Core.Interfaces.Services;
 using SystemV1.Domain.Core.Interfaces.Uow;
+using SystemV1.Domain.Core.Interfaces.Validations;
 using SystemV1.Domain.Services;
 using SystemV1.Domain.Services.Notifications;
+using SystemV1.Domain.Services.Validations;
 using SystemV1.Infrastructure.Data.Repositorys;
 using SystemV1.Infrastructure.Data.Uow;
 
@@ -31,6 +30,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<RepositoryState>().As<IRepositoryState>();
             builder.RegisterType<RepositoryCountry>().As<IRepositoryCountry>();
             builder.RegisterType<RepositoryCity>().As<IRepositoryCity>();
+            builder.RegisterType<RepositoryPeople>().As<IRepositoryPeople>();
 
             #endregion Repositorys
 
@@ -44,6 +44,7 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<ServiceState>().As<IServiceState>();
             builder.RegisterType<ServiceCountry>().As<IServiceCountry>();
             builder.RegisterType<ServiceCity>().As<IServiceCity>();
+            builder.RegisterType<ServiceProductItem>().As<IServiceProductItem>();
 
             #endregion Services
 
@@ -59,7 +60,6 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<MapperState>().As<IMapperState>();
             builder.RegisterType<MapperCity>().As<IMapperCity>();
 
-
             #endregion Mappers
 
             #region Application
@@ -72,6 +72,21 @@ namespace SystemV1.Infrastructure.CrossCutting.IOC
             builder.RegisterType<ApplicationServiceCity>().As<IApplicationServiceCity>();
 
             #endregion Application
+
+            #region Validations
+
+            builder.RegisterType<ValidationCountry>().As<IValidationCountry>();
+            builder.RegisterType<ValidationState>().As<IValidationState>();
+            builder.RegisterType<ValidationCity>().As<IValidationCity>();
+            builder.RegisterType<ValidationPeople>().As<IValidationPeople>();
+            builder.RegisterType<ValidationClient>().As<IValidationClient>();
+            builder.RegisterType<ValidationProvider>().As<IValidationProvider>();
+            builder.RegisterType<ValidationProduct>().As<IValidationProduct>();
+            builder.RegisterType<ValidationProductItem>().As<IValidationProductItem>();
+            builder.RegisterType<ValidationAddress>().As<IValidationAddress>();
+            builder.RegisterType<ValidationContact>().As<IValidationContact>();
+
+            #endregion Validations
 
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
             builder.RegisterType<Notifier>().As<INotifier>().InstancePerLifetimeScope();

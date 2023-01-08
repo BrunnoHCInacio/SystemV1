@@ -10,15 +10,15 @@ using SystemV1.Infrastructure.Data;
 namespace SystemV1.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20220513142132_create_database")]
-    partial class create_database
+    [Migration("20221219223538_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.14")
+                .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Address", b =>
@@ -30,34 +30,16 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("CityId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Complement")
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("DateChange")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateRegister")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("District")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("IdUserChange")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdUserRegister")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Number")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ProviderId")
+                    b.Property<Guid>("PeopleId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Street")
@@ -70,11 +52,35 @@ namespace SystemV1.Infrastructure.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("ProviderId");
+                    b.HasIndex("PeopleId");
 
                     b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("SystemV1.Domain.Entitys.Audit.EntityAudit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AuditedEntity")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("EntityName")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("IdUser")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("TypeOperation")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EntityAudit");
                 });
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.City", b =>
@@ -82,21 +88,6 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DateChange")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateRegister")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("IdUserChange")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdUserRegister")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -117,28 +108,12 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("DateChange")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateRegister")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Document")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("IdUserChange")
+                    b.Property<Guid>("PeopleId")
                         .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdUserRegister")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PeopleId");
 
                     b.ToTable("Client");
                 });
@@ -152,15 +127,6 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<string>("CellPhoneNumber")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DateChange")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateRegister")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("Ddd")
                         .HasColumnType("text");
 
@@ -170,29 +136,18 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("IdUserChange")
+                    b.Property<Guid>("PeopleId")
                         .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdUserRegister")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
-
-                    b.Property<Guid>("ProviderId")
-                        .HasColumnType("uuid");
 
                     b.Property<int>("TypeContact")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("ProviderId");
+                    b.HasIndex("PeopleId");
 
                     b.ToTable("Contact");
                 });
@@ -203,21 +158,6 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("DateChange")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateRegister")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("IdUserChange")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdUserRegister")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -226,31 +166,36 @@ namespace SystemV1.Infrastructure.Migrations
                     b.ToTable("Country");
                 });
 
+            modelBuilder.Entity("SystemV1.Domain.Entitys.People", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Document")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("TypePeople")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("People");
+                });
+
             modelBuilder.Entity("SystemV1.Domain.Entitys.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("DateChange")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateRegister")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("IdUserChange")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdUserRegister")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ProviderId")
+                    b.Property<Guid>("ProviderId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -266,23 +211,8 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("DateChange")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateRegister")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("IdUserChange")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdUserRegister")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("ImageZip")
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean");
@@ -312,28 +242,12 @@ namespace SystemV1.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("DateChange")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateRegister")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Document")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("IdUserChange")
+                    b.Property<Guid>("PeopleId")
                         .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdUserRegister")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PeopleId");
 
                     b.ToTable("Providers");
                 });
@@ -346,21 +260,6 @@ namespace SystemV1.Infrastructure.Migrations
 
                     b.Property<Guid>("CountryId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DateChange")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateRegister")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("IdUserChange")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdUserRegister")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -380,23 +279,15 @@ namespace SystemV1.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SystemV1.Domain.Entitys.Client", "Client")
+                    b.HasOne("SystemV1.Domain.Entitys.People", "People")
                         .WithMany("Addresses")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SystemV1.Domain.Entitys.Provider", "Provider")
-                        .WithMany("Addresses")
-                        .HasForeignKey("ProviderId")
+                        .HasForeignKey("PeopleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("City");
 
-                    b.Navigation("Client");
-
-                    b.Navigation("Provider");
+                    b.Navigation("People");
                 });
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.City", b =>
@@ -410,30 +301,35 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Navigation("State");
                 });
 
+            modelBuilder.Entity("SystemV1.Domain.Entitys.Client", b =>
+                {
+                    b.HasOne("SystemV1.Domain.Entitys.People", "People")
+                        .WithMany()
+                        .HasForeignKey("PeopleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("People");
+                });
+
             modelBuilder.Entity("SystemV1.Domain.Entitys.Contact", b =>
                 {
-                    b.HasOne("SystemV1.Domain.Entitys.Client", "Client")
+                    b.HasOne("SystemV1.Domain.Entitys.People", "People")
                         .WithMany("Contacts")
-                        .HasForeignKey("ClientId")
+                        .HasForeignKey("PeopleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SystemV1.Domain.Entitys.Provider", "Provider")
-                        .WithMany("Contacts")
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Provider");
+                    b.Navigation("People");
                 });
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.Product", b =>
                 {
                     b.HasOne("SystemV1.Domain.Entitys.Provider", "Provider")
                         .WithMany()
-                        .HasForeignKey("ProviderId");
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Provider");
                 });
@@ -449,6 +345,17 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("SystemV1.Domain.Entitys.Provider", b =>
+                {
+                    b.HasOne("SystemV1.Domain.Entitys.People", "People")
+                        .WithMany()
+                        .HasForeignKey("PeopleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("People");
+                });
+
             modelBuilder.Entity("SystemV1.Domain.Entitys.State", b =>
                 {
                     b.HasOne("SystemV1.Domain.Entitys.Country", "Country")
@@ -460,28 +367,21 @@ namespace SystemV1.Infrastructure.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("SystemV1.Domain.Entitys.Client", b =>
-                {
-                    b.Navigation("Addresses");
-
-                    b.Navigation("Contacts");
-                });
-
             modelBuilder.Entity("SystemV1.Domain.Entitys.Country", b =>
                 {
                     b.Navigation("States");
                 });
 
-            modelBuilder.Entity("SystemV1.Domain.Entitys.Product", b =>
-                {
-                    b.Navigation("ProductItems");
-                });
-
-            modelBuilder.Entity("SystemV1.Domain.Entitys.Provider", b =>
+            modelBuilder.Entity("SystemV1.Domain.Entitys.People", b =>
                 {
                     b.Navigation("Addresses");
 
                     b.Navigation("Contacts");
+                });
+
+            modelBuilder.Entity("SystemV1.Domain.Entitys.Product", b =>
+                {
+                    b.Navigation("ProductItems");
                 });
 
             modelBuilder.Entity("SystemV1.Domain.Entitys.State", b =>

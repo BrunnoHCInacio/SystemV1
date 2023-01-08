@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using SystemV1.Application.Resources;
 
 namespace SystemV1.Application.ViewModels
@@ -26,9 +24,7 @@ namespace SystemV1.Application.ViewModels
 
         [Required(ErrorMessage = ConstantMessages.CityRequired_PT)]
         public Guid CityId { get; set; }
-        public string CityName { get; set; }
 
-        public Guid? IdCLient { get; set; }
-        public Guid? IdProvider { get; set; }
+        public string CityName { get; set; }
     }
 }

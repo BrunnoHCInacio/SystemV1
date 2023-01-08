@@ -13,7 +13,8 @@ namespace SystemV1.API2.Controllers
     public class CityController : MainController
     {
         private readonly IApplicationServiceCity _applicationServiceCity;
-        public CityController(INotifier notifier, 
+
+        public CityController(INotifier notifier,
                               IApplicationServiceCity applicationServiceCity) : base(notifier)
         {
             _applicationServiceCity = applicationServiceCity;
@@ -34,7 +35,7 @@ namespace SystemV1.API2.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<CityViewModel>>> GetAll(int page, int pageSize)
         {
-            if(page == 0 || pageSize == 0)
+            if (page == 0 || pageSize == 0)
             {
                 Notify("É necessário informar a página e a quantidade de itens por página");
                 return OkResult();
@@ -48,6 +49,13 @@ namespace SystemV1.API2.Controllers
         public async Task<ActionResult<CityViewModel>> GetById(Guid id)
         {
             var city = await _applicationServiceCity.GetByIdAsync(id);
+            return OkResult(city);
+        }
+
+        [HttpGet("GetCityStateById/{id:guid}")]
+        public async Task<ActionResult<CityViewModel>> GetCityStateById(Guid id)
+        {
+            var city = await _applicationServiceCity.GetCityStateByIdAsync(id);
             return OkResult(city);
         }
 
@@ -66,17 +74,14 @@ namespace SystemV1.API2.Controllers
         [HttpDelete("Delete/{id:guid}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var city = await _applicationServiceCity.GetByIdAsync(id);
-
-            if(city == null)
+            if (!await _applicationServiceCity.ExistsAsync(id))
             {
                 Notify("Cidade não encontrada.");
                 return OkResult();
             }
 
-            await _applicationServiceCity.DeleteAsync(city);
+            await _applicationServiceCity.RemoveAsync(id);
             return OkResult();
         }
     }
-
 }

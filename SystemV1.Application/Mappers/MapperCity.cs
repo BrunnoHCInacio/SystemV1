@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
@@ -12,6 +11,11 @@ namespace SystemV1.Application.Mappers
     {
         public CityViewModel EntityToViewModel(City city)
         {
+            if (city == null)
+            {
+                return null;
+            }
+
             return new CityViewModel
             {
                 Id = city.Id,
@@ -24,14 +28,19 @@ namespace SystemV1.Application.Mappers
         public IEnumerable<CityViewModel> ListEntityToViewModel(IEnumerable<City> cities)
         {
             if (cities == null)
-            { 
+            {
                 return null;
             }
 
             return cities.Select(c => EntityToViewModel(c));
         }
 
-        public List<City> ListViewModelToEntity(IEnumerable<CityViewModel> cityViewModels)
+        public List<CityViewModel> ListEntityToViewModel(List<City> cities)
+        {
+            return cities.Select(c => EntityToViewModel(c)).ToList();
+        }
+
+        public List<City> ListViewModelToEntity(List<CityViewModel> cityViewModels)
         {
             return cityViewModels.Select(c => ViewModelToEntity(c)).ToList();
         }
@@ -39,7 +48,7 @@ namespace SystemV1.Application.Mappers
         public City ViewModelToEntity(CityViewModel cityViewModel)
         {
             var city = new City(cityViewModel.Id, cityViewModel.Name);
-            if (cityViewModel.StateId.HasValue 
+            if (cityViewModel.StateId.HasValue
                 && cityViewModel.StateId != Guid.Empty)
             {
                 city.SetState(cityViewModel.StateId.GetValueOrDefault());

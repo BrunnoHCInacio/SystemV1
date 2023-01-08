@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using SystemV1.Application.ViewModels;
 
 namespace SystemV1.Application.Interfaces
 {
-    public interface IApplicationServiceCity
+    public interface IApplicationServiceCity : IApplicationService<CityViewModel>
     {
-        Task AddAsync(CityViewModel cityViewModel);
-        Task UpdateAsync(CityViewModel cityViewModel);
-        Task DeleteAsync(CityViewModel cityViewModel);
-        Task<IEnumerable<CityViewModel>> GetAllAsync(int page, int pageSize);
-        Task<CityViewModel> GetByIdAsync(Guid id);
+        Task<List<CityViewModel>> GetByNameAsync(string name);
+
+        Task<CityViewModel> GetCityStateByIdAsync(Guid id);
     }
 }

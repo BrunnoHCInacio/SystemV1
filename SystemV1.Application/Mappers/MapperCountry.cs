@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
@@ -23,16 +22,18 @@ namespace SystemV1.Application.Mappers
             return new CountryViewModel
             {
                 Id = country.Id,
-                Name = country.Name,
-                States = country.States != null && country.States.Any() 
-                            ? _mapperState.ListEntityToViewModel(country.States) 
-                            : null
+                Name = country.Name
             };
         }
 
-        public IEnumerable<CountryViewModel> ListEntityToViewModel(IEnumerable<Country> countries)
+        public List<CountryViewModel> ListEntityToViewModel(List<Country> countries)
         {
-            return countries.Select(c => EntityToViewModel(c));
+            return countries.Select(c => EntityToViewModel(c)).ToList();
+        }
+
+        public List<Country> ListViewModelToEntity(List<CountryViewModel> viewModels)
+        {
+            return viewModels.Select(c => ViewModelToEntity(c)).ToList();
         }
 
         public Country ViewModelToEntity(CountryViewModel countryViewModel, Country countryPersisted)
@@ -40,29 +41,20 @@ namespace SystemV1.Application.Mappers
             countryPersisted.Id = countryViewModel.Id.GetValueOrDefault();
             countryPersisted.Name = countryViewModel.Name;
 
-            if (countryViewModel.States != null 
-                && countryViewModel.States.Any())
-            {
-                
-                countryPersisted.AddStates(_mapperState.ListViewModelToEntity(countryViewModel.States));
-                
-            }
-
             return countryPersisted;
         }
 
         public Country ViewModelToEntity(CountryViewModel countryViewModel)
         {
-            if (countryViewModel.States != null
-                && countryViewModel.States.Any())
+            if (countryViewModel.Id.GetValueOrDefault() == null
+                   || countryViewModel.Id.GetValueOrDefault() == Guid.Empty)
             {
-                return new Country(countryViewModel.Id.GetValueOrDefault(),
-                                   countryViewModel.Name,
-                                   _mapperState.ListViewModelToEntity(countryViewModel.States));
+                countryViewModel.Id = Guid.NewGuid();
             }
 
             return new Country(countryViewModel.Id.GetValueOrDefault(),
-                                   countryViewModel.Name);
+                               countryViewModel.Name,
+                               null);
         }
     }
 }

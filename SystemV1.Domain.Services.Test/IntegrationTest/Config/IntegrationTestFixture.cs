@@ -22,6 +22,9 @@ namespace SystemV1.Domain.Test.IntegrationTest.Config
 
         public Guid ProviderId { get; set; }
 
+        public string Email { get; set; }
+        public string Password { get; set; }
+
         public IntegrationTestFixture()
         {
             var clientOptions = new WebApplicationFactoryClientOptions

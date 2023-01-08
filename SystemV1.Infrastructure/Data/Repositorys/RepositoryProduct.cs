@@ -1,5 +1,4 @@
-﻿using Dapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,26 +19,27 @@ namespace SystemV1.Infrastructure.Data.Repositorys
         public async Task<IEnumerable<Product>> GetAllProductsAsync(int page, int pageSize)
         {
             var skip = (page - 1) * pageSize;
-            return await _sqlContext.Product.Where(p => p.IsActive)
-                                            .Skip(skip)
+            return await _sqlContext.Product.Skip(skip)
                                             .Take(pageSize)
                                             .ToListAsync();
         }
 
         public async Task<IEnumerable<Product>> GetByNameAsync(string name)
         {
-            var sql = $@"
-                        SELECT *
-                        FROM {"\""}Product{"\""}
-                        WHERE Name LIKE {name}
-                            AND {"\""}IsActive{"\""}
-                        ";
-            return await _sqlContext.Connection.QueryAsync<Product>(sql);
+            //var sql = $@"
+            //            SELECT *
+            //            FROM {"\""}Product{"\""}
+            //            WHERE Name LIKE {name}
+            //                AND {"\""}IsActive{"\""}
+            //            ";
+            //return await _sqlContext.Connection.QueryAsync<Product>(sql);
+
+            return null;
         }
 
         public async Task<Product> GetProductByIdAsync(System.Guid id)
         {
-            return await _sqlContext.Product.SingleAsync(p => p.IsActive && p.Id == id);
+            return await _sqlContext.Product.SingleAsync(p => p.Id == id);
         }
     }
 }

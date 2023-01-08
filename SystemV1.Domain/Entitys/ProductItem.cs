@@ -1,20 +1,25 @@
-﻿using FluentValidation.Results;
-using System;
-using SystemV1.Domain.Validations;
+﻿using System;
 
 namespace SystemV1.Domain.Entitys
 {
     public class ProductItem : Entity
     {
+        public ProductItem()
+        {
+        }
+
         public ProductItem(Guid id,
                            string modelo,
                            decimal value,
+                           Product product,
                            string imageZip = null)
         {
             Id = id;
             Modelo = modelo;
             Value = value;
             ImageZip = imageZip;
+            Product = product;
+            ProductId = product?.Id ?? Guid.Empty;
         }
 
         public Product Product { get; private set; }
@@ -32,14 +37,9 @@ namespace SystemV1.Domain.Entitys
             IsSold = true;
         }
 
-        public void SetProductForSale()
+        public void SetProductItemAvailable()
         {
-            SetProductItemAvailable();
             IsSold = false;
-        }
-
-        private void SetProductItemAvailable()
-        {
             IsAvailable = true;
         }
 
@@ -51,11 +51,7 @@ namespace SystemV1.Domain.Entitys
         public void SetProduct(Product product)
         {
             Product = product;
-        }
-
-        public ValidationResult ValidateProductItem()
-        {
-            return new ProductItemValidation().Validate(this);
+            ProductId = product.Id;
         }
     }
 }

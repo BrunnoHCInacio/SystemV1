@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SystemV1.Application.Interfaces.Mapper;
 using SystemV1.Application.ViewModels;
 using SystemV1.Domain.Entitys;
@@ -30,28 +29,17 @@ namespace SystemV1.Application.Mappers
             return addresses.Select(a => EntityToViewModel(a));
         }
 
-        public Address ViewModelToEntity(AddressViewModel addressViewModel)
+        public Address ViewModelToEntity(AddressViewModel addressViewModel,
+                                         Guid peopleId)
         {
-            var address = new Address(addressViewModel.Id,
-                                      addressViewModel.ZipCode,
-                                      addressViewModel.Street,
-                                      addressViewModel.Number,
-                                      addressViewModel.Complement,
-                                      addressViewModel.District);
-
-            address.SetCity(addressViewModel.CityId);
-
-            if (addressViewModel.IdCLient.HasValue)
-            {
-                address.SetClient(addressViewModel.IdCLient.GetValueOrDefault());
-            }
-
-            if (addressViewModel.IdProvider.HasValue)
-            {
-                address.SetProvider(addressViewModel.IdProvider.GetValueOrDefault());
-            }
-
-            return address;
+            return new Address(addressViewModel.Id,
+                               addressViewModel.ZipCode,
+                               addressViewModel.Street,
+                               addressViewModel.Number,
+                               addressViewModel.Complement,
+                               addressViewModel.District,
+                               addressViewModel.CityId,
+                               peopleId);
         }
     }
 }

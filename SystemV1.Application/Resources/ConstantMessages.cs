@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SystemV1.Application.Resources
+﻿namespace SystemV1.Application.Resources
 {
     public static class ConstantMessages
     {
@@ -43,5 +39,10 @@ namespace SystemV1.Application.Resources
         public static string pageAndPageSizeRequired => "É necessário informar a página e a quantidade de itens por página";
         public static string ProviderNotFound => "Fornecedor não encontrato";
         public static string ClientNotFound => "Cliente não encontrado.";
+
+        public const string PasswordNotEquals = "As senhas não conferem.";
+        public const string FieldIsRequired = "O campo {0} é obrigatório.";
+        public const string InvalidValueField = "O campo {0} está em formato inválido.";
+        public const string InvalidLengthField = "O campo {0} precisa ter entre {2} e {1} caracter.";
     }
 }

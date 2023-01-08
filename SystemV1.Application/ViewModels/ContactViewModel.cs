@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using SystemV1.Application.Resources;
 using SystemV1.Domain.Enums;
 
@@ -21,7 +19,6 @@ namespace SystemV1.Application.ViewModels
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
 
-        public Guid? IdProvider { get; set; }
-        public Guid? IdClient { get; set; }
+        public Guid peopleId { get; set; }
     }
 }

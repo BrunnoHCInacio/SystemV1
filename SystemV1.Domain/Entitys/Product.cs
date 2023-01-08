@@ -1,30 +1,25 @@
-﻿using FluentValidation.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Entitys
 {
     public class Product : Entity
     {
         public Product(Guid id,
-                       string name)
+                       string name,
+                       Guid providerId)
         {
             ProductItems = new List<ProductItem>();
             Id = id;
             Name = name;
+            ProviderId = providerId;
         }
 
         public string Name { get; private set; }
         public Provider Provider { get; private set; }
+        public Guid ProviderId { get; set; }
 
         public List<ProductItem> ProductItems { get; private set; }
-
-        public void SetProvider(Provider provider)
-        {
-            Provider = provider;
-        }
 
         public void AddProductItems(List<ProductItem> productItems)
         {
@@ -34,11 +29,6 @@ namespace SystemV1.Domain.Entitys
         public void AddProductItem(ProductItem product)
         {
             ProductItems.Add(product);
-        }
-
-        public ValidationResult ValidateProduct()
-        {
-            return new ProductValidation().Validate(this);
         }
     }
 }

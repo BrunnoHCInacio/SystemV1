@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SystemV1.Application.ViewModels
 {
@@ -9,7 +8,7 @@ namespace SystemV1.Application.ViewModels
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string ProviderName { get; set; }
-        public Guid? IdProvider { get; set; }
+        public Guid providerId { get; set; }
 
         public IEnumerable<ProductItemViewModel> ProductItems { get; set; }
     }

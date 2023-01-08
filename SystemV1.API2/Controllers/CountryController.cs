@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using SystemV1.Application.Interfaces;
 using SystemV1.Application.Resources;
@@ -77,9 +75,9 @@ namespace SystemV1.API2.Controllers
         [HttpDelete("Delete/{id:guid}")]
         public async Task<ActionResult> Remove(Guid id)
         {
-            if (!await _applicationServiceCountry.ExistsCountry(id))
+            if (!await _applicationServiceCountry.ExistsAsync(id))
             {
-                Notify("Não foi encontrato o país com o id informado.");
+                Notify("País não encontrado.");
                 return OkResult();
             }
 

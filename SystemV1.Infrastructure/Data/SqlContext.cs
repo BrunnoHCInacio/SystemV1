@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Npgsql;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
-using System.Data.SqlClient;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemV1.Domain.Entitys;
+using SystemV1.Domain.Entitys.Audit;
 
 namespace SystemV1.Infrastructure.Data
 {
@@ -17,22 +20,6 @@ namespace SystemV1.Infrastructure.Data
         {
         }
 
-        private NpgsqlConnection _connection;
-
-        public NpgsqlConnection Connection
-        {
-            get
-            {
-                if (_connection == null)
-                {
-                    _connection = new NpgsqlConnection(Database.GetDbConnection().ConnectionString);
-                    _connection.Open();
-                }
-               
-                return _connection;
-            }
-        }
-
         public DbSet<Client> Client { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<Contact> Contact { get; set; }
@@ -42,31 +29,56 @@ namespace SystemV1.Infrastructure.Data
         public DbSet<Country> Country { get; set; }
         public DbSet<Provider> Providers { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<EntityAudit> EntityAudit { get; set; }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entry in ChangeTracker.Entries())
-            {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Property("DateRegister").CurrentValue = DateTime.Now;
-                    entry.Property("IsActive").CurrentValue = true;
-                }
-                if (entry.Entity.GetType().GetProperty("DateChange") != null && entry.State == EntityState.Modified)
-                {
-                    entry.Property("DateChange").CurrentValue = DateTime.Now;
-                }
-            }
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            AuditEntities();
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
-        public override void Dispose()
+        public void AuditEntities()
         {
-            base.Dispose();
-            if (_connection != null)
+            var auditEntries = new List<EntityAudit>();
+            foreach (var entry in ChangeTracker.Entries())
             {
-                _connection.Close();
+                var options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+                {
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                    WriteIndented = true
+                };
+
+                var entitySerialized = JsonSerializer.Serialize(entry.Entity, options);
+                var entityaudited = new EntityAudit(entitySerialized,
+                                                    GetStateEntry(entry),
+                                                    DateTime.Now,
+                                                    Guid.NewGuid(),
+                                                    entry.Entity.GetType().Name);
+
+                auditEntries.Add(entityaudited);
             }
+
+            foreach (var auditEntry in auditEntries)
+            {
+                EntityAudit.Add(auditEntry);
+            }
+        }
+
+        private EnumTypeOperation GetStateEntry(EntityEntry entry)
+        {
+            switch (entry.State)
+            {
+                case EntityState.Deleted:
+                    return EnumTypeOperation.DELETE;
+
+                case EntityState.Modified:
+                    return EnumTypeOperation.UPDATE;
+
+                case EntityState.Added:
+                    return EnumTypeOperation.REGISTER;
+            }
+
+            return EnumTypeOperation.REGISTER;
         }
     }
 }

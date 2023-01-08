@@ -1,7 +1,5 @@
-﻿using FluentValidation.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using SystemV1.Domain.Validations;
 
 namespace SystemV1.Domain.Entitys
 {
@@ -28,26 +26,7 @@ namespace SystemV1.Domain.Entitys
             Id = id;
             Name = name;
             Country = country;
-        }
-
-        public State(Guid id,
-                     string name,
-                     DateTime dateRegister,
-                     DateTime dateChange,
-                     Guid idUserRegister,
-                     Guid idUserChange,
-                     Country country,
-                     bool isActive)
-        {
-            Cities = new List<City>();
-            Id = id;
-            Name = name;
-            DateRegister = dateRegister;
-            DateChange = dateChange;
-            IdUserRegister = idUserRegister;
-            IdUserChange = idUserChange;
-            Country = country;
-            IsActive = isActive;
+            CountryId = country.Id;
         }
 
         public string Name { get; set; }
@@ -65,11 +44,6 @@ namespace SystemV1.Domain.Entitys
         {
             Country = country;
             CountryId = country != null ? country.Id : Guid.Empty;
-        }
-
-        public ValidationResult ValidateState()
-        {
-            return new StateValidation().Validate(this);
         }
     }
 }

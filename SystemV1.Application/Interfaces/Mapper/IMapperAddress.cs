@@ -10,7 +10,8 @@ namespace SystemV1.Application.Interfaces.Mapper
     {
         AddressViewModel EntityToViewModel(Address address);
 
-        Address ViewModelToEntity(AddressViewModel addressViewModel);
+        Address ViewModelToEntity(AddressViewModel addressViewModel,
+                                  Guid peopleId);
 
         IEnumerable<AddressViewModel> ListEntityToViewModel(IEnumerable<Address> addresses);
     }

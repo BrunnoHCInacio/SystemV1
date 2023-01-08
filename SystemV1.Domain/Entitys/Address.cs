@@ -1,33 +1,21 @@
-﻿using FluentValidation.Results;
-using System;
-using SystemV1.Domain.Enums;
-using SystemV1.Domain.Validations;
+﻿using System;
 
 namespace SystemV1.Domain.Entitys
 {
     public class Address : Entity
     {
-        public Address(Guid id,
-                      string zipCode,
-                      string street,
-                      string number,
-                      string complement,
-                      string district)
+        public Address()
         {
-            Id = id;
-            ZipCode = zipCode;
-            Street = street;
-            Number = number;
-            Complement = complement;
-            District = district;
         }
+
         public Address(Guid id,
                        string zipCode,
                        string street,
                        string number,
                        string complement,
                        string district,
-                       City city)
+                       Guid cityId,
+                       Guid peopleId)
         {
             Id = id;
             ZipCode = zipCode;
@@ -35,14 +23,12 @@ namespace SystemV1.Domain.Entitys
             Number = number;
             Complement = complement;
             District = district;
-            City = city;
+            CityId = cityId;
+            PeopleId = peopleId;
         }
 
-        public Client Client{ get; private set; }
-        public Guid ClientId { get; private set; }
-
-        public Provider Provider { get; private set; }
-        public Guid ProviderId { get; private set; }
+        public People People { get; private set; }
+        public Guid PeopleId { get; private set; }
 
         public string ZipCode { get; private set; }
         public string Street { get; private set; }
@@ -51,39 +37,5 @@ namespace SystemV1.Domain.Entitys
         public string District { get; private set; }
         public City City { get; private set; }
         public Guid CityId { get; private set; }
-        
-
-        public ValidationResult ValidateAddress()
-        {
-            return new AddressValidation().Validate(this);
-        }
-
-        public void SetProvider(Guid providerId)
-        {
-            ProviderId = providerId;
-        }
-
-        public void SetClient(Guid clientId)
-        {
-            ClientId = clientId;
-            
-        }
-
-        public void SetCity(Guid cityId)
-        {
-            CityId = cityId;
-        }
-
-        public void SetPeopleProvider(Provider provider)
-        {
-            Provider = provider;
-            ProviderId = provider != null ? provider.Id : Guid.Empty;
-        }
-
-        public void SetClient(Client client)
-        {
-            Client = client;
-            ClientId = client != null ? client.Id : Guid.Empty;
-        }
     }
 }

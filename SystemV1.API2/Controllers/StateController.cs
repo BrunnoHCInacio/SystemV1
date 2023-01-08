@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using SystemV1.Application.Interfaces;
 using SystemV1.Application.ViewModels;
@@ -81,14 +78,13 @@ namespace SystemV1.API2.Controllers
         [HttpDelete("Delete/{id:guid}")]
         public async Task<ActionResult> Remove(Guid id)
         {
-            var state = await _applicationServiceState.GetStateCountryByIdAsync(id);
-
-            if (state == null)
+            if (!await _applicationServiceState.ExistsAsync(id))
             {
-                Notify("O estado é inválido.");
+                Notify("Estado não encontrado.");
                 return OkResult();
             }
-            await _applicationServiceState.RemoveAsync(state);
+
+            await _applicationServiceState.RemoveAsync(id);
             return OkResult();
         }
     }

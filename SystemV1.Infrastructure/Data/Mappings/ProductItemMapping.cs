@@ -15,7 +15,6 @@ namespace SystemV1.Infrastructure.Data.Mappings
             builder.Property(pi => pi.ImageZip).HasColumnType("varchar(1024)");
             builder.Property(pi => pi.IsAvailable);
             builder.Property(pi => pi.IsSold);
-            builder.Property(pi => pi.IsActive);
             builder.Property(pi => pi.Modelo)
                    .HasColumnType("varchar(1024)");
             builder.Property(pi => pi.Value)

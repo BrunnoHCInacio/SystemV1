@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using SystemV1.Domain.Entitys;
-using SystemV1.Domain.Services.Test.Fixture;
 using SystemV1.Domain.Test.Fixture;
-using SystemV1.Domain.Validations;
 using Xunit;
 
 namespace SystemV1.Domain.Test
@@ -21,8 +16,9 @@ namespace SystemV1.Domain.Test
         }
 
         #region Test validate for each property from entity
+
         [Fact(DisplayName = "Validate set as correct properties")]
-        [Trait("Categoria", "País - Cadastro")]
+        [Trait("UnitTests - Entity", "Country")]
         public void Country_NewCountryWithState_ShouldSetCorrectProperties()
         {
             //Arrange
@@ -39,7 +35,7 @@ namespace SystemV1.Domain.Test
             };
 
             //Act
-            var country = new Country(countryExpected.Id, countryExpected.Name);
+            var country = new Country(countryExpected.Id, countryExpected.Name, null);
             country.AddStates(states);
 
             //Assert
@@ -60,62 +56,7 @@ namespace SystemV1.Domain.Test
                 }
             }
         }
-        #endregion
 
-        // TODO: Criar teste para testar as propriedades genericas: data cadastro, data alteração, usuário cadastro e usuário alteração
-
-        #region Test validation for data
-        [Fact(DisplayName = "Validate country valid")]
-        [Trait("Categoria", "País - Cadastro")]
-        public void Country_ValidateNewCountry_ShouldBeValid()
-        {
-            //Arrange
-            var country = _countryTestFixture.GenerateValidCountry();
-
-            //Act
-            var result = country.ValidadeCountry();
-
-            //Assert
-            Assert.True(result.IsValid);
-        }
-
-        [Fact(DisplayName = "Validate country invalid")]
-        [Trait("Categoria", "País - Cadastro")]
-        public void Country_ValidateNewCountry_ShouldBeInvalid()
-        {
-            //Arrange
-            var country = _countryTestFixture.GenerateInvalidCountry();
-
-            //Act
-            var result = country.ValidadeCountry();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            
-            Assert.Contains(CountryValidation.CountryNameRequired, result.Errors.Select(e => e.ErrorMessage));
-            Assert.Contains(CountryValidation.NameMinLength, result.Errors.Select(e => e.ErrorMessage));
-        }
-
-        [Fact(DisplayName = "Validate country invalid")]
-        [Trait("Categoria", "País - Cadastro")]
-        public void Country_ValidateNewCountryDisabled_ShouldFailed()
-        {
-            //Arrange
-            var country = _countryTestFixture.GenerateValidCountryDisabled();
-
-            //Act
-            var result = country.ValidadeCountry();
-
-            //Assert
-            Assert.False(result.IsValid);
-            Assert.True(result.Errors.Any());
-            Assert.Single(result.Errors);
-            
-            Assert.Contains(CountryValidation.CountryNotActive, result.Errors.Select(e => e.ErrorMessage));
-            
-        }
-
-        #endregion
+        #endregion Test validate for each property from entity
     }
 }

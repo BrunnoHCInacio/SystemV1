@@ -1,13 +1,8 @@
 ﻿using Bogus;
-using Bogus.Extensions.Brazil;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SystemV1.Application.ViewModels;
-using SystemV1.Domain.Core.Constants;
 using SystemV1.Domain.Entitys;
-using SystemV1.Domain.Enums;
 using Xunit;
 
 namespace SystemV1.Domain.Test.Fixture
@@ -21,82 +16,23 @@ namespace SystemV1.Domain.Test.Fixture
     {
         public dynamic GenerateClientExpected()
         {
-            var faker = new Faker("pt_BR");
-            var addressFixture = new AddressTestFixture();
-            var contactFixture = new ContactTestFixture();
             return new
             {
                 Id = Guid.NewGuid(),
-                Name = faker.Name.FullName(),
-                Document = faker.Person.Cpf(),
-                Address = addressFixture.GenerateAddressExpected(),
-                ContactEmail = contactFixture.GenerateValidContactExpectedTypeEmail(),
-                ContactPhone = contactFixture.GenerateValidContactExpectedTypePhone(),
-                ContactCellPhone = contactFixture.GenerateValidContactExpectedTypeCellPhone()
+                PeopleId = Guid.NewGuid()
             };
         }
 
-        public List<Client> GenerateClient(int quantity,
-                                           bool withAddress = true,
-                                           bool hasValidAddress = true,
-                                           bool withContact = true,
-                                           bool hasValidContact = true)
-        {
-            var addressFixture = new AddressTestFixture();
-            var contactsFixture = new ContactTestFixture();
+        public List<Client> GenerateClient(int quantity, Guid peopleId)
 
+        {
             var client = new Faker<Client>("pt_BR")
-                            .CustomInstantiator(f => new Client(Guid.NewGuid(),
-                                                                f.Name.FullName(),
-                                                                f.Person.Cpf()))
-                            .FinishWith((f, c) =>
-                            {
-                                if (withAddress)
-                                {
-                                    if (hasValidAddress)
-                                    {
-                                        c.AddAddresses(addressFixture.GenerateAddress(2));
-                                    }
-                                    else
-                                    {
-                                        c.AddAddress(addressFixture.GenerateInvalidAddress());
-                                    }
-                                }
-                                if (withContact)
-                                {
-                                    if (hasValidContact)
-                                    {
-                                        c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactCellPhone, 2));
-                                        c.AddContacts(contactsFixture.GenerateContact(EnumTypeContact.TypeContactEmail, 1));
-                                    }
-                                    else
-                                    {
-                                        c.AddContact(contactsFixture.GenerateInvalidContactTypeCellPhone());
-                                        c.AddContact(contactsFixture.GenerateInvalidContactTypeEmail());
-                                        c.AddContact(contactsFixture.GenerateInvalidContactTypePhone());
-                                    }
-                                }
-                            });
+                            .CustomInstantiator(f => new Client(Guid.NewGuid(), peopleId));
 
             return client.Generate(quantity);
         }
 
-        public Client GenerateValidClient()
-        {
-            return GenerateClient(1).FirstOrDefault();
-        }
-
-        public Client GenerateInvalidClient()
-        {
-            return new Client(new Guid(), null, null);
-        }
-
-        public List<ClientViewModel> GenerateClientViewModel(int qtyClients,
-                                                             List<CityViewModel> citiesViewModel,
-                                                             int qtyAddress = 0,
-                                                             int qtyContacts = 0,
-                                                             bool isValidAddress = true,
-                                                             bool isValidContact = true)
+        public List<ClientViewModel> GenerateClientViewModel(int qtyClients, Guid peopleId)
         {
             var addressFixture = new AddressTestFixture();
             var contactsFixture = new ContactTestFixture();
@@ -105,11 +41,9 @@ namespace SystemV1.Domain.Test.Fixture
                                 .FinishWith(
                                 (f, c) =>
                                 {
-                                    c.Name = f.Name.FullName();
-                                    c.Document = f.Person.Cpf();
-                                    c.Addresses = addressFixture.GenerateAddress(qtyAddress, isValidAddress, addressFixture, citiesViewModel);
-                                    c.Contacts = contactsFixture.GenerateContact(qtyContacts, isValidContact, contactsFixture);
+                                    c.PeopleId = peopleId;
                                 });
+
             return client.Generate(qtyClients);
         }
 
@@ -121,9 +55,5 @@ namespace SystemV1.Domain.Test.Fixture
         public void Dispose()
         {
         }
-
-       
-
-        
     }
 }

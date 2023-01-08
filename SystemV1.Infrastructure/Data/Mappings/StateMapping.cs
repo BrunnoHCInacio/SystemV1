@@ -20,7 +20,6 @@ namespace SystemV1.Infrastructure.Data.Mappings
                    .WithMany(c => c.States)
                    .HasForeignKey(s => s.CountryId);
 
-            builder.Property(s => s.IsActive);
             builder.ToTable("States");
         }
     }

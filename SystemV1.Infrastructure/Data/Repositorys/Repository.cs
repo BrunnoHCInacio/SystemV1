@@ -1,8 +1,6 @@
-﻿using Dapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -22,7 +20,6 @@ namespace SystemV1.Infrastructure.Data.Repositorys
 
         public void Add(TEntity entity)
         {
-
             _sqlContext.Set<TEntity>().Add(entity);
         }
 
@@ -38,14 +35,60 @@ namespace SystemV1.Infrastructure.Data.Repositorys
             _sqlContext.Set<TEntity>().Update(entity);
         }
 
-        public int GetSkip(int page,int pageSize)
-        {
-            return (page - 1) * pageSize;
-        }
-
         public void Remove(TEntity entity)
         {
             _sqlContext.Set<TEntity>().Remove(entity);
+        }
+
+        public async Task<List<TEntity>> SearchAsync(Expression<Func<TEntity, bool>> conditional)
+        {
+            return await _sqlContext.Set<TEntity>().Where(conditional).ToListAsync();
+        }
+
+        public async Task<TEntity> GetEntityAsync(Expression<Func<TEntity, bool>> conditional,
+                                                  string includes = null)
+        {
+            var query = _sqlContext.Set<TEntity>().AsQueryable();
+
+            if (includes != null)
+            {
+                foreach (var include in includes.Split(','))
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.FirstOrDefaultAsync(conditional);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> conditional)
+        {
+            return await _sqlContext.Set<TEntity>().Where(conditional).CountAsync();
+        }
+
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> conditional)
+        {
+            return await _sqlContext.Set<TEntity>().Where(conditional).AnyAsync();
+        }
+
+        public async Task<List<TEntity>> SearchAsync(Expression<Func<TEntity, bool>> conditional,
+                                               int page,
+                                               int pageSize)
+        {
+            var query = _sqlContext.Set<TEntity>();
+            if (conditional != null)
+            {
+                query.Where(conditional);
+            }
+
+            return await query.Skip(GetSkip(page, pageSize))
+                              .Take(pageSize)
+                              .ToListAsync();
+        }
+
+        private int GetSkip(int page, int pageSize)
+        {
+            return (page - 1) * pageSize;
         }
     }
 }
