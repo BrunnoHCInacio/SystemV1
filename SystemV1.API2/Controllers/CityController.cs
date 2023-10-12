@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,8 +9,8 @@ using SystemV1.Domain.Core.Interfaces.Services;
 
 namespace SystemV1.API2.Controllers
 {
+    [Authorize]
     [Route("api/city")]
-    [ApiController]
     public class CityController : MainController
     {
         private readonly IApplicationServiceCity _applicationServiceCity;

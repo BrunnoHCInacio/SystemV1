@@ -20,6 +20,8 @@ namespace SystemV1.Domain.Test.IntegrationTest
     [Collection(nameof(IntegrationApiTestFixtureCollection))]
     public class StateApiTests : IntegrationTestBase
     {
+        // Criar testes com o contexto de autorização, para cada tipo de requisição, testes de falha de autenticação.
+
         private readonly IntegrationTestFixture<StartupApiTests> _integrationTestFixture;
 
         private string _requestAdd => "api/state/Add";

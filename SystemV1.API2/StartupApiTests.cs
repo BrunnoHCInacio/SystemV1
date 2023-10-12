@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -42,23 +43,17 @@ namespace API2
             services.AddDbContext<SqlContext>(options => options.UseNpgsql(connection));
             services.AddDbContext<IdentityContext>(options => options.UseNpgsql(connection));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddEntityFrameworkStores<IdentityContext>()
-                    .AddDefaultTokenProviders();
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
 
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "My Service", Version = "v1" }); });
-            services.AddControllers();
-            services.AddOptions();
-
             services.AddIdentity<IdentityUser, IdentityRole>()
-                   .AddEntityFrameworkStores<IdentityContext>()
-                   .AddDefaultTokenProviders();
+                                .AddEntityFrameworkStores<IdentityContext>()
+                                .AddDefaultTokenProviders();
+
+            services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             var appSettings = appSettingsSection.Get<AppSettings>();
@@ -82,6 +77,10 @@ namespace API2
                     ValidIssuer = appSettings.Emissor
                 };
             });
+
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "My Service", Version = "v1" }); });
+            services.AddControllers();
+            services.AddOptions();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -95,6 +94,7 @@ namespace API2
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             app.UseAuthentication();

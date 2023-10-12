@@ -36,7 +36,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             var user = _authUserFixture.GenerateValidRegisterUser();
 
             //act and assert
-            await AddAsync(user, _requestRegisterUser);
+            await AddAsync(user, _requestRegisterUser, true, false);
 
             _integrationTestFixture.Email = user.Email;
             _integrationTestFixture.Password = user.Password;
@@ -51,7 +51,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             user.Email = "admin_admin";
 
             //act
-            var result = await AddAsync(user, _requestRegisterUser, false);
+            var result = await AddAsync(user, _requestRegisterUser, false, false);
             var json = DeserializeJson<Deserialize<RegisterUserViewModel>>(await result.Content.ReadAsStringAsync());
 
             //Assert
@@ -70,7 +70,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             var user = _authUserFixture.GenerateValidRegisterUser(password: invalidPassword);
 
             //act
-            var result = await AddAsync(user, _requestRegisterUser, false);
+            var result = await AddAsync(user, _requestRegisterUser, false, false);
             var json = DeserializeJson<Deserialize<RegisterUserViewModel>>(await result.Content.ReadAsStringAsync());
 
             //Assert
@@ -88,7 +88,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             var user = _authUserFixture.GenerateValidRegisterUser(confirmPassword: invalidPassword);
 
             //act
-            var result = await AddAsync(user, _requestRegisterUser, false);
+            var result = await AddAsync(user, _requestRegisterUser, false, false);
             var json = DeserializeJson<Deserialize<RegisterUserViewModel>>(await result.Content.ReadAsStringAsync());
 
             //Assert
@@ -105,7 +105,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             var user = new RegisterUserViewModel();
 
             //act
-            var result = await AddAsync(user, _requestRegisterUser, false);
+            var result = await AddAsync(user, _requestRegisterUser, false, false);
             var json = DeserializeJson<Deserialize<RegisterUserViewModel>>(await result.Content.ReadAsStringAsync());
 
             //Assert
@@ -127,7 +127,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
                 Password = _integrationTestFixture.Password
             };
 
-            await AddAsync(user, _requestLoginUser);
+            await AddAsync(user, _requestLoginUser, true, false);
         }
 
         #endregion Login user

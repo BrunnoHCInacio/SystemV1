@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using SystemV1.Application.Interfaces;
@@ -7,6 +8,7 @@ using SystemV1.Domain.Core.Interfaces.Services;
 
 namespace SystemV1.API2.Controllers
 {
+    [Authorize]
     [Route("api/state")]
     public class StateController : MainController
     {

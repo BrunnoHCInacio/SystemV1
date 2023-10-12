@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using SystemV1.Application.Interfaces;
@@ -8,6 +9,7 @@ using SystemV1.Domain.Core.Interfaces.Services;
 
 namespace SystemV1.API2.Controllers
 {
+    [Authorize]
     [Route("api/client")]
     public class ClientController : MainController
     {
@@ -24,7 +26,6 @@ namespace SystemV1.API2.Controllers
         {
             var clients = await _applicationServiceClient.GetAllAsync(page, pageSize);
             return OkResult(clients);
-            
         }
 
         [HttpGet("GetById/{id:guid}")]
@@ -62,7 +63,7 @@ namespace SystemV1.API2.Controllers
                 return OkResult(ModelState);
             }
 
-            if(!await _applicationServiceClient.ExistsClient(id))
+            if (!await _applicationServiceClient.ExistsClient(id))
             {
                 Notify(ConstantMessages.ClientNotFound);
                 return OkResult();

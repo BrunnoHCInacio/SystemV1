@@ -133,7 +133,7 @@ namespace SystemV1.Domain.Services
             _repository.Remove(entity);
         }
 
-        private ValidationResult ValidateAdd(TEntity entity)
+        public ValidationResult ValidateAdd(TEntity entity)
         {
             _validation.RulesForAdd();
             return _validation.Validate(entity);

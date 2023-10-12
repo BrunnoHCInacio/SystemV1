@@ -111,10 +111,12 @@ namespace SystemV1.Domain.Test.ServiceTests
             await productService.AddAsyncUow(product);
 
             //Assert
-            _autoMocker.GetMock<IRepositoryProduct>()
-                  .Verify(r => r.Add(It.IsAny<Product>()), Times.Never);
             _autoMocker.GetMock<IServiceProductItem>()
-                  .Verify(s => s.AddAsyncUow(It.IsAny<ProductItem>()), Times.Never);
+                  .Verify(s => s.AddAsyncUow(It.IsAny<ProductItem>()), Times.Exactly(product.ProductItems.Count()));
+
+            _autoMocker.GetMock<IRepositoryProduct>()
+                  .Verify(r => r.Add(It.IsAny<Product>()), Times.Once);
+
             _autoMocker.GetMock<IUnitOfWork>()
                   .Verify(r => r.CommitAsync(), Times.Never);
         }

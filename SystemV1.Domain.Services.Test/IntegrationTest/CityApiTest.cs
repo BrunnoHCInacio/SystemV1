@@ -15,9 +15,11 @@ namespace SystemV1.Domain.Test.IntegrationTest
 {
     [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     [Collection(nameof(IntegrationApiTestFixtureCollection))]
-    public class CityApiTest
+    public class CityApiTest : IntegrationTestBase
     {
         //Criar testes para exclusão de cidade que contém em um endereço.
+
+        // Criar testes com o contexto de autorização, para cada tipo de requisição, testes de falha de autenticação.
 
         private readonly IntegrationTestFixture<StartupApiTests> _integrationTestFixture;
         private readonly StateApiTests _stateApiTests;
@@ -29,7 +31,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         private readonly string _requestGetById = "api/city/GetById/";
         private readonly string _requestGetCityStateById = "api/city/GetCityStateById/";
 
-        public CityApiTest(IntegrationTestFixture<StartupApiTests> integrationTestFixture)
+        public CityApiTest(IntegrationTestFixture<StartupApiTests> integrationTestFixture) : base(integrationTestFixture)
         {
             _integrationTestFixture = integrationTestFixture;
             _stateApiTests = new StateApiTests(_integrationTestFixture);
@@ -54,7 +56,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             var cityViewModel = cityTestFixture.GenerateInvalidCityViewModel();
 
             //Act
-            var response = await _integrationTestFixture.Client.PostAsJsonAsync(_requestAdd, cityViewModel);
+            var response = await AddAsync(cityViewModel, _requestAdd, false);
             var responseDeserialized = await TestTools.DeserializeResponseAsync<Deserialize<CityViewModel>>(response);
 
             //Assert
@@ -123,11 +125,10 @@ namespace SystemV1.Domain.Test.IntegrationTest
             city.Name += alteracao;
 
             //Act
-            var response = await _integrationTestFixture.Client.PutAsJsonAsync(_requestUpdate + city.Id, city);
+            await UpdateAsync(city, city.Id, _requestUpdate);
             var cityUpdated = await GetCityByIdAsync(_integrationTestFixture.CityId);
 
             //Assert
-            response.EnsureSuccessStatusCode();
             Assert.Contains(alteracao, cityUpdated.Name);
         }
 
@@ -159,7 +160,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             var city = await GetCityByIdAsync(_integrationTestFixture.CityId);
 
             //Act
-            var response = await _integrationTestFixture.Client.DeleteAsync(_requestDelete + city.Id);
+            var response = await RemoveAsync(city.Id, _requestDelete);
 
             //Assert
             response.EnsureSuccessStatusCode();
@@ -170,7 +171,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
         public async Task Delete_DeleteCity_MustNotDeleteAndReturnMessageNotification()
         {
             //Arrange and Act
-            var response = await _integrationTestFixture.Client.DeleteAsync(_requestDelete + Guid.NewGuid());
+            var response = await RemoveAsync(Guid.NewGuid(), _requestDelete);
             var responseDeserialized = await TestTools.DeserializeResponseAsync<Deserialize<CityTestFixture>>(response);
 
             //Assert

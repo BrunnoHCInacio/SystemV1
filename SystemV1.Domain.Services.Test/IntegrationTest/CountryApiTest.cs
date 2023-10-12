@@ -20,6 +20,8 @@ namespace SystemV1.Domain.Test.IntegrationTest
     [Collection(nameof(IntegrationApiTestFixtureCollection))]
     public class CountryApiTest : IntegrationTestBase
     {
+        // Criar testes com o contexto de autorização, para cada tipo de requisição, testes de falha de autenticação.
+
         private readonly IntegrationTestFixture<StartupApiTests> _integrationTestFixture;
 
         private string _requestAdd => "api/Country/Add";
@@ -57,7 +59,7 @@ namespace SystemV1.Domain.Test.IntegrationTest
             var countryViewModel = new CountryViewModel();
 
             //Act
-            var postResponse = await _integrationTestFixture.Client.PostAsJsonAsync(_requestAdd, countryViewModel);
+            var postResponse = await AddAsync(countryViewModel, _requestAdd);
             var jsonResponse = await postResponse.Content.ReadAsStringAsync();
             var obj = JsonConvert.DeserializeObject<Deserialize<CountryViewModel>>(jsonResponse);
 

@@ -12,7 +12,6 @@ using SystemV1.Domain.Core.Interfaces.Services;
 namespace SystemV1.API2.Controllers
 {
     [Route("api/auth")]
-    [ApiController]
     public class AuthController : MainController
     {
         private readonly SignInManager<IdentityUser> _signInManager;

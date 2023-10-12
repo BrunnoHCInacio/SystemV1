@@ -40,9 +40,9 @@ namespace SystemV1.Domain.Services.Validations
         public void RulesForUpdate()
         {
             RuleFor(p => p.Id)
-                .MustAsync(async (producId, cancellation) =>
+                .MustAsync(async (productId, cancellation) =>
                 {
-                    return await _repositoryProduct.ExistsAsync(p => p.Id == producId);
+                    return await _repositoryProduct.ExistsAsync(p => p.Id == productId);
                 })
                 .WithMessage(ProductNotRegistred);
 
